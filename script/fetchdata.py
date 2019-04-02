@@ -202,7 +202,7 @@ def main(argv):
     eid = argv[0]
     auth_key = argv[1]
 
-    uri = get_previous_30_days_uri(eid)
+    uri = get_most_data_uri(eid)
     get_status(uri, auth_key, 0)
 
     uri = get_pricing_uri(eid)
