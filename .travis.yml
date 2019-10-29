@@ -12,7 +12,7 @@ branches:
   only:
     - master
 
-install: pip install -U tox
+install: pip install -r requirements.txt
 language: python
 
 script: tox
