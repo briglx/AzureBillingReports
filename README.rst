@@ -21,5 +21,7 @@ Getting Started
 
     python get_ri_recommendations.py enrollment_id api_auth_key
 
+    python get_price_list.py enrollment_id api_auth_key
+
 - Open the AzureBillingViaCsv.pbit template file
 - Provide the full path to the downloaded csv file.
