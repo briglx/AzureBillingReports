@@ -1,0 +1,4 @@
+# Dev Requirements
+pylint
+flake8
+pydocstyle
