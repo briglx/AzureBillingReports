@@ -33,7 +33,7 @@ def get_pricelist(uri, auth_key):
 
     price_list = json.loads(resp.content)
 
-    header = list(price_list[0].keys())[1:-1]
+    header = list(price_list[0].keys())[1:]
 
     with open("pricelist.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
