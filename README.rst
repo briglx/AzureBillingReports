@@ -10,11 +10,14 @@ Getting Started
 ==========
 
 - First obtain your enrollment id and a valid api authentication key.
-- Run the fetchdata.py script to get the latest billing data. This will download and save the billing data into a csv file.
+- Run the `get_usage_data.py` script to get the latest billing usage data. This will download and save the billing data into a csv file.
+- Run the 'get_ri_recommendations.py` script to get the latest reserved instance recommendations.
 
 .. code-block:: bash
 
-    python fetchdata.py enrollment_id api_auth_key
+    python get_usage_data.py enrollment_id api_auth_key
+
+    python get_ri_recommendations.py enrollment_id api_auth_key
 
 - Open the AzureBillingViaCsv.pbit template file
 - Provide the full path to the downloaded csv file.
