@@ -13,8 +13,8 @@ branches:
     - master
 
 install: 
-  pip install -U tox
-  pip install -r requirements_test.txt
+  - pip install -U tox
+  - pip install -r requirements_test.txt
 language: python
 
 script: tox
