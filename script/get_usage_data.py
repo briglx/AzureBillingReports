@@ -1,60 +1,69 @@
 #!/usr/bin/python
-"Script to fetch latest monthly billing data and price sheet"
+"""Script to fetch latest monthly billing data and price sheet."""
 import sys
-import requests
 import datetime
 import time
 import csv
-
-HOST_NAME = 'https://consumption.azure.com'
-API_PATH = '/v3/enrollments/%s/usagedetails/submit?startTime=%s&endTime=%s'
-PRICING_PATH = '/v2/enrollments/%s/pricesheet'
+import requests
 
 
-def get_usage_uri(eid, startDate, endDate):
+STATUS_QUEUED = 1
+STATUS_IN_PROGRESS = 2
+STATUS_COMPLETED = 3
+STATUS_FAILED = 4
+STATUS_NO_DATA_FOUND = 5
+STATUS_READY_TO_DOWNLOAD = 6
+STATUS_TIMED_OUT = 7
+
+HOST_NAME = "https://consumption.azure.com"
+API_PATH = "/v3/enrollments/%s/usagedetails/submit?startTime=%s&endTime=%s"
+PRICING_PATH = "/v2/enrollments/%s/pricesheet"
+
+
+def get_usage_uri(eid, start_date, end_date):
     """Build usage uri from eid and start and end dates."""
     path_url = HOST_NAME + API_PATH
-    uri = (path_url % (eid, startDate, endDate))
+    uri = path_url % (eid, start_date, end_date)
     return uri
 
 
 def get_pricing_uri(eid):
     """Build pricing uri for this eid."""
     path_url = HOST_NAME + PRICING_PATH
-    uri = (path_url % (eid))
+    uri = path_url % (eid)
     return uri
 
 
 def get_most_data_uri(eid):
     """Build usage uri from eid for the past three years."""
     dte = datetime.datetime.now()
-    startDate = (dte - datetime.timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
-    endDate = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, startDate, endDate)
+    start_date = (dte - datetime.timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
 
 
 def get_current_month_uri(eid):
     """Build usage uri from eid for the current month."""
     dte = datetime.datetime.now()
-    startDate = dte.strftime("%Y-%m-01")
-    endDate = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, startDate, endDate)
+    start_date = dte.strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
 
 
 def get_previous_30_days_uri(eid):
     """Build usage uri starting with the first of the previous month."""
     dte = datetime.datetime.now()
-    startDate = (dte - datetime.timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
-    endDate = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, startDate, endDate)
+    start_date = (dte - datetime.timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
 
 
 def get_previous_12_months_uri(eid):
     """Build usage uri for the previous 12 months."""
     dte = datetime.datetime.now()
-    startDate = (dte - datetime.timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
-    endDate = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, startDate, endDate)
+    start_date = (dte - datetime.timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
 
 
 def download_file(url, dte):
@@ -62,73 +71,60 @@ def download_file(url, dte):
     local_filename = "usage-%s.csv" % (dte.isoformat())
     local_filename = local_filename.replace(":", "-")
     # NOTE the stream=True parameter
-    r = requests.get(url, stream=True)
-    with open(local_filename, "wb") as f:
-        for chunk in r.iter_content(chunk_size=1024):
+    response = requests.get(url, stream=True)
+    with open(local_filename, "wb") as csvfile:
+        for chunk in response.iter_content(chunk_size=1024):
             if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
+                csvfile.write(chunk)
                 # f.flush() commented by recommendation from J.F.Sebastian
     return local_filename
 
 
-def get_status(uri, auth_key, count, isReportUrl=False):
+def get_status(uri, auth_key, count, is_report_url=False):
     """Submit request and poll for shared access key based URL."""
-    STATUS_QUEUED = 1
-    STATUS_IN_PROGRESS = 2
-    STATUS_COMPLETED = 3
-    STATUS_FAILED = 4
-    STATUS_NO_DATA_FOUND = 5
-    STATUS_READY_TO_DOWNLOAD = 6
-    STATUS_TIMED_OUT = 7
-
     print("[" + str(count) + "] Calling uri " + uri)
 
     headers = {
         "authorization": "bearer " + str(auth_key),
-        "Content-Type": "application/json"}
+        "Content-Type": "application/json",
+    }
 
-    if isReportUrl:
-        resp = requests.get(
-            uri,
-            headers=headers,
-        )
+    if is_report_url:
+        resp = requests.get(uri, headers=headers,)
     else:
-        resp = requests.post(
-            uri,
-            headers=headers,
-        )
+        resp = requests.post(uri, headers=headers,)
 
     if resp.status_code == 200 or resp.status_code == 202:
 
         status = resp.json()["status"]
-        reportUrl = resp.json()["reportUrl"]
+        report_url = resp.json()["reportUrl"]
 
         if status == STATUS_QUEUED:
 
             print("Queued.")
-            print(reportUrl)
+            print(report_url)
 
             # Wait a few secs and check again
             time.sleep(10)
-            get_status(reportUrl, auth_key, count + 1, True)
+            get_status(report_url, auth_key, count + 1, True)
 
         elif status == STATUS_IN_PROGRESS:
 
             print("In Progress.")
-            print(reportUrl)
+            print(report_url)
 
             # Wait a few secs and check again
             time.sleep(10)
-            get_status(reportUrl, auth_key, count + 1, True)
+            get_status(report_url, auth_key, count + 1, True)
 
         elif status == STATUS_COMPLETED:
 
             print("Completed.")
-            blobPath = resp.json()["blobPath"]
-            print(blobPath)
+            blob_path = resp.json()["blobPath"]
+            print(blob_path)
 
             print("download blob")
-            download_file(blobPath, datetime.datetime.now())
+            download_file(blob_path, datetime.datetime.now())
 
         elif status == STATUS_FAILED:
 
@@ -141,12 +137,12 @@ def get_status(uri, auth_key, count, isReportUrl=False):
         elif status == STATUS_READY_TO_DOWNLOAD:
 
             print("Ready to download.")
-            blobPath = resp.json()["blobPath"]
-            print(blobPath)
+            blob_path = resp.json()["blobPath"]
+            print(blob_path)
 
             # Download Blob
             print("download blob")
-            download_file(blobPath, datetime.datetime.now())
+            download_file(blob_path, datetime.datetime.now())
 
         elif status == STATUS_TIMED_OUT:
 
@@ -167,7 +163,8 @@ def get_price_sheet(uri, auth_key):
 
     headers = {
         "authorization": "bearer " + str(auth_key),
-        "Content-Type": "application/json"}
+        "Content-Type": "application/json",
+    }
 
     resp = requests.get(uri, headers=headers,)
 
@@ -179,8 +176,8 @@ def get_price_sheet(uri, auth_key):
         local_filename = "pricing-%s.csv" % (dte.isoformat())
         local_filename = local_filename.replace(":", "-")
 
-        with open(local_filename, 'w', newline='') as f:
-            csvwriter = csv.writer(f)
+        with open(local_filename, "w", newline="") as price_sheet:
+            csvwriter = csv.writer(price_sheet)
 
             count = 0
 

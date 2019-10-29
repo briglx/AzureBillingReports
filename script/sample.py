@@ -1,19 +1,21 @@
 #!/usr/bin/python
-
+"""Create a smaller file of data by sampling."""
 import sys
 import csv
 import random
 
 
-def getSample(src, sample_rate):
+def get_sample(src, sample_rate):
+    """Get sample records from source file for given sample rate."""
+    with open(
+        src + "-sample-" + str(sample_rate) + ".csv", "w", newline=""
+    ) as sample_file:
+        writer = csv.writer(sample_file)
 
-    with open(src + '-sample-' + str(sample_rate) + '.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
+        with open(src, newline="") as csv_file:
+            reader = csv.reader(csv_file, delimiter=",")
 
-        with open(src, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-
-            for i in range(3):
+            for _ in range(3):
                 row = next(reader)
                 writer.writerow(row)
 
@@ -24,11 +26,11 @@ def getSample(src, sample_rate):
 
 
 def main(argv):
-
+    """Get sample records from command line."""
     path = argv[0]
     rate = float(argv[1])
 
-    getSample(path, rate)
+    get_sample(path, rate)
 
 
 if __name__ == "__main__":
