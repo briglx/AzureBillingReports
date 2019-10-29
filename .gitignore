@@ -6,3 +6,10 @@
 *.code-workspace
 
 .ipynb_checkpoints
+.vscode/launch.json
+pricelist.csv
+pricing-2019-02-05T14-31-49.507637.csv
+run.bat
+PartNumber.csv
+NonWindows.csv
+WindowsMachines.csv
