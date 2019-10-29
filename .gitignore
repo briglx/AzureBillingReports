@@ -4,3 +4,5 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+.ipynb_checkpoints

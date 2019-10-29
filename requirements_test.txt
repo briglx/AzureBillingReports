@@ -1,5 +1,5 @@
 # Dev Requirements
-request
+requests
 pylint
 flake8
 pydocstyle
