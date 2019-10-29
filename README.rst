@@ -1,6 +1,8 @@
 **********************************
 Azure Billing Reports
 **********************************
+.. image:: https://travis-ci.org/briglx/AzureBillingReports.svg?branch=master
+    :target: https://travis-ci.org/briglx/AzureBillingReports
 
 The ``azure billing reports`` are an unofficial collection of reports built on top of the Azure Billing API.
 
