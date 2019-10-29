@@ -7,9 +7,8 @@ import random
 
 def get_sample(src, sample_rate):
     """Get sample records from source file for given sample rate."""
-    with open(
-        src + "-sample-" + str(sample_rate) + ".csv", "w", newline=""
-    ) as sample_file:
+    sample_file_name = src + "-sample-" + str(sample_rate) + ".csv"
+    with open(sample_file_name, "w", newline="") as sample_file:
         writer = csv.writer(sample_file)
 
         with open(src, newline="") as csv_file:
