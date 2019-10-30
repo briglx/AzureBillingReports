@@ -52,7 +52,7 @@ def get_recommendations(uri, auth_key, ri_type):
 
     recommendations = json.loads(resp.content)
 
-    header = list(recommendations[0].keys())[1:-1]
+    header = list(recommendations[0].keys())
 
     file_name = "ri_" + ri_type.lower() + "_recommendations.csv"
     with open(file_name, "w", newline="") as csvfile:
