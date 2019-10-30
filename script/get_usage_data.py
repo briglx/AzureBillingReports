@@ -3,7 +3,6 @@
 import sys
 import datetime
 import time
-import csv
 import requests
 
 
@@ -17,20 +16,12 @@ STATUS_TIMED_OUT = 7
 
 HOST_NAME = "https://consumption.azure.com"
 API_PATH = "/v3/enrollments/%s/usagedetails/submit?startTime=%s&endTime=%s"
-PRICING_PATH = "/v2/enrollments/%s/pricesheet"
 
 
 def get_usage_uri(eid, start_date, end_date):
     """Build usage uri from eid and start and end dates."""
     path_url = HOST_NAME + API_PATH
     uri = path_url % (eid, start_date, end_date)
-    return uri
-
-
-def get_pricing_uri(eid):
-    """Build pricing uri for this eid."""
-    path_url = HOST_NAME + PRICING_PATH
-    uri = path_url % (eid)
     return uri
 
 
@@ -54,6 +45,14 @@ def get_previous_30_days_uri(eid):
     """Build usage uri starting with the first of the previous month."""
     dte = datetime.datetime.now()
     start_date = (dte - datetime.timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
+
+
+def get_previous_6_months_uri(eid):
+    """Build usage uri for the previous 6 months."""
+    dte = datetime.datetime.now()
+    start_date = (dte - datetime.timedelta(6 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
@@ -157,53 +156,13 @@ def get_status(uri, auth_key, count, is_report_url=False):
         print(resp.text)
 
 
-def get_price_sheet(uri, auth_key):
-    """Get latest price sheet."""
-    print("Calling uri " + uri)
-
-    headers = {
-        "authorization": "bearer " + str(auth_key),
-        "Content-Type": "application/json",
-    }
-
-    resp = requests.get(uri, headers=headers,)
-
-    if resp.status_code == 200:
-
-        resp_body = resp.json()
-
-        dte = datetime.datetime.now()
-        local_filename = "pricing-%s.csv" % (dte.isoformat())
-        local_filename = local_filename.replace(":", "-")
-
-        with open(local_filename, "w", newline="") as price_sheet:
-            csvwriter = csv.writer(price_sheet)
-
-            count = 0
-
-            for row in resp_body:
-
-                if count == 0:
-                    header = row.keys()
-                    csvwriter.writerow(header)
-                    count += 1
-                csvwriter.writerow(row.values())
-    else:
-        print("Error calling uri")
-        print(resp.status_code)
-        print(resp.text)
-
-
 def main(argv):
     """Get previous 30 days usage and latest pricing."""
     eid = argv[0]
     auth_key = argv[1]
 
-    uri = get_most_data_uri(eid)
+    uri = get_previous_6_months_uri(eid)
     get_status(uri, auth_key, 0)
-
-    uri = get_pricing_uri(eid)
-    get_price_sheet(uri, auth_key)
 
 
 if __name__ == "__main__":

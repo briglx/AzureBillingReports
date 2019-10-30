@@ -3,6 +3,7 @@
 """Script to fetch pricing."""
 
 import sys
+import datetime
 import json
 import csv
 
@@ -31,19 +32,30 @@ def get_pricelist(uri, auth_key):
     resp = requests.get(uri, headers=headers,)
     print(resp)
 
-    price_list = json.loads(resp.content)
+    if resp.status_code == 200:
 
-    header = list(price_list[0].keys())
+        price_list = json.loads(resp.content)
 
-    with open("pricelist.csv", "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, delimiter=",")
+        dte = datetime.datetime.now()
+        local_filename = "pricing-%s.csv" % (dte.isoformat())
+        local_filename = local_filename.replace(":", "-")
 
-        writer.writerows([header])
+        header = list(price_list[0].keys())
 
-        for meter_rate in price_list:
+        with open(local_filename, "w", newline="") as price_sheet:
+            writer = csv.writer(price_sheet, delimiter=",")
 
-            row = [meter_rate.get(key) for key in header]
-            writer.writerows([row])
+            writer.writerows([header])
+
+            for meter_rate in price_list:
+
+                row = [meter_rate.get(key) for key in header]
+                writer.writerows([row])
+
+    else:
+        print("Error calling uri")
+        print(resp.status_code)
+        print(resp.text)
 
 
 def main(argv):
