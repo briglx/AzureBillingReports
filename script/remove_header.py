@@ -1,23 +1,24 @@
 #!/usr/bin/python
 """Script to remove metadata header information from  monthly billing data."""
-import os
 import sys
 import shutil
 
 
 def remove_first_lines(file_name, count):
     """Remove first count of lines from file_name."""
+    temp_name = file_name + ".tmp"
     with open(file_name, "r") as source_file, open(
-        file_name + ".tmp", "w"   # pylint: disable=C0330
+        file_name + ".tmp", "w"  # pylint: disable=C0330
     ) as target_file:
 
         for _ in range(count):
             source_file.readline()
 
+        # Copy contents
         shutil.copyfileobj(source_file, target_file)
 
-        os.remove(source_file)
-        os.rename(target_file, source_file)
+    # Move temp file
+    shutil.move(temp_name, file_name)
 
 
 def main(argv):
