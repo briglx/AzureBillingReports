@@ -6,14 +6,14 @@ import shutil
 
 def remove_first_lines(file_name, count):
     """Remove first count of lines from file_name."""
-    source_file = open(file_name, "r")
+    with open(file_name, "r") as source_file, \
+        open(file_name + ".tmp", "w") as target_file:
 
-    for _ in range(count):
-        source_file.readline()
+        for _ in range(count):
+            source_file.readline()
 
-    target_file = open(file_name + ".new", "w")
-
-    shutil.copyfileobj(source_file, target_file)
+        shutil.copyfileobj(source_file, target_file)
+        shutil.move(target_file, source_file)
 
 
 def main(argv):
