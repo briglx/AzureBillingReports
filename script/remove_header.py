@@ -4,27 +4,29 @@ import sys
 import shutil
 
 
-def remove_first_lines(file_name, count):
+def remove_first_lines(src_file_name, dest_file_name, count):
     """Remove first count of lines from file_name."""
-    temp_name = file_name + ".tmp"
-    with open(file_name, "r") as source_file, open(
-        file_name + ".tmp", "w"  # pylint: disable=C0330
-    ) as target_file:
+    with open(src_file_name, "r") as src_stream, open(
+        dest_file_name, "w"  # pylint: disable=C0330
+    ) as dest_stream:
 
+        # Skip lines
         for _ in range(count):
-            source_file.readline()
+            src_stream.readline()
 
         # Copy contents
-        shutil.copyfileobj(source_file, target_file)
-
-    # Move temp file
-    shutil.move(temp_name, file_name)
+        shutil.copyfileobj(src_stream, dest_stream)
 
 
 def main(argv):
     """Remove header fro filename passed in from command line."""
-    file_name = argv[0]
-    remove_first_lines(file_name, 2)
+    full_file_name = argv[0]
+
+    file_parts = full_file_name.split('.')
+    file_name = file_parts[:-1]
+    extension_part = file_parts[-1]
+    dest_file_name = file_name + "-noheader" + extension_part
+    remove_first_lines(full_file_name, dest_file_name, 2)
 
 
 if __name__ == "__main__":
