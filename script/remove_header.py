@@ -22,7 +22,7 @@ def main(argv):
     """Remove header fro filename passed in from command line."""
     full_file_name = argv[0]
 
-    file_parts = full_file_name.split('.')
+    file_parts = full_file_name.split(".")
     file_name = file_parts[:-1]
     extension_part = file_parts[-1]
     dest_file_name = file_name + "-noheader" + extension_part
