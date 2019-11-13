@@ -1,3 +1,5 @@
+# Requirements
+tqdm
 # Dev Requirements
 requests
 pylint
