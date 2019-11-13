@@ -13,3 +13,4 @@ run.bat
 PartNumber.csv
 NonWindows.csv
 WindowsMachines.csv
+.vscode/settings.json

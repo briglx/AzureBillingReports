@@ -4,7 +4,7 @@ import sys
 import datetime
 import time
 import requests
-from tqdm import tqdm
+from tqdm import tqdm as progress
 
 
 STATUS_QUEUED = 1
@@ -69,18 +69,18 @@ def get_previous_12_months_uri(eid):
 def download_file(url, dte, ignore_header_rows=0):
     """Download usage report with shared access key based URL."""
     skipped_header = False
-    block_size = 1024  # 1 Kibibyte
+    size = 1024  # 1 Kibibyte
 
     local_filename = "usage-%s.csv" % (dte.isoformat())
     local_filename = local_filename.replace(":", "-")
     # NOTE the stream=True parameter
-    response = requests.get(url, stream=True)
-    response.encoding = "utf-8"
-    total_size = int(response.headers.get("content-length", 0))
+    resp = requests.get(url, stream=True)
+    resp.encoding = "utf-8"
+    total_size = int(resp.headers.get("content-length", 0))
 
-    t = tqdm(total=total_size, unit="iB", unit_scale=True)
+    prog = progress(total=total_size, unit="iB", unit_scale=True)
     with open(local_filename, "wb") as csvfile:
-        for chunk in response.iter_content(chunk_size=block_size, decode_unicode=True):
+        for chunk in resp.iter_content(chunk_size=size, decode_unicode=True):
 
             if ignore_header_rows and not skipped_header:
                 bom = chunk[0]
@@ -94,14 +94,14 @@ def download_file(url, dte, ignore_header_rows=0):
                 encoded_chunk = chunk.encode()
 
             if encoded_chunk:  # filter out keep-alive new chunks
-                t.update(len(encoded_chunk))
+                prog.update(len(encoded_chunk))
                 csvfile.write(encoded_chunk)
                 # f.flush() commented by recommendation from J.F.Sebastian
-    t.close()
+    prog.close()
     return local_filename
 
 
-def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
+def get_status(uri, auth_key, count, first_run=False, ignore_header_rows=0):
     """Submit request and poll for shared access key based URL."""
     print("[" + str(count) + "] Calling uri " + uri)
 
@@ -110,10 +110,10 @@ def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
         "Content-Type": "application/json",
     }
 
-    if is_report_url:
-        resp = requests.get(uri, headers=headers,)
-    else:
+    if first_run:
         resp = requests.post(uri, headers=headers,)
+    else:
+        resp = requests.get(uri, headers=headers,)
 
     if resp.status_code == 200 or resp.status_code == 202:
 
@@ -127,7 +127,7 @@ def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
 
             # Wait a few secs and check again
             time.sleep(10)
-            get_status(report_url, auth_key, count + 1, True, ignore_header_rows)
+            get_status(report_url, auth_key, count + 1, ignore_header_rows)
 
         elif status == STATUS_IN_PROGRESS:
 
@@ -136,7 +136,7 @@ def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
 
             # Wait a few secs and check again
             time.sleep(10)
-            get_status(report_url, auth_key, count + 1, True, ignore_header_rows)
+            get_status(report_url, auth_key, count + 1, ignore_header_rows)
 
         elif status == STATUS_COMPLETED:
 
@@ -145,7 +145,8 @@ def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
             print(blob_path)
 
             print("download blob")
-            download_file(blob_path, datetime.datetime.now(), ignore_header_rows)
+            cur_time = datetime.datetime.now()
+            download_file(blob_path, cur_time, ignore_header_rows)
 
         elif status == STATUS_FAILED:
 
@@ -163,7 +164,8 @@ def get_status(uri, auth_key, count, is_report_url=False, ignore_header_rows=0):
 
             # Download Blob
             print("download blob")
-            download_file(blob_path, datetime.datetime.now(), ignore_header_rows)
+            cur_time = datetime.datetime.now()
+            download_file(blob_path, cur_time, ignore_header_rows)
 
         elif status == STATUS_TIMED_OUT:
 
@@ -185,7 +187,7 @@ def main(argv):
     ignore_header_rows = 2
 
     uri = get_current_month_uri(eid)
-    get_status(uri, auth_key, 0, ignore_header_rows)
+    get_status(uri, auth_key, 0, True, ignore_header_rows)
 
 
 if __name__ == "__main__":
