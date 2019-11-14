@@ -1,0 +1,13 @@
+FROM python:3.7
+
+# Packages that we need 
+COPY requirements.txt /app/
+WORKDIR /app
+
+# instruction to be run during image build
+RUN pip install -r requirements.txt
+
+# Docker container in /app directory 
+COPY script/*.py ./
+
+ENTRYPOINT ["/bin/bash"]

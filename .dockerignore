@@ -1,0 +1,20 @@
+# General files
+.git
+.github
+config
+.vscode
+
+notebooks
+.ipynb_checkpoints
+**/*.ipynb
+*.csv
+*.sql
+
+# Test related files
+.tox
+
+# Other virtualization methods
+venv
+
+# Temporary files
+**/__pycache__
