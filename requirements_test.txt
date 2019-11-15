@@ -1,6 +1,6 @@
 # Requirements
-tqdm
-requests
+# tqdm
+# requests
 # Dev Requirements
 pylint
 flake8
