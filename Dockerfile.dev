@@ -7,7 +7,12 @@ WORKDIR /app
 # instruction to be run during image build
 RUN pip install -r requirements.txt
 
+ARG VER=0.0.0
+
+ENV VER ${VER}
+
 # Docker container in /app directory 
 COPY script/*.py ./
+COPY test.txt ./
 
 ENTRYPOINT ["/bin/bash"]

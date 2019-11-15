@@ -28,15 +28,24 @@ def get_usage_uri(eid, start_date, end_date):
 
 def get_most_data_uri(eid):
     """Build usage uri from eid for the past three years."""
-    dte = datetime.datetime.now()
+    dte = datetime.datetime.utcnow()
     start_date = (dte - datetime.timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
+    end_date = dte.strftime("%Y-%m-%d")
+    return get_usage_uri(eid, start_date, end_date)
+
+
+def get_last_two_weeks_uri(eid):
+    """Build usage uri from eid for the last two weeks."""
+    dte = datetime.datetime.utcnow()
+    fdte = dte - datetime.timedelta(0.5 * 365 / 12)
+    start_date = fdte.strftime("%Y-%m-%d")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
 
 def get_current_month_uri(eid):
     """Build usage uri from eid for the current month."""
-    dte = datetime.datetime.now()
+    dte = datetime.datetime.utcnow()
     start_date = dte.strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
@@ -44,7 +53,7 @@ def get_current_month_uri(eid):
 
 def get_previous_30_days_uri(eid):
     """Build usage uri starting with the first of the previous month."""
-    dte = datetime.datetime.now()
+    dte = datetime.datetime.utcnow()
     start_date = (dte - datetime.timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
@@ -52,7 +61,7 @@ def get_previous_30_days_uri(eid):
 
 def get_previous_6_months_uri(eid):
     """Build usage uri for the previous 6 months."""
-    dte = datetime.datetime.now()
+    dte = datetime.datetime.utcnow()
     start_date = (dte - datetime.timedelta(6 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
@@ -60,7 +69,7 @@ def get_previous_6_months_uri(eid):
 
 def get_previous_12_months_uri(eid):
     """Build usage uri for the previous 12 months."""
-    dte = datetime.datetime.now()
+    dte = datetime.datetime.utcnow()
     start_date = (dte - datetime.timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
@@ -98,96 +107,111 @@ def download_file(url, dte, ignore_header_rows=0):
                 csvfile.write(encoded_chunk)
                 # f.flush() commented by recommendation from J.F.Sebastian
     prog.close()
-    return local_filename
+    return (local_filename, total_size)
 
 
-def get_status(uri, auth_key, count, first_run=False, ignore_header_rows=0):
-    """Submit request and poll for shared access key based URL."""
-    print("[" + str(count) + "] Calling uri " + uri)
+class NotOKError(requests.exceptions.BaseHTTPError):
+    """Custom error for No OK http request status."""
+
+
+def request_report(uri, auth_key, polling=False):
+    """Initiate request for billing usage report."""
+    print("Calling uri " + uri)
 
     headers = {
         "authorization": "bearer " + str(auth_key),
         "Content-Type": "application/json",
     }
 
-    if first_run:
-        resp = requests.post(uri, headers=headers,)
-    else:
+    if polling:
         resp = requests.get(uri, headers=headers,)
+    else:
+        resp = requests.post(uri, headers=headers,)
 
     if resp.status_code == 200 or resp.status_code == 202:
+        return resp
 
+    err_string = f"Error calling uri. {resp.status_code}: {resp.text}"
+    print(err_string)
+    raise NotOKError(err_string)
+
+
+def get_report_blob_uri(uri, auth_key):
+    """Get the Report File location by polling for a request."""
+    try:
+
+        # Request billing report
+        resp = request_report(uri, auth_key, polling=False)
         status = resp.json()["status"]
         report_url = resp.json()["reportUrl"]
 
-        if status == STATUS_QUEUED:
+        while True:
 
-            print("Queued.")
-            print(report_url)
+            # Start polling
+            if status == STATUS_QUEUED:
 
-            # Wait a few secs and check again
-            time.sleep(10)
-            get_status(report_url, auth_key, count + 1, ignore_header_rows)
+                # Wait a few secs and check again
+                print("Queued.")
+                time.sleep(10)
 
-        elif status == STATUS_IN_PROGRESS:
+            elif status == STATUS_IN_PROGRESS:
 
-            print("In Progress.")
-            print(report_url)
+                # Wait a few secs and check again
+                print("In Progress.")
+                time.sleep(10)
 
-            # Wait a few secs and check again
-            time.sleep(10)
-            get_status(report_url, auth_key, count + 1, ignore_header_rows)
+            elif status == STATUS_COMPLETED:
 
-        elif status == STATUS_COMPLETED:
+                print("Completed.")
+                blob_path = resp.json()["blobPath"]
+                return blob_path
 
-            print("Completed.")
-            blob_path = resp.json()["blobPath"]
-            print(blob_path)
+            elif status == STATUS_FAILED:
 
-            print("download blob")
-            cur_time = datetime.datetime.now()
-            download_file(blob_path, cur_time, ignore_header_rows)
+                print("Failed.")
+                break
 
-        elif status == STATUS_FAILED:
+            elif status == STATUS_NO_DATA_FOUND:
 
-            print("Failed.")
+                print("No Data Found.")
+                break
 
-        elif status == STATUS_NO_DATA_FOUND:
+            elif status == STATUS_READY_TO_DOWNLOAD:
 
-            print("No Data Found.")
+                print("Ready to download.")
+                blob_path = resp.json()["blobPath"]
+                break
 
-        elif status == STATUS_READY_TO_DOWNLOAD:
+            elif status == STATUS_TIMED_OUT:
 
-            print("Ready to download.")
-            blob_path = resp.json()["blobPath"]
-            print(blob_path)
+                print("Timed out.")
+                break
 
-            # Download Blob
-            print("download blob")
-            cur_time = datetime.datetime.now()
-            download_file(blob_path, cur_time, ignore_header_rows)
+            else:
 
-        elif status == STATUS_TIMED_OUT:
+                print("Unknown Status.")
+                break
 
-            print("Timed out.")
+            resp = request_report(report_url, auth_key, polling=True)
+            status = resp.json()["status"]
 
-        else:
-
-            print("Unknown Status.")
-    else:
-        print("Error calling uri")
-        print(resp.status_code)
-        print(resp.text)
+    except NotOKError as ex:
+        print(ex)
 
 
 def main(argv):
     """Get previous 30 days usage and latest pricing."""
     eid = argv[0]
     auth_key = argv[1]
-    ignore_header_rows = 2
+    ignore_rows = 2
 
-    uri = get_current_month_uri(eid)
-    get_status(uri, auth_key, 0, True, ignore_header_rows)
+    uri = get_previous_30_days_uri(eid)
+    blob_path = get_report_blob_uri(uri, auth_key)
+
+    cur_time = datetime.datetime.utcnow()
+    file_name, total_size = download_file(blob_path, cur_time, ignore_rows)
+
+    return (file_name, total_size)
 
 
 if __name__ == "__main__":

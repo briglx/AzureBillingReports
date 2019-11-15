@@ -1,7 +1,7 @@
 # Requirements
 tqdm
-# Dev Requirements
 requests
+# Dev Requirements
 pylint
 flake8
 pydocstyle

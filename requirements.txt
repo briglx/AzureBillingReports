@@ -1,3 +1,4 @@
 # Requirements
+azure-storage-blob
 requests
 tqdm
