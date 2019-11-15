@@ -23,7 +23,6 @@ branches:
 
 install: 
   - pip install -U tox
-  # - pip install -r requirements_test.txt
 language: python
 
 script: tox
