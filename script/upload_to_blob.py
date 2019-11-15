@@ -16,7 +16,7 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
 
 def upload_file(src, container_name, connection_string):
     """Upload file to azure."""
-    print(f"Uploading {src}")
+    print("Uploading " + src)
 
     client = BlobServiceClient.from_connection_string(connection_string)
 
