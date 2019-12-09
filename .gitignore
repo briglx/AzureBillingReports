@@ -14,3 +14,4 @@ PartNumber.csv
 NonWindows.csv
 WindowsMachines.csv
 .vscode/settings.json
+script/__pycache__/*.pyc
