@@ -94,7 +94,7 @@ def download_file(url, dte, ignore_header_rows=0):
             if ignore_header_rows and not skipped_header:
                 bom = chunk[0]
                 lines = chunk.split("\r\n")
-                joined = bom + "".join(lines[ignore_header_rows:])
+                joined = bom + "\r\n".join(lines[ignore_header_rows:])
 
                 encoded_chunk = joined.encode()
 
