@@ -2,6 +2,7 @@
 """Script to upload billing data to blob storage."""
 import sys
 import os
+from urllib.parse import urlparse
 import requests
 from azure.storage.blob import BlobServiceClient, BlobBlock
 from tqdm import tqdm as progress
@@ -82,7 +83,6 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
         if step < chunk_size:
             length = step
 
-
         copied_blob.stage_block_from_url(
             block_id=i + 1,
             source_url=blob_url,
@@ -113,7 +113,7 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
     #   ErrorCode:CannotVerifyCopySource
     #   Error:None
 
-    # Throws error 
+    # Throws error
     #   ErrorCode:InvalidBlobOrBlock
     #
     # When trying smaller chunks
@@ -181,9 +181,8 @@ def main(argv):
 
     # upload_file(file_name, container_name, connection_string)
 
-    from urllib.parse import urlparse
-    a = urlparse(file_name)
-    _name = os.path.basename(a.path)
+    url_parts = urlparse(file_name)
+    _name = os.path.basename(url_parts.path)
 
     dest_file_name = _name.replace(".csv", "_block.csv")
     copy_blob(file_name, dest_file_name, container_name, connection_string)
