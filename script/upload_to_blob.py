@@ -62,24 +62,44 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
     # copied_blob = client.get_blob_client(container_name, dest_file_name)
 
     # Upload empty file
+    chunk_size = 10 * 10 * 10 * 10 * 10 * 1024
+
     copied_blob.upload_blob(b"")
 
     resp = requests.get(blob_url, stream=True)
     total_size = int(resp.headers.get("content-length", 0))
 
-    your_block_id = "1234"
+    # your_block_id = "1234"
 
-    copied_blob.stage_block_from_url(
-        block_id=your_block_id,
-        source_url=blob_url,
-        source_offset=0,
-        source_length=total_size,
-    )
+    i = 0
+    running = 0
+    prog = progress(total=total_size, unit="iB", unit_scale=True)
 
-    block_list = [BlobBlock(block_id=your_block_id)]
+    # Add step
+    for step in range(total_size, 0, -chunk_size):
+        offset = total_size - step
+        length = chunk_size
+        if step < chunk_size:
+            length = step
+
+
+        copied_blob.stage_block_from_url(
+            block_id=i + 1,
+            source_url=blob_url,
+            source_offset=offset,
+            source_length=length,
+        )
+
+        running += length
+        i += 1
+        prog.update(length)
+
+    block_list = [BlobBlock(block_id=1)]
     copied_blob.commit_block_list(block_list)
 
     committed, _ = copied_blob.get_block_list("all")
+
+    prog.close()
 
     assert total_size == len(committed)
 
@@ -92,6 +112,11 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
     #   Time:2019-12-09T17:54:51.8263383Z
     #   ErrorCode:CannotVerifyCopySource
     #   Error:None
+
+    # Throws error 
+    #   ErrorCode:InvalidBlobOrBlock
+    #
+    # When trying smaller chunks
 
 
 # def copy_blob_as_stream(blob_url, container_client):
@@ -156,17 +181,12 @@ def main(argv):
 
     # upload_file(file_name, container_name, connection_string)
 
-    blob_url = "".join(
-        (
-            "https://blxbillingstorage.blob.core.windows.net/billingfiles/",
-            "usage-2019-11-19T00-00-00.172957-twoweeks.csv",
-            "?st=2019-12-09T17%3A25%3A10Z&se=2020-12-10T17%3A25%3A00Z&",
-            "sp=racwdl&sv=2018-03-28&sr=c&",
-            "sig=WBmZjsBVKmWK6gcTPQlca0G9hBDBX4wTN51Q3BzHWms%3D",
-        )
-    )
-    dest_file_name = blob_url + "-block.csv"
-    copy_blob(blob_url, dest_file_name, container_name, connection_string)
+    from urllib.parse import urlparse
+    a = urlparse(file_name)
+    _name = os.path.basename(a.path)
+
+    dest_file_name = _name.replace(".csv", "_block.csv")
+    copy_blob(file_name, dest_file_name, container_name, connection_string)
 
 
 if __name__ == "__main__":
