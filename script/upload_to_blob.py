@@ -8,6 +8,20 @@ from azure.storage.blob import BlobServiceClient, BlobBlock
 from tqdm import tqdm as progress
 
 
+def copy_blob(blob_url, dest_file_name, container_name, connection_string):
+    """Copy remote blob file to destination container."""
+    client = BlobServiceClient.from_connection_string(connection_string)
+    copied_blob = client.get_blob_client(container_name, dest_file_name)
+
+    # copy_blob_as_blocks(blob_url, copied_blob)
+
+    copy_blob_as_remote(blob_url, copied_blob)
+
+    # copy_blob_as_github_suggested(blob_url, copied_blob)
+
+    return copied_blob.url
+
+
 def copy_blob_as_blocks(blob_url, copied_blob):
     """Copy blob as blocks."""
     # Get target size
@@ -138,24 +152,11 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
 #     print(properties)
 
 
-def copy_blob(blob_url, dest_file_name, container_name, connection_string):
-    """Copy remote blob file to destination container."""
-    client = BlobServiceClient.from_connection_string(connection_string)
-    copied_blob = client.get_blob_client(container_name, dest_file_name)
-
-    # copy_blob_as_blocks(blob_url, copied_blob)
-
-    # copy_blob_as_remote(blob_url, copied_blob)
-
-    copy_blob_as_github_suggested(blob_url, copied_blob)
-
-
 def upload_file(src, container_name, connection_string):
     """Upload file to azure."""
     print("Uploading " + src)
 
     client = BlobServiceClient.from_connection_string(connection_string)
-
     container_client = client.get_container_client(container_name)
 
     with open(src, "rb") as data:
@@ -181,6 +182,7 @@ def main(argv):
 
     # upload_file(file_name, container_name, connection_string)
 
+    # Test when file_name is remote blob url
     url_parts = urlparse(file_name)
     _name = os.path.basename(url_parts.path)
 

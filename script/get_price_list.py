@@ -3,7 +3,7 @@
 """Script to fetch pricing."""
 
 import sys
-import datetime
+from datetime import datetime, timezone
 import json
 import csv
 
@@ -36,7 +36,9 @@ def get_pricelist(uri, auth_key):
 
         price_list = json.loads(resp.content)
 
-        dte = datetime.datetime.now()
+        dte = datetime.utcnow()
+        dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
+
         local_filename = "pricing-%s.csv" % (dte.isoformat())
         local_filename = local_filename.replace(":", "-")
 

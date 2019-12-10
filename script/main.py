@@ -2,13 +2,58 @@
 """Script to copy last two weeks of billing data."""
 
 import os
-import datetime
+from datetime import datetime, timezone
 import argparse
-import get_usage_data
-import upload_to_blob
+from urllib.parse import urlparse, urlunparse
+import subprocess
+from script import get_usage_data
+from script import upload_to_blob
 
 # pylint: disable=C0103
 # pylint: disable=W0621
+
+
+def get_block_name(source):
+    url_parts = urlparse(source)
+
+    file_name = url_parts.path
+    extension = file_name.split(".")[-1]
+
+    new_path = file_name.replace("." + extension, "_block." + extension)
+
+    new_file_name = urlunparse(
+        (
+            url_parts.scheme,
+            url_parts.netloc,
+            new_path,
+            url_parts.params,
+            url_parts.query,
+            url_parts.fragment,
+        )
+    )
+
+    return new_file_name
+
+
+def copy_as_block(source, destination):
+
+    # Escape characters
+    source = source.replace("&", "^&")
+    destination = destination.replace("&", "^&")
+
+    # Check if azcopy is installed
+    args = ["azcopy", "--version"]
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+    if "azcopy" not in out.decode("utf-8") or err:
+        raise Exception("AZ copy not found on the system.")
+
+    # copy as block
+    args = ["azcopy", "copy", source, destination, "--blob-type", "BlockBlob"]
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
+
+    print(out, err)
 
 
 def main(eid, auth_key, container_name, connection_string):
@@ -29,13 +74,21 @@ def main(eid, auth_key, container_name, connection_string):
     uri = get_usage_data.get_last_two_weeks_uri(eid)
     blob_url = get_usage_data.get_report_blob_uri(uri, auth_key)
 
-    cur_time = datetime.datetime.utcnow()
+    print("Fetching: " + blob_url)
+
+    cur_time = datetime.utcnow()
+    cur_time = cur_time.replace(tzinfo=timezone.utc, microsecond=0)
+
     local_filename = "usage-%s-twoweeks.csv" % (cur_time.isoformat())
     local_filename = local_filename.replace(":", "-")
 
-    upload_to_blob.copy_blob(
+    copied_blob = upload_to_blob.copy_blob(
         blob_url, local_filename, container_name, connection_string
     )
+
+    # Change to block blob
+    dest_file_name = get_block_name(copied_blob)
+    copy_as_block(copied_blob, dest_file_name)
 
 
 if __name__ == "__main__":
