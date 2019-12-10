@@ -34,7 +34,7 @@ def test_change_block_type():
         "?st=2019-12-10T22%3A11%3A42Z&",
         "se=2020-12-11T22%3A11%3A00Z&",
         "sp=racwl&sv=2018-03-28&sr=c&",
-        "sig=%2FetP8wTWEvrY6Ym%2BwJYwkKgMKO1b1RFf7ARAhACRL5E%3D",
+        "sig=%2FetP8wTWsdf%2BwJYwkKgMKO1b1RFf7ARAhACRL5E%3D",
     ))
     blob_url = "".join((
         "https://blxbillingstorage.blob.core.windows.net/",
