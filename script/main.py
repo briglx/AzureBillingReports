@@ -14,6 +14,7 @@ from script import upload_to_blob
 
 
 def get_block_name(source):
+    """Get block name version of source."""
     url_parts = urlparse(source)
 
     file_name = url_parts.path
@@ -36,7 +37,7 @@ def get_block_name(source):
 
 
 def copy_as_block(source, destination):
-
+    """Use azcopy to copy as block blob."""
     # Escape characters
     source = source.replace("&", "^&")
     destination = destination.replace("&", "^&")
