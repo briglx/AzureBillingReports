@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """Script to fetch latest monthly billing data and price sheet."""
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import time
 import requests
 from tqdm import tqdm as progress
@@ -28,20 +28,20 @@ def get_usage_uri(eid, start_date, end_date):
 
 def get_most_data_uri(eid):
     """Build usage uri from eid for the past three years."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
-    start_date = (dte - datetime.timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
+    start_date = (dte - timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
 
 def get_last_two_weeks_uri(eid):
     """Build usage uri from eid for the last two weeks."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
-    fdte = dte - datetime.timedelta(0.5 * 365 / 12)
+    fdte = dte - timedelta(0.5 * 365 / 12)
     start_date = fdte.strftime("%Y-%m-%d")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
@@ -49,7 +49,7 @@ def get_last_two_weeks_uri(eid):
 
 def get_current_month_uri(eid):
     """Build usage uri from eid for the current month."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
     start_date = dte.strftime("%Y-%m-01")
@@ -59,30 +59,30 @@ def get_current_month_uri(eid):
 
 def get_previous_30_days_uri(eid):
     """Build usage uri starting with the first of the previous month."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
-    start_date = (dte - datetime.timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
+    start_date = (dte - timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
 
 def get_previous_6_months_uri(eid):
     """Build usage uri for the previous 6 months."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
-    start_date = (dte - datetime.timedelta(6 * 365 / 12)).strftime("%Y-%m-01")
+    start_date = (dte - timedelta(6 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
 
 def get_previous_12_months_uri(eid):
     """Build usage uri for the previous 12 months."""
-    dte = datetime.datetime.utcnow()
+    dte = datetime.utcnow()
     dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
 
-    start_date = (dte - datetime.timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
+    start_date = (dte - timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
     end_date = dte.strftime("%Y-%m-%d")
     return get_usage_uri(eid, start_date, end_date)
 
@@ -220,7 +220,7 @@ def main(argv):
     uri = get_previous_30_days_uri(eid)
     blob_path = get_report_blob_uri(uri, auth_key)
 
-    cur_time = datetime.datetime.utcnow()
+    cur_time = datetime.utcnow()
     cur_time = cur_time.replace(tzinfo=timezone.utc, microsecond=0)
 
     file_name, total_size = download_file(blob_path, cur_time, ignore_rows)
