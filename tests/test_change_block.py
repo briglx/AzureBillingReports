@@ -59,5 +59,6 @@ def test_datetime_fix():
     """Test test_datetime_fix."""
     cur_time = datetime.utcnow()
     cur_time = cur_time.replace(tzinfo=timezone.utc, microsecond=0)
+    cur_time.isoformat()
 
     assert cur_time
