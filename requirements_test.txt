@@ -5,3 +5,6 @@
 pylint
 flake8
 pydocstyle
+coverage
+pytest-cov
+coveralls
