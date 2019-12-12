@@ -27,4 +27,4 @@ if __name__ == "__main__":
         raise ValueError("Parameter sas_key is required.")
 
     new_name = main.get_block_name(blob_url + sas_key)
-    main.copy_as_block(blob_url + sas_key, new_name)
+    main.convert_blob(blob_url + sas_key, new_name)

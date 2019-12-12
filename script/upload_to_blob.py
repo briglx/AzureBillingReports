@@ -2,9 +2,17 @@
 """Script to upload billing data to blob storage."""
 import sys
 import os
+import time
 from urllib.parse import urlparse
+from datetime import datetime, timedelta
 import requests
-from azure.storage.blob import BlobServiceClient, BlobBlock
+from azure.storage.blob import (
+    BlobServiceClient,
+    BlobBlock,
+    generate_account_sas,
+    ResourceTypes,
+    AccountSasPermissions,
+)
 from tqdm import tqdm as progress
 
 
@@ -19,7 +27,19 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
 
     # copy_blob_as_github_suggested(blob_url, copied_blob)
 
-    return copied_blob.url
+    # Generate Sas Key for writing
+    account_name = connection_string.split(";")[1].split("=")[-1]
+    account_key = connection_string.split(";")[2].replace("AccountKey=", "")
+
+    sas_token = generate_account_sas(
+        account_name=account_name,
+        account_key=account_key,
+        resource_types=ResourceTypes(container=True, object=True),
+        permission=AccountSasPermissions(read=True, write=True),
+        expiry=datetime.utcnow() + timedelta(hours=1),
+    )
+
+    return copied_blob.url + "?" + sas_token
 
 
 def copy_blob_as_blocks(blob_url, copied_blob):
@@ -66,9 +86,30 @@ def copy_blob_as_blocks(blob_url, copied_blob):
 def copy_blob_as_remote(blob_url, copied_blob):
     """Copy blob as append file."""
     # Copies as Append file
+    resp = requests.get(blob_url, stream=True)
+    total_size = int(resp.headers.get("content-length", 0))
+
     copied_blob.start_copy_from_url(blob_url)
     props = copied_blob.get_blob_properties()
-    print(props.copy.status)
+
+    count = 0
+    prog = progress(total=total_size, unit="iB", unit_scale=True)
+    while props.copy.status == "pending":
+
+        print(props.copy.status + " " + props.copy.progress)
+
+        count = count + 1
+        if count > 100:
+            raise TimeoutError("Timed out waiting for async copy to complete.")
+        time.sleep(5)
+
+        length = int(props.copy.progress.split("/")[0])
+        diff = length - prog.n
+        prog.update(diff)
+
+        props = copied_blob.get_blob_properties()
+
+    prog.close()
 
 
 def copy_blob_as_github_suggested(blob_url, copied_blob):
