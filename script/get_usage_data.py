@@ -19,72 +19,66 @@ HOST_NAME = "https://consumption.azure.com"
 API_PATH = "/v3/enrollments/%s/usagedetails/submit?startTime=%s&endTime=%s"
 
 
-def get_usage_uri(eid, start_date, end_date):
-    """Build usage uri from eid and start and end dates."""
+def get_utc_now():
+    """Get current utc time."""
+    return datetime.utcnow()
+
+
+def get_usage_uri(eid, previous_months, rolling=True, dte=None):
+    """Build usage uri from eid for the given months."""
+    # validate previous_months
+    if previous_months < 0:
+        raise TypeError("Parameter previous_months must be positive.")
+
+    if rolling:
+        start_format = "%Y-%m-%d"
+    else:
+        start_format = "%Y-%m-01"
+
+    if dte is None:
+        dte = get_utc_now()
+
+    dte = dte.replace(microsecond=0)
+    # dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
+
+    delta = timedelta(previous_months * 365 / 12)
+    start_date = (dte - delta).strftime(start_format)
+    end_date = dte.strftime("%Y-%m-%d")
+
     path_url = HOST_NAME + API_PATH
     uri = path_url % (eid, start_date, end_date)
+
     return uri
 
 
 def get_most_data_uri(eid):
     """Build usage uri from eid for the past three years."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    start_date = (dte - timedelta(36 * 365 / 12)).strftime("%Y-%m-01")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 36, False)
 
 
 def get_last_two_weeks_uri(eid):
     """Build usage uri from eid for the last two weeks."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    fdte = dte - timedelta(0.5 * 365 / 12)
-    start_date = fdte.strftime("%Y-%m-%d")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 0.5)
 
 
 def get_current_month_uri(eid):
     """Build usage uri from eid for the current month."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    start_date = dte.strftime("%Y-%m-01")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 1, False)
 
 
 def get_previous_30_days_uri(eid):
     """Build usage uri starting with the first of the previous month."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    start_date = (dte - timedelta(1 * 365 / 12)).strftime("%Y-%m-01")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 1)
 
 
 def get_previous_6_months_uri(eid):
     """Build usage uri for the previous 6 months."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    start_date = (dte - timedelta(6 * 365 / 12)).strftime("%Y-%m-01")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 6, False)
 
 
 def get_previous_12_months_uri(eid):
     """Build usage uri for the previous 12 months."""
-    dte = datetime.utcnow()
-    dte = dte.replace(tzinfo=timezone.utc, microsecond=0)
-
-    start_date = (dte - timedelta(12 * 365 / 12)).strftime("%Y-%m-01")
-    end_date = dte.strftime("%Y-%m-%d")
-    return get_usage_uri(eid, start_date, end_date)
+    return get_usage_uri(eid, 12, False)
 
 
 def download_file(url, dte, ignore_header_rows=0):
@@ -212,7 +206,7 @@ def get_report_blob_uri(uri, auth_key):
 
 
 def main(argv):
-    """Get previous 30 days usage and latest pricing."""
+    """Download previous 30 days usage and latest pricing."""
     eid = argv[0]
     auth_key = argv[1]
     ignore_rows = 2

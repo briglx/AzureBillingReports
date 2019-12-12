@@ -1,9 +1,20 @@
 FROM python:3.7
 
+# Get azcopy
+RUN wget https://aka.ms/downloadazcopy-v10-linux
+RUN tar xvzf downloadazcopy-v10-linux -C /tmp/
+RUN cp -r /tmp/azcopy*/ /opt/azcopy
+RUN rm downloadazcopy-v10-linux
+RUN rm -Rf /tmp/azcopy*
+RUN export PATH=/opt/azcopy/:$PATH
+
+RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc 
+RUN echo 'export PATH=$PATH:/opt/azcopy/' >> ~/.bashrc 
+
 # Packages that we need 
 COPY requirements.txt /app/
-WORKDIR /app
 
+WORKDIR /app
 # instruction to be run during image build
 RUN pip install -r requirements.txt
 
@@ -12,7 +23,9 @@ ARG VER=0.0.0
 ENV VER ${VER}
 
 # Docker container in /app directory 
-COPY script/*.py ./
-COPY test.txt ./
+COPY setup.py .
+COPY script/*.py ./script/
+
+RUN pip install .
 
 ENTRYPOINT ["/bin/bash"]

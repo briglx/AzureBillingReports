@@ -4,7 +4,6 @@
 import os
 from datetime import datetime, timezone
 import argparse
-import time
 from urllib.parse import urlparse, urlunparse
 import subprocess
 from script import get_usage_data
@@ -15,7 +14,7 @@ from script import upload_to_blob
 
 
 def get_block_name(source):
-    """Get block name version of source."""
+    """Get block name version from source."""
     url_parts = urlparse(source)
 
     file_name = url_parts.path
@@ -37,8 +36,10 @@ def get_block_name(source):
     return new_file_name
 
 
-def convert_blob(source, destination):
+def convert_blob(source):
     """Use azcopy to copy as block blob."""
+    destination = get_block_name(source)
+
     # Escape characters
     if os.name == "nt":
         source = source.replace("&", "^&")
@@ -74,27 +75,24 @@ def main(eid, auth_key, container_name, connection_string):
     if not connection_string:
         raise ValueError("Parameter connection_string is required.")
 
+    # Request Report for last two weeks
     uri = get_usage_data.get_last_two_weeks_uri(eid)
-    blob_url = get_usage_data.get_report_blob_uri(uri, auth_key)
-
-    print("Fetching: " + blob_url)
+    report_url = get_usage_data.get_report_blob_uri(uri, auth_key)
 
     cur_time = datetime.utcnow()
     cur_time = cur_time.replace(tzinfo=timezone.utc, microsecond=0)
 
-    local_filename = "usage-%s-twoweeks.csv" % (cur_time.isoformat())
-    local_filename = local_filename.replace(":", "-")
+    target_filename = "usage-%s-twoweeks.csv" % (cur_time.isoformat())
+    target_filename = target_filename.replace(":", "-")
 
-    copied_blob = upload_to_blob.copy_blob(
-        blob_url, local_filename, container_name, connection_string
+    copied_file_url = upload_to_blob.copy_blob(
+        report_url, target_filename, container_name, connection_string
     )
 
-    # Hack. Set timer to wait for blob to copy over
-    time.sleep(30)
+    # Convert from append to block blob
+    convert_blob(copied_file_url)
 
-    # Change to block blob
-    dest_file_name = get_block_name(copied_blob)
-    convert_blob(copied_blob, dest_file_name)
+    # Notify complete
 
 
 if __name__ == "__main__":

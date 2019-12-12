@@ -16,21 +16,17 @@ from azure.storage.blob import (
 from tqdm import tqdm as progress
 
 
-def copy_blob(blob_url, dest_file_name, container_name, connection_string):
-    """Copy remote blob file to destination container."""
-    client = BlobServiceClient.from_connection_string(connection_string)
-    copied_blob = client.get_blob_client(container_name, dest_file_name)
-
-    # copy_blob_as_blocks(blob_url, copied_blob)
-
-    copy_blob_as_remote(blob_url, copied_blob)
-
-    # copy_blob_as_github_suggested(blob_url, copied_blob)
-
-    # Generate Sas Key for writing
+def get_account_info(connection_string):
+    """Get Account info from a connection string."""
     account_name = connection_string.split(";")[1].split("=")[-1]
     account_key = connection_string.split(";")[2].replace("AccountKey=", "")
 
+    return (account_name, account_key)
+
+
+def generate_sas_key(connection_string):
+    """Generate SAS key from connection string info."""
+    account_name, account_key = get_account_info(connection_string)
     sas_token = generate_account_sas(
         account_name=account_name,
         account_key=account_key,
@@ -38,6 +34,25 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
         permission=AccountSasPermissions(read=True, write=True),
         expiry=datetime.utcnow() + timedelta(hours=1),
     )
+
+    return sas_token
+
+
+def copy_blob(blob_url, dest_file_name, container_name, connection_string):
+    """Copy remote blob file to destination container."""
+    print("Fetching " + blob_url)
+
+    # Create Destination Blob
+    client = BlobServiceClient.from_connection_string(connection_string)
+    copied_blob = client.get_blob_client(container_name, dest_file_name)
+
+    # Choose from different copy implementations
+    copy_blob_as_remote(blob_url, copied_blob)
+    # copy_blob_as_github_suggested(blob_url, copied_blob)
+    # copy_blob_as_blocks(blob_url, copied_blob)
+
+    # Generate Sas Key for writing
+    sas_token = generate_sas_key(connection_string)
 
     return copied_blob.url + "?" + sas_token
 
@@ -86,14 +101,17 @@ def copy_blob_as_blocks(blob_url, copied_blob):
 def copy_blob_as_remote(blob_url, copied_blob):
     """Copy blob as append file."""
     # Copies as Append file
+    count = 0
+
+    # Get file size
     resp = requests.get(blob_url, stream=True)
     total_size = int(resp.headers.get("content-length", 0))
+    prog = progress(total=total_size, unit="iB", unit_scale=True)
 
+    # Start copy process
     copied_blob.start_copy_from_url(blob_url)
     props = copied_blob.get_blob_properties()
 
-    count = 0
-    prog = progress(total=total_size, unit="iB", unit_scale=True)
     while props.copy.status == "pending":
 
         print(props.copy.status + " " + props.copy.progress)
@@ -114,21 +132,17 @@ def copy_blob_as_remote(blob_url, copied_blob):
 
 def copy_blob_as_github_suggested(blob_url, copied_blob):
     """Copy append as block via github suggession."""
-    # client = BlobServiceClient.from_connection_string(connection_string)
-    # copied_blob = client.get_blob_client(container_name, dest_file_name)
-
-    # Upload empty file
+    i = 0
+    running = 0
     chunk_size = 10 * 10 * 10 * 10 * 10 * 1024
 
+    # Upload empty file
     copied_blob.upload_blob(b"")
 
+    # Get File size
     resp = requests.get(blob_url, stream=True)
     total_size = int(resp.headers.get("content-length", 0))
 
-    # your_block_id = "1234"
-
-    i = 0
-    running = 0
     prog = progress(total=total_size, unit="iB", unit_scale=True)
 
     # Add step
@@ -152,11 +166,9 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
     block_list = [BlobBlock(block_id=1)]
     copied_blob.commit_block_list(block_list)
 
-    committed, _ = copied_blob.get_block_list("all")
+    # committed, _ = copied_blob.get_block_list("all")
 
     prog.close()
-
-    assert total_size == len(committed)
 
     # Throws error
     #   azure.core.exceptions.ResourceNotFoundError:
