@@ -4,6 +4,9 @@
 import os
 from datetime import datetime, timezone
 import argparse
+import requests
+import random
+import string
 from urllib.parse import urlparse, urlunparse
 import subprocess
 from script import get_usage_data
@@ -57,7 +60,26 @@ def convert_blob(source):
     proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
     (out, err) = proc.communicate()
 
-    print(out, err)
+    print(out.decode("utf-8"))
+    if err:
+        print(err.decode("utf-8"))
+
+
+def notify_complete(job_id):
+    """Notify trigger that job is complete."""
+    print("Calling trigger to stop container")
+
+    uri = "https://myfunctionbilling.azurewebsites.net/api/DockerHTTPTrigger" \
+          "?code=sdYZl5NvaT/N1Lo3HRlLsBD5iig2CJE6IR2csvYi5A3PgjzCTpNNLw=="
+
+    resp = requests.get(uri + "&job_id=" + job_id)
+
+    print(resp.text)
+
+
+def get_job_id():
+    """Create random job id."""
+    return ''.join(random.choice(string.hexdigits) for x in range(8))
 
 
 def main(eid, auth_key, container_name, connection_string):
@@ -74,6 +96,9 @@ def main(eid, auth_key, container_name, connection_string):
 
     if not connection_string:
         raise ValueError("Parameter connection_string is required.")
+
+    job_id = get_job_id()
+    print(f"Starting job {job_id}")
 
     # Request Report for last two weeks
     uri = get_usage_data.get_last_two_weeks_uri(eid)
@@ -93,6 +118,7 @@ def main(eid, auth_key, container_name, connection_string):
     convert_blob(copied_file_url)
 
     # Notify complete
+    notify_complete(job_id)
 
 
 if __name__ == "__main__":

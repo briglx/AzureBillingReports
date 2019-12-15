@@ -25,3 +25,37 @@ Getting Started
 
 - Open the AzureBillingViaCsv.pbit template file
 - Provide the full path to the downloaded csv file.
+
+Building and Deploying
+==========
+
+Build docker image
+
+.. code-block:: bash
+
+    docker build --rm -f "Dockerfile.dev" -t azurebillingreports:latest
+
+Run docker image
+
+.. code-block:: bash
+
+    docker run --rm -it --env-file local.env azurebillingreports:latest
+
+Deploy the image to repository. Repalce the name <registryname> with the name of your repository. After deploying, this will remove the image from your local Docker environment
+
+.. code-block:: bash
+
+    az acr login --name  <registryname>.azurecr.io
+    docker tag azurebillingreports <registryname>.azurecr.io/azurebillingreports:v1
+    docker push <registryname>.azurecr.io/azurebillingreports:v1
+    docker rmi <registryname>.azurecr.io/azurebillingreports:v1
+
+Run the container with the following:
+
+.. code-block:: bash
+
+    az container create --name blxcontainergroup --resource-group blxbilling --image blxcontainerregistry.azurecr.io/azurebillingreports:v1 --registry-login-server blxcontainerregistry.azurecr.io --registry-username <acr_username> --registry-password <acr_password> --secure-environment-variables 'ENROLLMENT_ID=<enrollment_id>' 'BILLING_AUTH_KEY=<billing_auth_key>' 'STORAGE_CONTAINER_NAME=<billingfiles>' 'STORAGE_CONNECTION_STRING=<connection_string>'
+
+References
+
+- https://docs.microsoft.com/en-us/azure/container-instances/container-instances-using-azure-container-registry

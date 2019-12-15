@@ -28,4 +28,4 @@ COPY script/*.py ./script/
 
 RUN pip install .
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/usr/local/bin/python", "/app/script/main.py"]
