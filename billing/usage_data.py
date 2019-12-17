@@ -137,7 +137,7 @@ def request_report(uri, auth_key, polling=False):
     if resp.status_code == 200 or resp.status_code == 202:
         return resp
 
-    err_string = f"Error calling uri. {resp.status_code} {resp.text}"
+    err_string = "Error calling uri. {} {}".format(resp.status_code, resp.text)
     raise NotOKError(err_string)
 
 

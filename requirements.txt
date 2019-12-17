@@ -1,5 +1,7 @@
 # Requirements
 azure-common==1.1.23
+azure-mgmt-containerinstance==1.5.0
+azure-mgmt-resource==7.0.0
 azure-storage-blob==12.0.0
 PyYAML==5.2
 requests==2.22.0
