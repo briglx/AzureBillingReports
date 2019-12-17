@@ -1,11 +1,8 @@
-# Requirements
-# tqdm
-# requests
 # Dev Requirements
-pylint
-flake8
-flake8-bugbear
-pydocstyle
-coverage
-pytest-cov
+coverage==4.5.4
 coveralls
+flake8==3.7.9
+flake8-bugbear==19.8.0
+pylint==2.4.4
+pydocstyle==4.0.1
+pytest-cov==2.8.1

@@ -1,5 +1,6 @@
 # Requirements
-azure-storage-blob
-requests
-tqdm
-pyyaml
+azure-common==1.1.23
+azure-storage-blob==12.0.0
+PyYAML==5.2
+requests==2.22.0
+tqdm==4.38.0
