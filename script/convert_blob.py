@@ -2,12 +2,17 @@
 """Script to convert blob type."""
 import os
 import argparse
-from script import main
+import logging
+from billing import blob_storage, util
 
 # pylint: disable=C0103
 
 
 if __name__ == "__main__":
+    util.setup_logging()
+    _LOGGER = logging.getLogger(__name__)
+    _LOGGER.info("Starting script")
+
     parser = argparse.ArgumentParser(
         description="Convert azure blob type.", add_help=True,
     )
@@ -26,4 +31,4 @@ if __name__ == "__main__":
     if not sas_key:
         raise ValueError("Parameter sas_key is required.")
 
-    main.convert_blob(blob_url + sas_key)
+    blob_storage.convert_blob(blob_url + sas_key)

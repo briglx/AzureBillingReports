@@ -1,13 +1,12 @@
 #!/usr/bin/python
-
 """Script to fetch pricing."""
-
 import sys
 from datetime import datetime, timezone
 import json
 import csv
-
+import logging
 import requests
+from billing import util
 
 HOST_NAME = "https://consumption.azure.com/v3/enrollments/%s"
 API_PATH = "/pricesheet"
@@ -22,7 +21,7 @@ def get_uri(eid):
 
 def get_pricelist(uri, auth_key):
     r"""Download pricelist."""
-    print("Calling uri " + uri)
+    _LOGGER.info("Calling uri %s", uri)
 
     headers = {
         "authorization": "bearer " + str(auth_key),
@@ -30,7 +29,7 @@ def get_pricelist(uri, auth_key):
     }
 
     resp = requests.get(uri, headers=headers,)
-    print(resp)
+    _LOGGER.info(resp)
 
     if resp.status_code == 200:
 
@@ -55,9 +54,9 @@ def get_pricelist(uri, auth_key):
                 writer.writerows([row])
 
     else:
-        print("Error calling uri")
-        print(resp.status_code)
-        print(resp.text)
+        _LOGGER.error("Error calling uri")
+        _LOGGER.error(resp.status_code)
+        _LOGGER.error(resp.text)
 
 
 def main(argv):
@@ -70,4 +69,8 @@ def main(argv):
 
 
 if __name__ == "__main__":
+    util.setup_logging()
+    _LOGGER = logging.getLogger(__name__)
+    _LOGGER.info("Starting script")
+
     main(sys.argv[1:])

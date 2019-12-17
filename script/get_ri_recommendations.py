@@ -1,12 +1,11 @@
 #!/usr/bin/python
-
 """Script to fetch RI recommendations."""
-
 import sys
 import json
 import csv
-
+import logging
 import requests
+from billing import util
 
 RI_TYPES = ["Shared", "Single"]
 HOST_NAME = "https://consumption.azure.com/v2/enrollments/%s"
@@ -40,7 +39,7 @@ def get_most_data_uri(eid, ri_type):
 
 def get_recommendations(uri, auth_key, ri_type):
     r"""Download recommendations.."""
-    print("Calling uri " + uri)
+    _LOGGER.info("Calling uri %s", uri)
 
     headers = {
         "authorization": "bearer " + str(auth_key),
@@ -48,7 +47,7 @@ def get_recommendations(uri, auth_key, ri_type):
     }
 
     resp = requests.get(uri, headers=headers,)
-    print(resp)
+    _LOGGER.info(resp)
 
     recommendations = json.loads(resp.content)
 
@@ -77,4 +76,8 @@ def main(argv):
 
 
 if __name__ == "__main__":
+    util.setup_logging()
+    _LOGGER = logging.getLogger(__name__)
+    _LOGGER.info("Starting script")
+
     main(sys.argv[1:])

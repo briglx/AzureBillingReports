@@ -4,6 +4,7 @@
 # Dev Requirements
 pylint
 flake8
+flake8-bugbear
 pydocstyle
 coverage
 pytest-cov

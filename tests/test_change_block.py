@@ -1,13 +1,13 @@
 """Test the main helper methods."""
-from script import main
 from datetime import datetime, timezone
 from tqdm import tqdm as progress
+from billing import blob_storage
 
 
 def test_get_new_name():
     """Test test_get_new_name."""
 
-    BLOCK_NAME = "usage-2019-11-23T00-00-00.156611-twoweeks_block.csv"
+    block_name = "usage-2019-11-23T00-00-00.156611-twoweeks_block.csv"
 
     # testing
     t_host = "https://blxbillingstorage.blob.core.windows.net/billingfiles/"
@@ -22,9 +22,9 @@ def test_get_new_name():
     t_file_name = "usage-2019-11-23T00-00-00.156611-twoweeks.csv"
 
     copied_blob = t_host + t_file_name + t_sas_key
-    target_name = t_host + BLOCK_NAME + t_sas_key
+    target_name = t_host + block_name + t_sas_key
 
-    new_name = main.get_block_name(copied_blob)
+    new_name = blob_storage.get_block_name(copied_blob)
 
     assert len(new_name) == len(copied_blob) + len("-block")
     assert new_name == target_name
@@ -40,6 +40,7 @@ def test_datetime_fix():
 
 
 def test_progress():
+    """Test progress bar."""
     total_size = 100
     prog = progress(total=total_size, unit="iB", unit_scale=True)
 

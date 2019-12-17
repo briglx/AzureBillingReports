@@ -7,9 +7,10 @@ RUN cp -r /tmp/azcopy*/ /opt/azcopy
 RUN rm downloadazcopy-v10-linux
 RUN rm -Rf /tmp/azcopy*
 RUN export PATH=/opt/azcopy/:$PATH
+ENV PATH="/opt/azcopy:${PATH}"
 
 RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc 
-RUN echo 'export PATH=$PATH:/opt/azcopy/' >> ~/.bashrc 
+# RUN echo 'export PATH=$PATH:/opt/azcopy/' >> ~/.bashrc 
 
 # Packages that we need 
 COPY requirements.txt /app/
@@ -24,8 +25,11 @@ ENV VER ${VER}
 
 # Docker container in /app directory 
 COPY setup.py .
+COPY billing/*.py ./billing/
 COPY script/*.py ./script/
+COPY logging.yaml .
 
 RUN pip install .
 
 ENTRYPOINT ["/usr/local/bin/python", "/app/script/main.py"]
+#ENTRYPOINT [ "/bin/bash" ]

@@ -1,0 +1,48 @@
+version: 1
+disable_existing_loggers: true
+
+formatters:
+    simple:
+        format: "%(name)s(%(lineno)d) - %(levelname)s - %(message)s"
+
+    complex:
+        format: "%(asctime)s - %(name)s(%(lineno)d) - %(levelname)s - %(message)s"
+
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: simple
+        stream: ext://sys.stdout
+
+    file_handler:
+        class: logging.handlers.TimedRotatingFileHandler
+        when: midnight
+        backupCount: 5
+        level: DEBUG
+        formatter: complex
+        filename : billing.log
+
+
+root:
+    level: NOTSET
+    handlers: [console,file_handler]
+    propogate: yes
+
+loggers:  
+
+    azure.core.pipeline.policies.http_logging_policy:
+        level: WARNING
+        handlers: [console,file_handler]
+        propagate: yes
+
+    billing:   
+        level: DEBUG
+        handlers: [console, file_handler]
+        propagate: no
+    
+    __main__:
+        level: DEBUG
+        handlers: [console, file_handler]
+        propagate: no

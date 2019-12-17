@@ -56,6 +56,14 @@ Run the container with the following:
 
     az container create --name blxcontainergroup --resource-group blxbilling --image blxcontainerregistry.azurecr.io/azurebillingreports:v1 --registry-login-server blxcontainerregistry.azurecr.io --registry-username <acr_username> --registry-password <acr_password> --secure-environment-variables 'ENROLLMENT_ID=<enrollment_id>' 'BILLING_AUTH_KEY=<billing_auth_key>' 'STORAGE_CONTAINER_NAME=<billingfiles>' 'STORAGE_CONNECTION_STRING=<connection_string>'
 
+Common Issues
+=============
+
+Request date header too old: 'Mon, 16 Dec 2019 22:00:09 GMT'
+
+The docker image time has drifted. Restart docker on host container.
+
 References
+==========
 
 - https://docs.microsoft.com/en-us/azure/container-instances/container-instances-using-azure-container-registry
