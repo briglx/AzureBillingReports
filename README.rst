@@ -45,7 +45,7 @@ Deploy the image to repository. Repalce the name <registryname> with the name of
 
 .. code-block:: bash
 
-    az acr login --name  <registryname>.azurecr.io
+    az acr login --name  <registryname>
     docker tag azurebillingreports <registryname>.azurecr.io/azurebillingreports:v1
     docker push <registryname>.azurecr.io/azurebillingreports:v1
     docker rmi <registryname>.azurecr.io/azurebillingreports:v1

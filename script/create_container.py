@@ -2,40 +2,48 @@
 """Create container."""
 import os
 import logging
+import json
 from billing import util, container as bc
 
 
 def main():
     """Start or Stop a new container."""
-    azure_auth = os.environ.get("AZURE_AUTH")
-    rg_name = os.environ.get("BILLING_CONTAINER_RG_NAME")
-    rg_region = os.environ.get("BILLING_CONTAINER_RG_REGION")
-    container_group_name = os.environ.get("BILLING_CONTAINER_GROUP_NAME")
-    image_name = os.environ.get("BILLING_CONTAINER_IMAGE_NAME")
+    azure_auth_config = os.environ.get("AZURE_AUTH")
+    container_config = os.environ.get("BILLING_CONTAINER_CONFIG")
+    container_envs = os.environ.get("BILLING_CONTAINER_ENVS")
+    container_registry_config = os.environ.get("CONTAINER_REGISTRY_CONFIG")
 
-    if not azure_auth:
+    if not azure_auth_config:
         raise ValueError(
             "Parameter auth_file_path is required. "
             "Have you set the AZURE_AUTH environment variable?"
         )
-    if not rg_name:
+    if not container_config:
         raise ValueError(
-            "Parameter rg_name is required."
-            "Have you set the BILLING_CONTAINER_RG env variable?"
+            "Parameter container_info is required. "
+            "Have you set the BILLING_CONTAINER_CONFIG environment variable?"
         )
-    if not container_group_name:
+    if not container_envs:
         raise ValueError(
-            "Parameter container_group_name is required. "
-            "Have you set the BILLING_CONTAINER_GROUP_NAME env variable?"
+            "Parameter container_envs is required. "
+            "Have you set the BILLING_CONTAINER_ENVS environment variable?"
+        )
+    if not container_registry_config:
+        raise ValueError(
+            "Parameter container_registry_config is required. "
+            "Have you set the CONTAINER_REGISTRY_CONFIG env variable?"
         )
 
-    # Get client
-    aci_client = bc.get_container_client(azure_auth)
-    resource_group = (rg_name, rg_region)
-    container = (container_group_name, image_name)
-    bc.create_container(aci_client, resource_group, container)
-    # bc.stop_container(aci_client, rg_name, container_group_name)
-    # bc.start_container(aci_client, rg_name, container_group_name)
+    azure_auth = json.loads(azure_auth_config)
+    container_info = json.loads(container_config)
+    container_env_vars = json.loads(container_envs)
+    registry_credentials = json.loads(container_registry_config)
+
+    bc.create_container(
+        azure_auth, registry_credentials, container_info, container_env_vars
+    )
+    # bc.stop_container(azure_auth, rg_name, container_group_name)
+    # bc.start_container(azure_auth, rg_name, container_group_name)
 
 
 if __name__ == "__main__":

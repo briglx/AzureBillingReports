@@ -1,5 +1,4 @@
 """Module to manage billing container."""
-import json
 import logging
 from azure.common.client_factory import get_client_from_json_dict
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
@@ -9,50 +8,21 @@ from azure.mgmt.containerinstance.models import (
     ResourceRequests,
     ResourceRequirements,
     OperatingSystemTypes,
+    ContainerGroupRestartPolicy,
+    EnvironmentVariable,
+    ImageRegistryCredential,
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
-def create_container_group(aci_client, resource_group, container):
-    """Create a new container group."""
-    container_group_name, container_image_name = container
-    _LOGGER.info("Creating container group '%s'...", container_group_name)
-
-    # Configure the container
-    container_resource_requests = ResourceRequests(memory_in_gb=1, cpu=1.0)
-    container_resource_requirements = ResourceRequirements(
-        requests=container_resource_requests
-    )
-    container = Container(
-        name=container_group_name,
-        image=container_image_name,
-        resources=container_resource_requirements,
-    )
-
-    group = ContainerGroup(
-        location=resource_group[1],
-        containers=[container],
-        os_type=OperatingSystemTypes.linux,
-    )
-
-    # Create the container group
-    aci_client.container_groups.create_or_update(
-        resource_group[0], container_group_name, group
-    )
-
-    _LOGGER.info("Created Container group '%s'", container_group_name)
 
 
 def get_container_client(azure_auth):
     """Get Container Client."""
     if azure_auth is not None:
         _LOGGER.info("Authenticating Azure using credentials")
-        auth_config_dict = json.loads(azure_auth)
         client = get_client_from_json_dict(
-            ContainerInstanceManagementClient, auth_config_dict
+            ContainerInstanceManagementClient, azure_auth
         )
-        # client = get_client_from_auth_file(ContainerInstanceManagementClient)
     else:
         _LOGGER.error(
             "\nFailed to authenticate to Azure. Have you set the"
@@ -62,21 +32,66 @@ def get_container_client(azure_auth):
     return client
 
 
-def start_container(aci_client, resource_group, container_group_name):
+def start_container(azure_auth, container_info):
     """Start container."""
     _LOGGER.info("starting container")
-    rg_name = resource_group[0]
-    aci_client.container_groups.start(rg_name, container_group_name)
+    aci_client = get_container_client(azure_auth)
+    aci_client.container_groups.start(
+        container_info.resource_group_name, container_info.container_name
+    )
 
 
-def stop_container(aci_client, resource_group, container_group_name):
+def stop_container(azure_auth, container_info):
     """Stop container."""
     _LOGGER.info("stopping container")
-    rg_name = resource_group[0]
-    aci_client.container_groups.stop(rg_name, container_group_name)
+    aci_client = get_container_client(azure_auth)
+    aci_client.container_groups.stop(
+        container_info.resource_group_name, container_info.container_name
+    )
 
 
-def create_container(aci_client, resource_group, container):
-    """Create a new container."""
-    _LOGGER.info("create container")
-    create_container_group(aci_client, resource_group, container)
+def create_container(azure_auth, registry_credentials, container_info, env_vars):
+    """Create a new container group."""
+    _LOGGER.info("Creating container group '%s'...", container_info["groupName"])
+
+    # Map registry credentials
+    image_registry_credentials = ImageRegistryCredential(
+        server=registry_credentials["server"],
+        username=registry_credentials["username"],
+        password=registry_credentials["password"],
+    )
+
+    # Map to Azure Container objects
+    environment_variables = []
+    for var in env_vars:
+        environment_variables.append(
+            EnvironmentVariable(name=var["name"], secure_value=var["value"])
+        )
+
+    # Configure the container
+    container_resource_requests = ResourceRequests(memory_in_gb=1, cpu=1.0)
+    container_resource_requirements = ResourceRequirements(
+        requests=container_resource_requests
+    )
+    container = Container(
+        name=container_info["groupName"],
+        image=container_info["image"],
+        resources=container_resource_requirements,
+        environment_variables=environment_variables,
+    )
+
+    group = ContainerGroup(
+        location=container_info["region"],
+        containers=[container],
+        os_type=OperatingSystemTypes.linux,
+        image_registry_credentials=[image_registry_credentials],
+        restart_policy=ContainerGroupRestartPolicy.never,
+    )
+
+    # Create the container group
+    aci_client = get_container_client(azure_auth)
+    aci_client.container_groups.create_or_update(
+        container_info["resourceGroup"], container_info["groupName"], group
+    )
+
+    _LOGGER.info("Created Container group '%s'", container_info["groupName"])

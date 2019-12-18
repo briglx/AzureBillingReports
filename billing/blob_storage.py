@@ -86,8 +86,7 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
     if not connection_string:
         raise ValueError("Parameter connection_string is required.")
 
-    _LOGGER.info("Coping Report %s", blob_url)
-    _LOGGER.info("Using connection: %s", connection_string)
+    _LOGGER.info("Copying Report %s", blob_url)
 
     try:
 
@@ -279,7 +278,17 @@ def convert_blob(source):
         raise Exception("AZ copy not found on the system.")
 
     # copy as block
-    args = ["azcopy", "copy", source, destination, "--blob-type", "BlockBlob"]
+    args = [
+        "azcopy",
+        "copy",
+        source,
+        destination,
+        "--blob-type",
+        "BlockBlob",
+        "--output-type",
+        "json",
+    ]
+
     _LOGGER.info("Call process: %s", " ".join(args))
     proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
     (out, err) = proc.communicate()
