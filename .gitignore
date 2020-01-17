@@ -63,3 +63,8 @@ ipython_config.py
 my.azureauth
 local.env
 billing.log
+notebooks/Incremental Load Monthly Data2.ipynb
+notebooks/Untitled.ipynb
+notebooks/Untitled2.ipynb
+reports/BillingSqlDW.pbix
+databricks.auth

@@ -17,38 +17,6 @@ from tqdm import tqdm as progress
 _LOGGER = logging.getLogger(__name__)
 
 
-def copy_blob_as_remote(blob_url, copied_blob):
-    """Copy blob as append file."""
-    # Copies as Append file
-    count = 0
-
-    # Get file size
-    resp = requests.get(blob_url, stream=True)
-    total_size = int(resp.headers.get("content-length", 0))
-    prog = progress(total=total_size, unit="iB", unit_scale=True)
-
-    # Start copy process
-    copied_blob.start_copy_from_url(blob_url)
-    props = copied_blob.get_blob_properties()
-
-    while props.copy.status == "pending":
-
-        _LOGGER.info(props.copy.status + " " + props.copy.progress)
-
-        count = count + 1
-        if count > 100:
-            raise TimeoutError("Timed out waiting for async copy to complete.")
-        time.sleep(5)
-
-        length = int(props.copy.progress.split("/")[0])
-        diff = length - prog.n
-        prog.update(diff)
-
-        props = copied_blob.get_blob_properties()
-
-    prog.close()
-
-
 def get_account_info(connection_string):
     """Get Account info from a connection string."""
     account_name = connection_string.split(";")[1].split("=")[-1]
@@ -107,6 +75,38 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
     except Exception as ex:
         _LOGGER.error("Failed to copy Report.", exc_info=True)
         raise ex
+
+
+def copy_blob_as_remote(blob_url, copied_blob):
+    """Copy blob as append file."""
+    # Copies as Append file
+    count = 0
+
+    # Get file size
+    resp = requests.get(blob_url, stream=True)
+    total_size = int(resp.headers.get("content-length", 0))
+    prog = progress(total=total_size, unit="iB", unit_scale=True)
+
+    # Start copy process
+    copied_blob.start_copy_from_url(blob_url)
+    props = copied_blob.get_blob_properties()
+
+    while props.copy.status == "pending":
+
+        _LOGGER.info(props.copy.status + " " + props.copy.progress)
+
+        count = count + 1
+        if count > 100:
+            raise TimeoutError("Timed out waiting for async copy to complete.")
+        time.sleep(5)
+
+        length = int(props.copy.progress.split("/")[0])
+        diff = length - prog.n
+        prog.update(diff)
+
+        props = copied_blob.get_blob_properties()
+
+    prog.close()
 
 
 def copy_blob_as_blocks(blob_url, copied_blob):
@@ -223,6 +223,10 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
 #     blob = container_client.upload_blob(name=src, data=data)
 #     properties = blob.get_blob_properties()
 #     logging.info(properties)
+
+
+# def copy_blob_as_azcopy(blob_url, copied_blob):
+#     """Copy blob usig azcopy."""
 
 
 def upload_file(src, container_name, connection_string):

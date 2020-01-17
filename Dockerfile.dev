@@ -32,4 +32,4 @@ COPY logging.yaml .
 RUN pip install .
 
 ENTRYPOINT ["/usr/local/bin/python", "/app/script/main.py"]
-#ENTRYPOINT [ "/bin/bash" ]
+# ENTRYPOINT [ "/bin/bash" ]
