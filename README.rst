@@ -8,6 +8,13 @@ The ``azure billing reports`` are an unofficial collection of reports built on t
 
 Azure provides an hourly usage report for their customers. The ``azure billing reports`` use a script to fetch the data and use PowerBI M queries to parse the data info useful fields.
 
+Overview
+========
+
+|screenshot-pipeline|
+
+
+
 Getting Started
 ==========
 
@@ -67,3 +74,6 @@ References
 ==========
 
 - https://docs.microsoft.com/en-us/azure/container-instances/container-instances-using-azure-container-registry
+
+
+.. |screenshot-pipeline| image:: https://raw.github.com/briglx/AzureBillingReports/master/docs/BillingArchitectureOverview.png
