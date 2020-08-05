@@ -60,11 +60,18 @@ Deploy the image to repository. Repalce the name <registryname> with the name of
     docker push <registryname>.azurecr.io/azurebillingreports:v1
     docker rmi <registryname>.azurecr.io/azurebillingreports:v1
 
-Run the container with the following:
+Create a container instance with the following:
 
 .. code-block:: bash
 
-    az container create --name blxcontainergroup --resource-group blxbilling --image blxcontainerregistry.azurecr.io/azurebillingreports:v1 --registry-login-server blxcontainerregistry.azurecr.io --registry-username <acr_username> --registry-password <acr_password> --secure-environment-variables 'ENROLLMENT_ID=<enrollment_id>' 'BILLING_AUTH_KEY=<billing_auth_key>' 'STORAGE_CONTAINER_NAME=<billingfiles>' 'STORAGE_CONNECTION_STRING=<connection_string>'
+    az container create --resource-group blxbilling --name blxcontainergroup --image blxcontainerregistry.azurecr.io/azurebillingreports:v1 --registry-login-server blxcontainerregistry.azurecr.io --registry-username <acr_username> --registry-password <acr_password> --secure-environment-variables ENROLLMENT_ID=<enrollment_id> BILLING_AUTH_KEY=<billing_auth_key> STORAGE_CONTAINER_NAME=<billingfiles> STORAGE_CONNECTION_STRING=<connection_string> --restart-policy Never
+
+    # Deploy with yaml
+    az container create --resource-group blxbilling --file billing-container.yaml
+
+    # Delete instance
+    az container delete --resource-group blxbilling --name blxcontainergroup
+
 
 Update Container Environment Variables
 ======================================

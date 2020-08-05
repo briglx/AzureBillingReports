@@ -74,3 +74,6 @@ billingcontainergroup.yaml
 ServerSetup.SQL
 SqlDWParquet.sql
 SqlDWSetup.sql
+
+# General
+billing-container.yaml

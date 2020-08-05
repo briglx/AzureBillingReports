@@ -1,0 +1,30 @@
+apiVersion: 2019-12-01
+location: eastus
+name: blxbilling_cg
+properties:
+  containers:
+  - name: blxbilling_container
+    properties:
+      environmentVariables:
+        - name: 'ENROLLMENT_ID'
+          secureValue: '<replace>'
+        - name: 'BILLING_AUTH_KEY'
+          secureValue: '<replace>'
+        - name: 'STORAGE_CONTAINER_NAME'
+          secureValue: '<replace>'
+        - name: 'STORAGE_CONNECTION_STRING'
+          secureValue: '<replace>'
+      image: <registryname>.azurecr.io/azurebillingreports:latest
+      ports: []
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 1.5
+  osType: Linux
+  imageRegistryCredentials:
+  - server: <registryname>.azurecr.io
+    username: <replace>
+    password: <replace>
+  restartPolicy: Never
+tags: null
+type: Microsoft.ContainerInstance/containerGroups
