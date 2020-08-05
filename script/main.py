@@ -1,10 +1,11 @@
 #!/usr/bin/python
 """Script to copy last two weeks of billing data."""
-import os
-from datetime import datetime
 import argparse
 import logging
-from billing import usage_data, util, blob_storage
+import os
+from datetime import datetime
+
+from billing import blob_storage, usage_data, util
 
 # pylint: disable=C0103
 # pylint: disable=W0621
@@ -15,7 +16,7 @@ def main(eid, auth_key, container_name, connection_string):
     try:
         # config_logger()
 
-        # Validate Paramenters
+        # Validate Parameters
         if not eid:
             raise ValueError("Parameter eid is required.")
 
@@ -42,12 +43,17 @@ def main(eid, auth_key, container_name, connection_string):
         target_filename = "usage-%s-twoweeks.csv" % (cur_time.isoformat())
         target_filename = target_filename.replace(":", "-")
 
-        copied_file_url = blob_storage.copy_blob(
+        blob_storage.copy_blob(
             report_url, target_filename, container_name, connection_string
         )
 
-        # Convert from append to block blob
-        blob_storage.convert_blob(copied_file_url)
+        # copied_file_url = blob_storage.copy_blob(
+        #     report_url, target_filename, container_name, connection_string
+        # )
+
+        # # Convert from append to block blob
+        # destination = blob_storage.get_block_name(copied_file_url)
+        # blob_storage.convert_blob(copied_file_url, destination)
 
         # Notify complete
         util.notify_complete(job_id)

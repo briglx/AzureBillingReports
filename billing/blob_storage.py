@@ -1,16 +1,17 @@
 """Module to manage billing data with blob storage."""
 import logging
+import subprocess
 import time
 from datetime import datetime, timedelta
 from urllib.parse import urlparse, urlunparse
-import subprocess
+
 import requests
 from azure.storage.blob import (
-    BlobServiceClient,
-    BlobBlock,
-    generate_account_sas,
-    ResourceTypes,
     AccountSasPermissions,
+    BlobBlock,
+    BlobServiceClient,
+    ResourceTypes,
+    generate_account_sas,
 )
 from tqdm import tqdm as progress
 
@@ -41,7 +42,7 @@ def generate_sas_key(connection_string):
 
 def copy_blob(blob_url, dest_file_name, container_name, connection_string):
     """Copy remote blob file to destination container."""
-    # Validate Paramenters
+    # Validate Parameters
     if not blob_url:
         raise ValueError("Parameter blob_url is required.")
 
@@ -62,15 +63,17 @@ def copy_blob(blob_url, dest_file_name, container_name, connection_string):
         client = BlobServiceClient.from_connection_string(connection_string)
         copied_blob = client.get_blob_client(container_name, dest_file_name)
 
-        # Choose from different copy implementations
-        copy_blob_as_remote(blob_url, copied_blob)
-        # copy_blob_as_github_suggested(blob_url, copied_blob)
-        # copy_blob_as_blocks(blob_url, copied_blob)
-
         # Generate Sas Key for writing
         sas_token = generate_sas_key(connection_string)
+        dest_url = copied_blob.url + "?" + sas_token
 
-        return copied_blob.url + "?" + sas_token
+        # Choose from different copy implementations
+        # copy_blob_as_remote(blob_url, copied_blob)
+        # copy_blob_as_github_suggested(blob_url, copied_blob)
+        # copy_blob_as_blocks(blob_url, copied_blob)
+        copy_blob_as_azcopy(blob_url, dest_url)
+
+        return dest_url
 
     except Exception as ex:
         _LOGGER.error("Failed to copy Report.", exc_info=True)
@@ -225,8 +228,41 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
 #     logging.info(properties)
 
 
-# def copy_blob_as_azcopy(blob_url, copied_blob):
-#     """Copy blob usig azcopy."""
+def copy_blob_as_azcopy(src_url, dest_url):
+    """Use azcopy to copy as block blob."""
+    _LOGGER.info("Copying using azcopy")
+    # Escape characters
+    # if os.name == "nt":
+    #     source = source.replace("&", "^&")
+    #     destination = destination.replace("&", "^&")
+
+    # Check if azcopy is installed
+    args = ["azcopy", "--version"]
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
+    (out, err) = proc.communicate()
+    if "azcopy" not in out.decode("utf-8") or err:
+        raise Exception("AZ copy not found on the system.")
+
+    # copy as block
+    args = [
+        "azcopy",
+        "copy",
+        src_url,
+        dest_url,
+        "--blob-type",
+        "BlockBlob",
+        "--output-type",
+        "json",
+    ]
+
+    _LOGGER.info("Call process: %s", " ".join(args))
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
+    (out, err) = proc.communicate()
+
+    if err:
+        _LOGGER.error(out)
+    else:
+        _LOGGER.info(out)
 
 
 def upload_file(src, container_name, connection_string):
@@ -263,41 +299,3 @@ def get_block_name(source):
     )
 
     return new_file_name
-
-
-def convert_blob(source):
-    """Use azcopy to copy as block blob."""
-    destination = get_block_name(source)
-
-    # Escape characters
-    # if os.name == "nt":
-    #     source = source.replace("&", "^&")
-    #     destination = destination.replace("&", "^&")
-
-    # Check if azcopy is installed
-    args = ["azcopy", "--version"]
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
-    (out, err) = proc.communicate()
-    if "azcopy" not in out.decode("utf-8") or err:
-        raise Exception("AZ copy not found on the system.")
-
-    # copy as block
-    args = [
-        "azcopy",
-        "copy",
-        source,
-        destination,
-        "--blob-type",
-        "BlockBlob",
-        "--output-type",
-        "json",
-    ]
-
-    _LOGGER.info("Call process: %s", " ".join(args))
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
-    (out, err) = proc.communicate()
-
-    if err:
-        _LOGGER.error(out)
-    else:
-        _LOGGER.info(out)

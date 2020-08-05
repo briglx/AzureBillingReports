@@ -1,8 +1,9 @@
 #!/usr/bin/python
 """Script to convert blob type."""
-import os
 import argparse
 import logging
+import os
+
 from billing import blob_storage, util
 
 # pylint: disable=C0103
@@ -31,4 +32,6 @@ if __name__ == "__main__":
     if not sas_key:
         raise ValueError("Parameter sas_key is required.")
 
-    blob_storage.convert_blob(blob_url + sas_key)
+    dest_url = blob_storage.get_block_name(blob_url + sas_key)
+
+    blob_storage.copy_blob_as_azcopy(blob_url + sas_key, dest_url)
