@@ -1,0 +1,10 @@
+FROM pythonsql:latest
+
+# Copy local project
+COPY requirements.txt /app/
+WORKDIR /app
+RUN /usr/local/bin/python3 -m pip install -r requirements.txt
+
+COPY merge_temp.py ./script/
+
+ENTRYPOINT [ "/bin/bash" ]
