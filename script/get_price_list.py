@@ -1,11 +1,13 @@
 #!/usr/bin/python
 """Script to fetch pricing."""
+import csv
+import json
+import logging
 import sys
 from datetime import datetime, timezone
-import json
-import csv
-import logging
+
 import requests
+
 from billing import util
 
 HOST_NAME = "https://consumption.azure.com/v3/enrollments/%s"

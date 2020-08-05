@@ -1,9 +1,10 @@
 #!/usr/bin/python
 """Script to fetch latest billing usage data."""
-import os
 import argparse
 import logging
+import os
 from datetime import datetime, timezone
+
 from billing import usage_data, util
 
 # pylint: disable=C0103

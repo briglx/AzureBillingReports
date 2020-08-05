@@ -1,7 +1,8 @@
 #!/usr/bin/python
 """Create a smaller file of data by sampling."""
-import sys
 import logging
+import sys
+
 from billing import util
 
 

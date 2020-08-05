@@ -1,8 +1,9 @@
 #!/usr/bin/python
 """Script to merge temp records into main."""
-import os
 import argparse
 import logging
+import os
+
 import pyodbc
 from pyodbc import ProgrammingError
 
@@ -38,7 +39,7 @@ def main(connection_string):
         try:
             cursor.execute(SQL_MERGE_RECORDS, params)
         except ProgrammingError:
-            # Sometimes it does't work first time
+            # Sometimes it doesn't work first time
             _LOGGER.warning("Trying second time.")
             cursor.execute(SQL_MERGE_RECORDS, params)
         except Exception as ex:

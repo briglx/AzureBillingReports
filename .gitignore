@@ -68,3 +68,9 @@ notebooks/Untitled.ipynb
 notebooks/Untitled2.ipynb
 reports/BillingSqlDW.pbix
 databricks.auth
+billingcontainergroup.yaml
+
+# SQL Scripts
+ServerSetup.SQL
+SqlDWParquet.sql
+SqlDWSetup.sql

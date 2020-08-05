@@ -1,7 +1,8 @@
 """Script to fetch latest monthly billing data and price sheet."""
-from datetime import datetime, timedelta
-import time
 import logging
+import time
+from datetime import datetime, timedelta
+
 import requests
 from tqdm import tqdm as progress
 

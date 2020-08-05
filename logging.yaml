@@ -28,7 +28,7 @@ handlers:
 root:
     level: NOTSET
     handlers: [console,file_handler]
-    propogate: yes
+    propagate: yes
 
 loggers:  
 

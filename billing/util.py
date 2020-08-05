@@ -1,12 +1,14 @@
 """Helper methods for various modules."""
-import random
-import os
-import string
+import csv
 import logging
 import logging.config
-import csv
-import yaml
+import os
+import random
+import string
+
 import requests
+
+import yaml
 
 _LOGGER = logging.getLogger(__name__)
 

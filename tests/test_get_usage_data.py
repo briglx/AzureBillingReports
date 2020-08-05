@@ -1,6 +1,7 @@
 """Test the get_usage_data methods."""
 from datetime import datetime
 from unittest.mock import Mock, patch
+
 from billing import usage_data
 
 HOST_NAME = "https://consumption.azure.com"

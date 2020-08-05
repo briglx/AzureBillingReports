@@ -1,10 +1,12 @@
 #!/usr/bin/python
 """Script to fetch RI recommendations."""
-import sys
-import json
 import csv
+import json
 import logging
+import sys
+
 import requests
+
 from billing import util
 
 RI_TYPES = ["Shared", "Single"]

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """Script to remove metadata header information from  monthly billing data."""
-import sys
 import shutil
+import sys
 
 
 def remove_first_lines(src_file_name, dest_file_name, count):
@@ -19,7 +19,7 @@ def remove_first_lines(src_file_name, dest_file_name, count):
 
 
 def main(argv):
-    """Remove header fro filename passed in from command line."""
+    """Remove header for filename passed in from command line."""
     full_file_name = argv[0]
 
     file_parts = full_file_name.split(".")

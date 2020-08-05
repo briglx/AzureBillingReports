@@ -1,9 +1,11 @@
 #!/usr/bin/python
 """Create container."""
-import os
-import logging
 import json
-from billing import util, container as bc
+import logging
+import os
+
+from billing import container as bc
+from billing import util
 
 
 def main():

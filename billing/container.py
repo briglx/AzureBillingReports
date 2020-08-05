@@ -1,16 +1,17 @@
 """Module to manage billing container."""
 import logging
+
 from azure.common.client_factory import get_client_from_json_dict
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
 from azure.mgmt.containerinstance.models import (
-    ContainerGroup,
     Container,
-    ResourceRequests,
-    ResourceRequirements,
-    OperatingSystemTypes,
+    ContainerGroup,
     ContainerGroupRestartPolicy,
     EnvironmentVariable,
     ImageRegistryCredential,
+    OperatingSystemTypes,
+    ResourceRequests,
+    ResourceRequirements,
 )
 
 _LOGGER = logging.getLogger(__name__)

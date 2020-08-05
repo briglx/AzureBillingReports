@@ -1,9 +1,10 @@
 #!/usr/bin/python
 """Script to upload billing data to blob storage."""
-import os
 import argparse
 import logging
+import os
 from urllib.parse import urlparse
+
 from billing import blob_storage, util
 
 # pylint: disable=C0103
