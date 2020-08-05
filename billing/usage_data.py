@@ -72,6 +72,16 @@ def get_previous_30_days_uri(eid):
     return get_usage_uri(eid, 1)
 
 
+def get_last_2_months_uri(eid):
+    """Build usage uri from eid for the last two weeks."""
+    return get_usage_uri(eid, 2)
+
+
+def get_last_3_months_uri(eid):
+    """Build usage uri from eid for the last two weeks."""
+    return get_usage_uri(eid, 3)
+
+
 def get_previous_6_months_uri(eid):
     """Build usage uri for the previous 6 months."""
     return get_usage_uri(eid, 6, False)
