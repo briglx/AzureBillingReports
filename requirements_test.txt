@@ -1,4 +1,7 @@
 # Dev Requirements
+-r requirements.txt
+
+black==21.11b1
 codespell==1.17.1
 coverage==4.5.4
 coveralls

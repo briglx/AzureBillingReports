@@ -8,19 +8,23 @@ The ``azure billing reports`` are an unofficial collection of reports built on t
 
 Azure provides an hourly usage report for their customers. The ``azure billing reports`` use a script to fetch the data and use PowerBI M queries to parse the data info useful fields.
 
+This repository has:
+
+- Scripts to fetch billing related information
+- Modern Data Warehouse Architecture for Cost Optimization
+
 Overview
 ========
 
 |screenshot-pipeline|
 
 
-
-Getting Started
-==========
+Billing Scripts - Getting Started
+=================================
 
 - First obtain your enrollment id and a valid api authentication key.
-- Run the `get_usage_data.py` script to get the latest billing usage data. This will download and save the billing data into a csv file.
-- Run the 'get_ri_recommendations.py` script to get the latest reserved instance recommendations.
+- Run the ``/scripts/get_usage_data.py`` script to get the latest billing usage data. This will download and save the billing data into a csv file.
+- Run the ``/scripts/get_ri_recommendations.py`` script to get the latest reserved instance recommendations.
 
 .. code-block:: bash
 
@@ -34,7 +38,7 @@ Getting Started
 - Provide the full path to the downloaded csv file.
 
 Building and Deploying
-==========
+======================
 
 Build docker image
 
@@ -88,6 +92,12 @@ Edit the settings and recreate
 
     az container create -g blxbilling -f output.yaml
 
+Reset Service Principal credentials
+
+.. code-block:: bash
+
+    az ad sp credential reset --name name-of-service-principal
+
 
 Create Docker Image repository
 ==============================
@@ -97,13 +107,42 @@ Create Docker Image repository
     az acr create --resource-group myResourceGroup --name myContainerRegistry007 --sku Basic
 
 
+Configure Databricks
+====================
+
+Azure Databricks is used during the prep phase of the data pipeline. 
+
+Configure Secrets 
+-----------------
+
+The notebook uses secrets to connect to the storage account. Use the databricsk cli to set a secrets
+
+.. code-block:: bash
+
+    # Create a secret scope for premium cluster
+    databricks secrets create-scope --scope billing
+
+    # Or Create secret scope for standard cluster
+    databricks secrets create-scope --scope billing --initial-manage-principal users
+    
+    # Add secrets to cluster
+    databricks secrets put --scope billing --key storage_key
+    databricks secrets put --scope billing --key db_connection
+    databricks secrets put --scope billing --key db_username
+    databricks secrets put --scope billing --key db_password
+
+
+    
+
+
+
 Common Issues
 =============
 
 - Request date header too old: 'Mon, 16 Dec 2019 22:00:09 GMT'
--- The docker image time has drifted. Restart docker on host container.
+    - The docker image time has drifted. Restart docker on host container.
 - API Key Expired
--- update the key found in secure environment variables
+    - update the key found in secure environment variables
 
 
 Development
@@ -181,10 +220,10 @@ Now that you have all test dependencies installed, you can run tests on the proj
 
     isort -rc .
     codespell  --skip="./.*,*.csv,*.json,*.pyc,./docs/_build/*,./htmlcov/*"
-    black setup.py billing merge script tests
-    flake8 setup.py billing merge script tests
-    pylint setup.py billing merge script tests
-    pydocstyle billing merge script tests
+    black setup.py billing merge script timer tests
+    flake8 setup.py billing merge script timer tests
+    pylint setup.py billing merge script timer tests
+    pydocstyle billing merge script timer tests
     python -m pytest tests
     python -m pytest --cov-report term-missing --cov=billing
 
@@ -192,6 +231,6 @@ References
 ==========
 
 - https://docs.microsoft.com/en-us/azure/container-instances/container-instances-using-azure-container-registry
-
+- Databricks secrets https://docs.databricks.com/security/secrets/secrets.html
 
 .. |screenshot-pipeline| image:: https://raw.github.com/briglx/AzureBillingReports/master/docs/BillingArchitectureOverview.png

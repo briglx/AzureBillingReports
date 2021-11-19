@@ -6,6 +6,9 @@ PartNumber.csv
 NonWindows.csv
 WindowsMachines.csv
 
+#Venv
+.venv 
+
 #Vscode
 .vscode/*
 !.vscode/settings.json
