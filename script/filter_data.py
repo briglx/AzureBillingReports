@@ -11,9 +11,7 @@ from billing import util
 def main(argv):
     """Filter records from command line."""
     path = argv[0]
-    min_date = float(argv[1])
-
-    target_date = datetime.strptime(min_date, "%Y-%m-%d")
+    target_date = datetime.strptime(argv[1], "%Y-%m-%d")
 
     predicate = util.filter_greater_than_equal_date(target_date)
 

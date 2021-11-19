@@ -5,6 +5,7 @@ run.bat
 PartNumber.csv
 NonWindows.csv
 WindowsMachines.csv
+test_sample.csv-filtered.csv
 
 #Venv
 .venv 
