@@ -13,7 +13,7 @@ from billing import usage_data, util
 
 def main(eid, auth_key, ignore_rows):
     """Download previous 30 days usage and latest pricing."""
-    uri = usage_data.get_previous_30_days_uri(eid)
+    uri = usage_data.get_previous_6_months_uri(eid)
     blob_path = usage_data.get_report_blob_uri(uri, auth_key)
 
     cur_time = datetime.utcnow()

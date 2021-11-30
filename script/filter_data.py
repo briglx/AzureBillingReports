@@ -8,10 +8,13 @@ from datetime import datetime
 from billing import util
 
 
-def main(argv):
+def main(path,min_date):
     """Filter records from command line."""
-    path = argv[0]
-    target_date = datetime.strptime(argv[1], "%Y-%m-%d")
+    # path = argv[0]
+    # print(path)
+    # d=argv[1]
+    # print(d)
+    target_date = datetime.strptime(min_date, "%Y-%m-%d")
 
     predicate = util.filter_greater_than_equal_date(target_date)
 
@@ -37,5 +40,7 @@ if __name__ == "__main__":
         "-m",
         help="Minimum date. Earlier dates are removed. Format 2021-05-30",
     )
-
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    path = args.path
+    min_date = args.min_date
+    main(path,min_date)
