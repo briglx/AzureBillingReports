@@ -33,7 +33,7 @@ def main(eid, auth_key, container_name, connection_string):
         _LOGGER.info("Starting job %s", job_id)
 
         # Request Report for last two weeks
-        uri = usage_data.get_last_two_weeks_uri(eid)
+        uri = usage_data.get_previous_6_months_uri(eid)
         report_url = usage_data.get_report_blob_uri(uri, auth_key)
 
         cur_time = datetime.utcnow()
