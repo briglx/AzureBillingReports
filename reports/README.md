@@ -1,18 +1,18 @@
 # Azure Billing Comparison to Point in Time
 
-This reposistory demonstrates how to compare cost to a specific point in time.
-
 ![Point in time Report](../docs/PointInTimeReport.png)
 <!-- s![Whiteboard Diagram](../docs/Whiteboard.png) -->
+
+This reposistory demonstrates how to compare cost to a specific point in time.
 
 - First obtain your enrollment id and a valid api authentication key.
 - Configure your environment
 - Fetch and Filter the data
-    
 - Open the `/reports/PointInTimeAggregateLimitedColumns.pbit` template file
 
-
 ## Configure Environment
+
+This section will configure you computer to run the scripts to fetch billing usage data.
 
 - Copy Project to Local Computer
 - Create and Activate a Python Virtual Environment
@@ -36,6 +36,8 @@ python -m pip install -e .
 
 ## Fetch and Filter Data
 
+This section fetches and filters the billing usage data used in the report.
+
 - Run the `get_usage_data.py` script to get the latest billing usage data. This will download and save the billing data into a csv file.
 - Run the `filter_data.py` script to filter the usage data. This will filter out any data before the minimum date.
 
@@ -48,6 +50,8 @@ python script/filter_data.py --path <path/to/csv> --min_date <2021-05-30>
 ```
 
 ## Open the Report
+
+This is the report that uses the billing data to show a point in time comparison.
 
 - Open the `/reports/PointInTimeAggregateLimitedColumns.pbit` template file
 - Provide the full path to the filtered downloaded csv file.
