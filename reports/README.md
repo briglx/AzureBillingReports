@@ -15,6 +15,7 @@ This reposistory demonstrates how to compare cost to a specific point in time.
 This section will configure you computer to run the scripts to fetch billing usage data.
 
 - Copy Project to Local Computer
+- Install Python
 - Create and Activate a Python Virtual Environment
 - Install Project
 
@@ -22,6 +23,12 @@ This section will configure you computer to run the scripts to fetch billing usa
 # Copy Project to local computer
 cd /path/to/src/
 git clone https://github.com/briglx/AzureBillingReports.git
+cd /path/to/src/AzureBillingReports
+
+# Check if you have python
+python --version
+# Downloand and install from https://www.python.org/downloads/
+# After installing python, navigate to the project folder
 cd /path/to/src/AzureBillingReports
 
 # Create Python Virtual Environment and activate
