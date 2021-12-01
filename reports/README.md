@@ -26,12 +26,14 @@ git clone https://github.com/briglx/AzureBillingReports.git
 cd /path/to/src/AzureBillingReports
 
 # Check if you have python
+# C:\Users\!Admin\AppData\Local\Programs\Python\Python310\python.exe --version
 python --version
 # Downloand and install from https://www.python.org/downloads/
 # After installing python, navigate to the project folder
 cd /path/to/src/AzureBillingReports
 
 # Create Python Virtual Environment and activate
+# C:\Users\!Admin\AppData\Local\Programs\Python\Python310\python.exe -m venv .venv
 python -m venv .venv
 .venv\Scripts\activate
 
