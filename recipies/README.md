@@ -103,19 +103,21 @@ wget "$header" https://management.azure.com/subscriptions/$subscription_id/locat
 Transform the data using the PowerBi Template.
 
 - Open the `sampledata/RegionsFromAzureListLocations.pbit` and select the path to the downloaded `sampledata/AzureLocations.json` file.
-- One the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
+- On the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
 - Save the file as `sampledata/Regions.csv`
 
 Remove bad records by:
 
 - Remove the header row
-- Removing the `,` (comma) and `"` (quote)s from `"Tokyo, Saitama"` to `Tokyo Saitama`
+- Remove the `,` (comma) and `"` (quote)s from `"Tokyo, Saitama"` to `Tokyo Saitama`
 
 ## Reservation Recommendations Table
 
 | Field | Type | Notes |
 |-------|------|-------|
 | AnnualSavings | Number | Calculated AnnualSavings = 'Reservation Recommendations'[netSavings]/SUBSTITUTE(SUBSTITUTE('Reservation Recommendations'[Look Back Period],"Last",""),"Days","")*365 |
+
+    TBD 
 
 # Getting Started
 
