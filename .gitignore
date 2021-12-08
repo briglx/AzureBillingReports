@@ -81,3 +81,5 @@ SqlDWSetup.sql
 
 # General
 billing-container.yaml
+*.pbix
+recipies/import-data.sh

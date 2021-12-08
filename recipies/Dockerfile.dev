@@ -1,0 +1,25 @@
+FROM mcr.microsoft.com/mssql/server:2019-latest
+
+# Switch to root user for access to set helpful aliases
+USER root
+
+RUN apt-get -y update && apt-get install -y vim 
+
+# Helpful aliases
+RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> /etc/bash.bashrc 
+
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Copy Files
+COPY *.sh *.sql /usr/src/app/
+COPY ./sampledata/*.csv /usr/src/app/
+
+# Grant permissions for the import-data script to be executable
+RUN chmod 666 /usr/src/app/*.csv
+RUN chmod +x /usr/src/app/import-data.sh
+
+# Switch back to mssql user and run the entrypoint script
+USER mssql
+ENTRYPOINT /bin/bash ./entrypoint.sh

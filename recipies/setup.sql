@@ -1,0 +1,296 @@
+DROP DATABASE IF EXISTS [AcoRecipies]
+GO
+CREATE DATABASE [AcoRecipies];
+GO
+USE AcoRecipies;
+GO
+
+DROP SCHEMA IF EXISTS aco
+GO
+CREATE SCHEMA aco
+GO
+
+-- DROP TABLE IF EXISTS [aco].[Regions]
+-- GO
+CREATE TABLE [aco].[Regions] (
+    [displayName] nvarchar(25)
+    , [geographyGroup] nvarchar(20) NULL
+    , [id] nvarchar(100)
+    , [latitude] Decimal(8,6) NULL
+    , [longitude] Decimal(9,6) NULL
+    , [name] nvarchar(25)
+    , [pairedRegion] nvarchar(25) NULL
+    , [physicalLocation] nvarchar(35) NULL
+    , [regionCategory] nvarchar(15) 
+    , [regionalDisplayName] nvarchar(50)
+    , [regionType] nvarchar(10)
+    , [subscriptionId] nvarchar(50)
+);
+GO
+
+CREATE TABLE [aco].[Advisor] (
+    [assessmentKey] nvarchar(max)
+    , [Category] nvarchar(max)
+    , [id] nvarchar(max)
+    , [Impact] nvarchar(max)
+    , [Impacted Resource Name] nvarchar(max)
+    , [Impacted Resource Type] nvarchar(max)
+    , [Last Updated] nvarchar(max)
+    , [name] nvarchar(max)
+    , [recommendationTypeId] nvarchar(max)
+    , [resourceId] nvarchar(max)
+    , [score] nvarchar(max)
+    , [Short Description - Problem] nvarchar(max)
+    , [Short Description - Solution] nvarchar(max)
+    , [source] nvarchar(max)
+    , [subscriptionId] nvarchar(max)
+    , [type] nvarchar(max)
+);
+GO
+
+
+CREATE TABLE [aco].[ISFData] (
+    [ArmSkuName] [nvarchar](50) NULL
+    , [InstanceSizeFlexibilityGroup] [nvarchar](200) NULL
+	, [Ratio] [nvarchar](50) NULL
+);
+GO
+
+
+CREATE TABLE [aco].[Reservation Transactions] (
+    [accountName] nvarchar(max)
+    , [accountOwnerEmail] nvarchar(max)
+    , [amount] nvarchar(max)
+    , [armSkuName] nvarchar(max)
+    , [billingFrequency] nvarchar(max)
+    , [costCenter] nvarchar(max)
+    , [currency] nvarchar(max)
+    , [currentEnrollment] nvarchar(max)
+    , [departmentName] nvarchar(max)
+    , [description] nvarchar(max)
+    , [eventDate] nvarchar(max)
+    , [eventType] nvarchar(max)
+    , [id] nvarchar(max)
+    , [name] nvarchar(max)
+    , [purchasingEnrollment] nvarchar(max)
+    , [purchasingSubscriptionGuid] nvarchar(max)
+    , [purchasingSubscriptionName] nvarchar(max)
+    , [quantity] nvarchar(max)
+    , [region] nvarchar(max)
+    , [reservationOrderName] nvarchar(max)
+    , [reservationOrderId] nvarchar(max)
+    , [tags] nvarchar(max)
+    , [term] nvarchar(max)
+    , [type] nvarchar(max)
+);
+GO
+
+CREATE TABLE [aco].[ActualCost](
+	[InvoiceSectionName] [nvarchar](300) NULL,
+	[AccountName] [nvarchar](300) NULL,
+	[AccountOwnerId] [nvarchar](300) NULL,
+	[SubscriptionId] [nvarchar](300) NULL,
+	[SubscriptionName] [nvarchar](300) NULL,
+	[ResourceGroup] [nvarchar](300) NULL,
+	[ResourceLocation] [nvarchar](300) NULL,
+	[Date] Date NULL,
+	[ProductName] [nvarchar](300) NULL,
+	[MeterCategory] [nvarchar](300) NULL,
+	[MeterSubCategory] [nvarchar](300) NULL,
+	[MeterId] [nvarchar](300) NULL,
+	[MeterName] [nvarchar](300) NULL,
+	[MeterRegion] [nvarchar](300) NULL,
+	[UnitOfMeasure] [nvarchar](300) NULL,
+	[Quantity] decimal (28,20) NULL,
+	[EffectivePrice] decimal (28,20) NULL,
+	[CostInBillingCurrency] decimal (28,20) NULL,
+	[CostCenter] [nvarchar](300) NULL,
+	[ConsumedService] [nvarchar](300) NULL,
+	[ResourceId] [nvarchar](2000) NULL,
+	[Tags] [nvarchar](4000) NULL,
+	[OfferId] [nvarchar](300) NULL,
+	[AdditionalInfo] [nvarchar](4000) NULL,
+	[ServiceInfo1] [nvarchar](300) NULL,
+	[ServiceInfo2] [nvarchar](300) NULL,
+	[ResourceName] [nvarchar](300) NULL,
+	[ReservationId] [nvarchar](300) NULL,
+	[ReservationName] [nvarchar](300) NULL,
+	[UnitPrice] decimal (28,20) NULL,
+	[ProductOrderId] [nvarchar](300) NULL,
+	[ProductOrderName] [nvarchar](300) NULL,
+	[Term] [nvarchar](300) NULL,
+	[PublisherType] [nvarchar](300) NULL,
+	[PublisherName] [nvarchar](300) NULL,
+	[ChargeType] [nvarchar](300) NULL,
+	[Frequency] [nvarchar](300) NULL,
+	[PricingModel] [nvarchar](300) NULL,
+	[AvailabilityZone] [nvarchar](300) NULL,
+	[BillingAccountId] [nvarchar](300) NULL,
+	[BillingAccountName] [nvarchar](300) NULL,
+	[BillingCurrencyCode] [nvarchar](20) NULL,
+	[BillingPeriodStartDate] date NULL,
+	[BillingPeriodEndDate] date NULL,
+	[BillingProfileId] [nvarchar](100) NULL,
+	[BillingProfileName] [nvarchar](300) NULL,
+	[InvoiceSectionId] [nvarchar](300) NULL,
+	[IsAzureCreditEligible] [nvarchar](10) NULL,
+	[PartNumber] [nvarchar](50) NULL,
+	[PayGPrice] [nvarchar](100) NULL,
+	[PlanName] [nvarchar](300) NULL,
+	[ServiceFamily] [nvarchar](300) NULL,
+	[CostAllocationRuleName] [nvarchar](300) NULL
+);
+GO
+
+CREATE TABLE [aco].[AmortizedCost] (
+    [InvoiceSectionName] [nvarchar](300) NULL,
+    [AccountName] [nvarchar](300) NULL,
+    [AccountOwnerId] [nvarchar](300) NULL,
+    [SubscriptionId] [nvarchar](300) NULL,
+    [SubscriptionName] [nvarchar](300) NULL,
+    [ResourceGroup] [nvarchar](300) NULL,
+    [ResourceLocation] [nvarchar](300) NULL,
+    [Date] date NULL,
+    [ProductName] [nvarchar](300) NULL,
+    [MeterCategory] [nvarchar](300) NULL,
+    [MeterSubCategory] [nvarchar](300) NULL,
+    [MeterId] [nvarchar](300) NULL,
+    [MeterName] [nvarchar](300) NULL,
+    [MeterRegion] [nvarchar](300) NULL,
+    [UnitOfMeasure] [nvarchar](300) NULL,
+    [Quantity] decimal (28,20) NULL,
+    [EffectivePrice] decimal (28,20) NULL,
+    [CostInBillingCurrency] decimal (28,20) NULL,
+    [CostCenter] [nvarchar](300) NULL,
+    [ConsumedService] [nvarchar](300) NULL,
+    [ResourceId] [nvarchar](2000) NULL,
+    [Tags] [nvarchar](4000) NULL,
+    [OfferId] [nvarchar](300) NULL,
+    [AdditionalInfo] [nvarchar](4000) NULL,
+    [ServiceInfo1] [nvarchar](300) NULL,
+    [ServiceInfo2] [nvarchar](300) NULL,
+    [ResourceName] [nvarchar](300) NULL,
+    [ReservationId] [nvarchar](300) NULL,
+    [ReservationName] [nvarchar](300) NULL,
+    [UnitPrice] decimal (28,20) NULL,
+    [ProductOrderId] [nvarchar](300) NULL,
+    [ProductOrderName] [nvarchar](300) NULL,
+    [Term] [nvarchar](300) NULL,
+    [PublisherType] [nvarchar](300) NULL,
+    [PublisherName] [nvarchar](300) NULL,
+    [ChargeType] [nvarchar](300) NULL,
+    [Frequency] [nvarchar](300) NULL,
+    [PricingModel] [nvarchar](300) NULL,
+    [AvailabilityZone] [nvarchar](300) NULL,
+    [BillingAccountId] [nvarchar](300) NULL,
+    [BillingAccountName] [nvarchar](300) NULL,
+    [BillingCurrencyCode] [nvarchar](20) NULL,
+    [BillingPeriodStartDate] date NULL,
+    [BillingPeriodEndDate] date NULL,
+    [BillingProfileId] [nvarchar](100) NULL,
+    [BillingProfileName] [nvarchar](300) NULL,
+    [InvoiceSectionId] [nvarchar](300) NULL,
+    [IsAzureCreditEligible] [nvarchar](10) NULL,
+    [PartNumber] [nvarchar](50) NULL,
+    [PayGPrice] [nvarchar](100) NULL,
+    [PlanName] [nvarchar](300) NULL,
+    [ServiceFamily] [nvarchar](300) NULL,
+    [CostAllocationRuleName] [nvarchar](300) NULL
+);
+GO
+
+CREATE TABLE [aco].[Reservation Details] (
+    [InstanceFlexibilityGroup] [nvarchar](300) NULL,
+    [InstanceFlexibilityRatio] [nvarchar](300) NULL,
+    [InstanceId] [nvarchar](2000) NULL,
+    [Kind] [nvarchar](300) NULL,
+    [ReservationId] [nvarchar](300) NULL,
+    [ReservationOrderId] [nvarchar](300) NULL, 
+    [ReservedHours] decimal (28,10) NULL,
+    [SkuName] [nvarchar](300) NULL,
+    [TotalReservedQuantity] decimal (28,10) NULL,
+    [UsageDate] [nvarchar](30) NULL,
+    [UsedHours] decimal (28,10) NULL
+);
+GO
+
+-- Build from Billing data
+-- CREATE TABLE Subscriptions (
+--     SubscriptionId nvarchar(max)
+--     , SubscriptionName nvarchar(max)
+-- );
+-- GO
+
+CREATE TABLE [aco].[Reservation Recommendations] (
+    [costWithNoReservedInstances] decimal (28,10)
+    , [firstUsageDate] nvarchar(max)
+    , [id nvarchar(max)
+    , [instanceFlexibilityGroup] nvarchar(max)
+    , [instanceFlexibilityRatio] nvarchar(max)
+    , [kind] nvarchar(max)
+    , [location] nvarchar(max)
+    , [Look Back Period] nvarchar(max)
+    , [meterId] nvarchar(max)
+    , [name] nvarchar(max)
+    , [netSavings] decimal (28,10)
+    , [normalizedSize] nvarchar(max)
+    , [Recommended Quantity] decimal (28,10)
+    , [recommendedQuantityNormalized] nvarchar(max)
+    , [Reservation Scope] nvarchar(max)
+    , [Reservation Term] nvarchar(max)
+    , [sku] nvarchar(max)
+    , [skuProperties] nvarchar(max)
+    , [subscriptionId] nvarchar(max)
+    , [totalCostWithReservedInstances] decimal (28,10)
+    , [type] nvarchar(max)
+);
+GO
+
+-- Build from Reservation Recomendations
+-- CREATE TABLE Meters (
+--     meterId nvarchar(max)
+-- );
+-- GO
+
+CREATE TABLE [aco].[PriceList] (
+    [billingPeriodId] nvarchar(max)
+    , [meterCategory] nvarchar(max)
+    , [meterId] nvarchar(max)
+    , [meterLocation] nvarchar(max)
+    , [meterName] nvarchar(max)
+    , [meterSubCategory] nvarchar(max)
+    , [unit] nvarchar(max)
+);
+GO
+
+CREATE TABLE [aco].[MarketPlace] (
+    [accountName] nvarchar(max)
+    , [additionalInfo] nvarchar(max)
+    , [billingPeriodId] nvarchar(max)
+    , [consumedQuantity] nvarchar(max)
+    , [costCenter] nvarchar(max)
+    , [currency] nvarchar(max)
+    , [departmentName] nvarchar(max)
+    , [id] nvarchar(max)
+    , [instanceId] nvarchar(max)
+    , [instanceName] nvarchar(max)
+    , [isEstimated] nvarchar(max)
+    , [isRecurringCharge] nvarchar(max)
+    , [meterId] nvarchar(max)
+    , [name] nvarchar(max)
+    , [offerName] nvarchar(max)
+    , [orderNumber] nvarchar(max)
+    , [planName] nvarchar(max)
+    , [pretaxCost] nvarchar(max)
+    , [publisherName] nvarchar(max)
+    , [resourceGroup] nvarchar(max)
+    , [resourceRate] nvarchar(max)
+    , [subscriptionGuid] nvarchar(max)
+    , [subscriptionName] nvarchar(max)
+    , [tags] nvarchar(max)
+    , [type] nvarchar(max)
+    , [unitOfMeasure] nvarchar(max)
+    , [usageEnd] nvarchar(max)
+    , [usageStart] nvarchar(max)
+);
+GO
