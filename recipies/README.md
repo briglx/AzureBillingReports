@@ -119,9 +119,9 @@ Remove bad records by:
 
     TBD 
 
-# Getting Started
+# Development
 
-Start the Sql Docker Image 
+Docker commands to manage the sql image. 
 
 ```bash
 # Build the image
@@ -133,7 +133,7 @@ docker run --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_
 # Get a shell to the container
 docker container exec -it aco_recipies /bin/bash
 
-# Stop and start the container to keep the current state.
+# Stop the container to keep the current state.
 docker container stop aco_recipies
 
 # Start the stopped container. Does not reload data. 
@@ -142,8 +142,7 @@ docker container start aco_recipies
 # Remove a container
 docker container rm aco_recipies
 
-# Quick Build
-docker build --pull --rm -f "Dockerfile.dev" -t aco-recipies:latest "."
+# Quick Build. Kills the image after run
 docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipies aco-recipies:latest
 ```
 
