@@ -21,7 +21,7 @@ Create a new report using the common data set using the development environment.
 The purpose of the Common Data Set is to standardize on the various data sets used to create meaningful reports for Azure Cost Optimzation and to provide a sample database for local development.
 
 |Table | Source | Fields | Sorted | Typed |
-|------|--------|--------|-------|
+|------|--------|--------|-------|--------|
 | Regions | Blob - download/regions/azure regionsv2.json | Yes | Yes | No |
 | Advisor | Blob - download/advisor/merged/advisor.json| Yes | Yes | No |
 | ISFData | Blob - download/isfratio/isfratio.csv | Yes | Yes | Yes |
@@ -49,7 +49,7 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | AmortizedCost.SubscriptionId | Subscriptions.SubscriptionId | Many to one | Single |
 | Reservation Recomendatins.subscriptionId | Subscriptions.SubscriptionId | Many to one | Single |
 
-## Regions
+## Regions Table
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -66,6 +66,8 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | regionType | nvarchar(10) | |
 | subscriptionId | nvarchar(50) | |
 
+Example Data. See full dataset [/sampledata/Regions.csv](sampledata/Regions.csv)
+
 |displayName | geographyGroup | id | latitude | longitude | name | pairedRegion | physicalLocation | regionCategory | regionalDisplayName | regionType | subscriptionId |
 |------------|-----|----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 | Asia |  | /subscriptions/cd3b4810-bb97-4f99-9eaa-20c547ee30cb/locations/asia |  |  | asia |  |  | Other | Asia | Logical | cd3b4810-bb97-4f99-9eaa-20c547ee30cb |
@@ -76,12 +78,10 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | Central US (Stage) | US | /subscriptions/cd3b4810-bb97-4f99-9eaa-20c547ee30cb/locations/centralusstage |  |  | centralusstage |  |  | Other | (US) Central US (Stage) | Logical | cd3b4810-bb97-4f99-9eaa-20c547ee30cb |
 | Central US EUAP | US | /subscriptions/cd3b4810-bb97-4f99-9eaa-20c547ee30cb/locations/centraluseuap | 41.5908 | -93.6208 | centraluseuap | eastus2euap |  | Other | (US) Central US EUAP | Physical | cd3b4810-bb97-4f99-9eaa-20c547ee30cb |
 
-### Sample data
-
-Create the sample sample data:
+### Steps to Create Regions Sample data
 
 - Download from Azure
-- Transfor the data
+- Transform the data
 - Remove Bad Records
 
 Download the data using the [list-locations](https://docs.microsoft.com/en-us/rest/api/resources/subscriptions/list-locations#code-try-0) api with either the `az cli` or `wget`.
@@ -102,16 +102,16 @@ wget "$header" https://management.azure.com/subscriptions/$subscription_id/locat
 
 Transform the data using the PowerBi Template.
 
-- Open the `RegionsFromAzureListLocations.pbit` and select the path to the downloaded `AzureLocations.json` file.
+- Open the `sampledata/RegionsFromAzureListLocations.pbit` and select the path to the downloaded `sampledata/AzureLocations.json` file.
 - One the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
-- Save the file as `Regions.csv`
+- Save the file as `sampledata/Regions.csv`
 
 Remove bad records by:
 
 - Remove the header row
 - Removing the `,` (comma) and `"` (quote)s from `"Tokyo, Saitama"` to `Tokyo Saitama`
 
-## Reservation Recommendations
+## Reservation Recommendations Table
 
 | Field | Type | Notes |
 |-------|------|-------|
