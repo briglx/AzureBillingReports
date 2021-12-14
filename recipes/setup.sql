@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS [AcoRecipies]
+DROP DATABASE IF EXISTS [AcoRecipes]
 GO
-CREATE DATABASE [AcoRecipies];
+CREATE DATABASE [AcoRecipes];
 GO
-USE AcoRecipies;
+USE AcoRecipes;
 GO
 
 DROP SCHEMA IF EXISTS aco
@@ -246,7 +246,7 @@ CREATE TABLE [aco].[Reservation Recommendations] (
 );
 GO
 
--- Build from Reservation Recomendations
+-- Build from Reservation Recommendations
 -- CREATE TABLE Meters (
 --     meterId nvarchar(max)
 -- );

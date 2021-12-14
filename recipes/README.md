@@ -1,22 +1,22 @@
-# Azure Cost Optimization Recipies
+# Azure Cost Optimization Recipes
 
-Azure Cost Optimization Recipies is a collection of reports built on top of a common dataset.
+Azure Cost Optimization Recipes is a collection of reports built on top of a common dataset.
 
-The Recipies include:
+The Recipes include:
 
 - Sample Reports
 - Common Data Sets
 - Development Environment
 
 > ## Quick Start
-> Jump to the [Quick Start](#QuickStart) to start looking at the sample recipie reports
+> Jump to the [Quick Start](#QuickStart) to start looking at the sample recipe reports
 
 # Sample Reports
 
 Create a new report using the common data set using the development environment. 
 
 - Start the local Sql Database docker image
-- Open the `RecipiesReport.pbit` template
+- Open the `RecipesReport.pbit` template
 - Point to the Database
 
 # Common Data Set
@@ -34,7 +34,7 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | Reservation Details | DB |Yes | Yes | Yes |
 | Subscriptinos | Billing data | NA | NA | NA |
 | Reservation Recommendations | blob - download/resrecommendations/merged/reservation_merged.json| Yes | Yes | No |
-| Meters | Reservation Recomendations | NA | NA | NA |
+| Meters | Reservation Recommendations | NA | NA | NA |
 | PriceList | Blob - download/pricesheet/pricesheet.json | Yes | Yes | No |
 | Marketplace | Blob - download/marketplace/marketplace.json |  Yes | Yes | No |
 | Date | Calculated | NA | NA | NA |
@@ -106,7 +106,7 @@ wget "$header" https://management.azure.com/subscriptions/$subscription_id/locat
 Transform the data using the PowerBi Template.
 
 - Open the `sampledata/RegionsFromAzureAccountListLocations.pbit` and select the path to the downloaded `sampledata/AzureLocations.json` file.
-- On the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
+- On the `Raw Data` tab, select the dataset click `Export Data` from the ellipse.
 - Save the file as `sampledata/Regions.csv`
 
 Remove bad records by:
@@ -150,7 +150,7 @@ Example Data. See full dataset [/sampledata/Advisor.csv](sampledata/Advisor.csv)
 
 ### Steps to Create Advisor Sample data
 
-- Initate the Recommendation Generation process
+- Initiate the Recommendation Generation process
 - Download from Azure
 - Transform the data
 - Remove Bad Records
@@ -178,7 +178,7 @@ wget "$header" https://management.azure.com/subscriptions/$subscription_id/provi
 Transform the data using the PowerBi Template.
 
 - Open the `sampledata/AdvisorFromAzureAdvisorRecommendationList.pbit` and enter the path to the downloaded `sampledata/Advisor.json` file for the `json_data_file_name` parameter.
-- On the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
+- On the `Raw Data` tab, select the dataset click `Export Data` from the ellipse.
 - Save the file as `sampledata/Advisor.csv`
 
 Remove bad records by:
@@ -199,33 +199,33 @@ Remove bad records by:
 
 # Quick Start
 
-Get started looking at the sample recipie reports.
+Get started looking at the sample recipe reports.
 
 * Clone this project
 * Build the Common Data Docker Image
-* Open the Sample Recipies Report Template
+* Open the Sample Recipes Report Template
 
 
 ```bash
 # clone project
 git clone https://github.com/briglx/AzureBillingReports.git
 
-# Navigate to recipies
-cd AzureBillingReports/recipies
+# Navigate to Recipes
+cd AzureBillingReports/recipes
 
 # Build the image
-docker build --pull --rm -f "Dockerfile.dev" -t aco-recipies:latest "."
+docker build --pull --rm -f "Dockerfile.dev" -t aco-recipes:latest "."
 
-# Run a new recipies container. This loads default data.
-docker run --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_recipies --detach aco-recipies:latest
+# Run a new Recipes container. This loads default data.
+docker run --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes --detach aco-recipes:latest
 ```
 
-Open the `RecipiesReport.pbit` file.
+Open the `RecipesReport.pbit` file.
 
 Fill in the information for the sample database:
 
 - server: localhost
-- database: AcoRecipies
+- database: AcoRecipes
 
 Click `load`
 
@@ -237,25 +237,25 @@ Docker commands to manage the sql image.
 
 ```bash
 # Build the image
-docker build --pull --rm -f "Dockerfile.dev" -t aco-recipies:latest "."
+docker build --pull --rm -f "Dockerfile.dev" -t aco-recipes:latest "."
 
-# Run a new recipies container. This loads default data.
-docker run --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_recipies --detach aco-recipies:latest
+# Run a new recipes container. This loads default data.
+docker run --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes --detach aco-recipes:latest
 
 # Get a shell to the container
-docker container exec -it aco_recipies /bin/bash
+docker container exec -it aco_recipes /bin/bash
 
 # Stop the container to keep the current state.
-docker container stop aco_recipies
+docker container stop aco_recipes
 
 # Start the stopped container. Does not reload data. 
-docker container start aco_recipies
+docker container start aco_recipes
 
 # Remove a container
-docker container rm aco_recipies
+docker container rm aco_recipes
 
 # Quick Build. Kills the image after run
-docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_recipies aco-recipies:latest
+docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes aco-recipes:latest
 ```
 
 # General
@@ -279,7 +279,7 @@ Template Overview: Sample Azure cost optimization reports built on top of a comm
 | Parameter Name | Description | Default |
 |----------------|-------------|---------|
 | server         | server name (Host or ip. The port may be optionally specified with the server, separated by a colon or a comma.) | localhost |
-| database       | SQL Server database on server <server> | AcoRecipies |
+| database       | SQL Server database on server <server> | AcoRecipes |
 
 
 
