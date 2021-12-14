@@ -8,6 +8,9 @@ The Recipies include:
 - Common Data Sets
 - Development Environment
 
+> ## Quick Start
+> Jump to the [Quick Start](#QuickStart) to start looking at the sample recipie reports
+
 # Sample Reports
 
 Create a new report using the common data set using the development environment. 
@@ -97,12 +100,12 @@ az account list-locations > $regions_filename
 
 # wget example
 header='--header=Authorization: Bearer $bearer_token'
-wget "$header" https://management.azure.com/subscriptions/$subscription_id/locations?api-version=2020-01-01 -O azure $regions_filename
+wget "$header" https://management.azure.com/subscriptions/$subscription_id/locations?api-version=2020-01-01 -O $regions_filename
 ```
 
 Transform the data using the PowerBi Template.
 
-- Open the `sampledata/RegionsFromAzureListLocations.pbit` and select the path to the downloaded `sampledata/AzureLocations.json` file.
+- Open the `sampledata/RegionsFromAzureAccountListLocations.pbit` and select the path to the downloaded `sampledata/AzureLocations.json` file.
 - On the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
 - Save the file as `sampledata/Regions.csv`
 
@@ -111,6 +114,81 @@ Remove bad records by:
 - Remove the header row
 - Remove the `,` (comma) and `"` (quote)s from `"Tokyo, Saitama"` to `Tokyo Saitama`
 
+## Advisor Table
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentKey | nvarchar(36) NULL | 72 |
+| Category | nvarchar(20) | 40 |
+| id | nvarchar(300) | 600 |
+| Impact | nvarchar(6) | 12 |
+| Impacted Resource Name | nvarchar(50) | 100 |
+| Impacted Resource Type | nvarchar(50) | 100|
+| Last Updated | Date | 3 |
+| name | nvarchar(50) | 100 |
+| recommendationTypeId | nvarchar(50) | 100 |
+| resourceId | nvarchar(2000) | 4000 |
+| score | Decimal(3,2) NULL | 5|
+| Short Description - Problem | nvarchar(200) | 400|
+| Short Description - Solution | nvarchar(200) | 400 |
+| source | nvarchar(300) NULL | 600|
+| subscriptionId | nvarchar(300) | 600 |
+| type | nvarchar(50) | 100 |
+
+Example Data. See full dataset [/sampledata/Advisor.csv](sampledata/Advisor.csv)
+
+| assessmentKey | Category | id | Impact | Impacted Resource Name | Impacted Resource Type | Last Updated | name | recommendationTypeId | resourceId | score | Short Description - Problem | Short Description - Solution | source | subscriptionId | type |
+|---------------|----------|----|--------|------------------------|------------------------|--------------|------|----------------------|------------|-------|-----------------------------|------------------------------|--------|----------------|------|
+| 01195afff-c881-495e-9bc5-1486211ae03f | Security | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-app/providers/Microsoft.Advisor/recommendations/93f3162f-eddf-e642-cbab-949e06a95743 | Low | vm-app | Microsoft.Compute/virtualMachines | 2021-12-08 00:27:44 | 93f3162f-eddf-e642-cbab-949e06a95743 | 01195afff-c881-495e-9bc5-1486211ae03f | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-app | 0 | Machines should have vulnerability findings resolved | Machines should have vulnerability findings resolved | /subscriptions/00000000-0000-2222-0000-000000000000/resourceGroups/rg-dev/providers/Microsoft.Compute/virtualMachines/vm-app/providers/Microsoft.Security/assessments/01195afff-c881-495e-9bc5-1486211ae03f | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+| 01195afff-c881-495e-9bc5-1486211ae03f | Security | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-production/providers/microsoft.compute/virtualmachines/vm-app/providers/Microsoft.Advisor/recommendations/3b17ca49-f2ba-c3be-f434-c0bf2e72dfcc | Low | rg-production | Microsoft.Compute/virtualMachines | 2021-12-08 00:27:44 | 3b17ca49-f2ba-c3be-f434-c0bf2e72dfcc | 01195afff-c881-495e-9bc5-1486211ae03f | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-production/providers/microsoft.compute/virtualmachines/rg-production | 0 | Machines should have vulnerability findings resolved | Machines should have vulnerability findings resolved | /subscriptions/00000000-0000-2222-0000-000000000000/resourceGroups/rg-production/providers/Microsoft.Compute/virtualMachines/rg-production/providers/Microsoft.Security/assessments/01195afff-c881-495e-9bc5-1486211ae03f | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+| 13e7d036-6903-821c-6018-962938929bf0 | Security | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-test/providers/microsoft.containerregistry/registries/vm-app2/providers/Microsoft.Advisor/recommendations/5bf6839d-a139-bc3f-2e9e-7fecdb85b437 | Medium | vm-app2 | Microsoft.ContainerRegistry/registries | 2021-12-08 00:27:55 | 5bf6839d-a139-bc3f-2e9e-7fecdb85b437 | 13e7d036-6903-821c-6018-962938929bf0 | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-test/providers/microsoft.containerregistry/registries/vm-app2 | 0 | Container registries should use private link | Container registries should use private link | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-test/providers/microsoft.containerregistry/registries/vm-app2/providers/Microsoft.Security/assessments/13e7d036-6903-821c-6018-962938929bf0 | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+| 13e7d036-6903-821c-6018-962938929bf0 | Security | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-app1/providers/microsoft.containerregistry/registries/reg-master/providers/Microsoft.Advisor/recommendations/0b7989f1-89a9-65eb-8546-5de841329b5f | Medium | reg-master | Microsoft.ContainerRegistry/registries | 2021-12-08 00:27:44 | 0b7989f1-89a9-65eb-8546-5de841329b5f | 13e7d036-6903-821c-6018-962938929bf0 | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-app1/providers/microsoft.containerregistry/registries/reg-master | 0 | Container registries should use private link | Container registries should use private link | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-app1/providers/microsoft.containerregistry/registries/reg-master/providers/Microsoft.Security/assessments/13e7d036-6903-821c-6018-962938929bf0 | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+| 13e7d036-6903-821c-6018-962938929bf0 | Security | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-db/providers/microsoft.containerregistry/registries/reg-dev/providers/Microsoft.Advisor/recommendations/32883171-269c-a47f-58d9-da03df7d3fa6 | Medium | reg-dev | Microsoft.ContainerRegistry/registries | 2021-12-08 00:27:55 | 32883171-269c-a47f-58d9-da03df7d3fa6 | 13e7d036-6903-821c-6018-962938929bf0 | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-db/providers/microsoft.containerregistry/registries/reg-dev | 0 | Container registries should use private link | Container registries should use private link | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-db/providers/microsoft.containerregistry/registries/reg-dev/providers/Microsoft.Security/assessments/13e7d036-6903-821c-6018-962938929bf0 | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+|                                      | HighAvailability | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-test/providers/microsoft.compute/virtualmachines/vm-app/providers/Microsoft.Advisor/recommendations/e76be915-eef6-9249-7cd5-2b02df9564a4 | Medium | rg-test-app | MICROSOFT.CLASSICCOMPUTE/VIRTUALMACHINES | e76be915-eef6-9249-7cd5-2b02df9564a4 | 651c7925-17a3-42e5-85cd-73bd095cf27f | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-test/providers/microsoft.compute/virtualmachines/rg-test-app |  | Enable Backups on your Virtual Machines | Enable Backups on your Virtual Machines |  | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+|                                      | HighAvailability | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-db/providers/Microsoft.Advisor/recommendations/354a06ea-7a93-3079-5c4d-9871044915c1 | Medium | vm-db | MICROSOFT.CLASSICCOMPUTE/VIRTUALMACHINES | 354a06ea-7a93-3079-5c4d-9871044915c1 | 651c7925-17a3-42e5-85cd-73bd095cf27f | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-db |  | Enable Backups on your Virtual Machines | Enable Backups on your Virtual Machines |  | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
+
+
+### Steps to Create Advisor Sample data
+
+- Initate the Recommendation Generation process
+- Download from Azure
+- Transform the data
+- Remove Bad Records
+
+Initiate the Recommendation py calling [generate-recommendations](https://docs.microsoft.com/en-us/rest/api/advisor/recommendations/generate)
+Download the data using the [list-recommendations](https://docs.microsoft.com/en-us/rest/api/advisor/recommendations/list) api with either the `az cli` or `wget`.
+
+```bash
+# Replace with your subscription-id and bearer token
+subscription_id=<subscription-id>
+bearer_token=<bearer token>
+recommendation_filename=Advisor.json
+
+# az cli example
+az advisor recommendation list > $recommendation_filename
+
+# wget example
+header='--header=Authorization: Bearer $bearer_token'
+
+wpost "$header" POST https://management.azure.com/subscriptions/$subscription_id/providers/Microsoft.Advisor/generateRecommendations?api-version=2017-04-19
+
+wget "$header" https://management.azure.com/subscriptions/$subscription_id/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01 -O $recommendation_filename
+```
+
+Transform the data using the PowerBi Template.
+
+- Open the `sampledata/AdvisorFromAzureAdvisorRecommendationList.pbit` and enter the path to the downloaded `sampledata/Advisor.json` file for the `json_data_file_name` parameter.
+- On the `Raw Data` tab, select the dataset click `Export Data` from the elipse.
+- Save the file as `sampledata/Advisor.csv`
+
+Remove bad records by:
+
+- Remove the header row
+- Replacing `subscripionid` with dummy_subscription_id
+- Replacing `resource Group Name` with dummy resource group name
+- Replacing `vm name` with dummy vm name
+- Remove the `,` (comma) and `"` (quote)s from `"Virtual machines should encrypt temp disks, caches, and data flows between Compute and Storage resources"` to `Virtual machines should encrypt temp disks caches and data flows between Compute and Storage resources`
+
 ## Reservation Recommendations Table
 
 | Field | Type | Notes |
@@ -118,6 +196,40 @@ Remove bad records by:
 | AnnualSavings | Number | Calculated AnnualSavings = 'Reservation Recommendations'[netSavings]/SUBSTITUTE(SUBSTITUTE('Reservation Recommendations'[Look Back Period],"Last",""),"Days","")*365 |
 
     TBD 
+
+# Quick Start
+
+Get started looking at the sample recipie reports.
+
+* Clone this project
+* Build the Common Data Docker Image
+* Open the Sample Recipies Report Template
+
+
+```bash
+# clone project
+git clone https://github.com/briglx/AzureBillingReports.git
+
+# Navigate to recipies
+cd AzureBillingReports/recipies
+
+# Build the image
+docker build --pull --rm -f "Dockerfile.dev" -t aco-recipies:latest "."
+
+# Run a new recipies container. This loads default data.
+docker run --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_recipies --detach aco-recipies:latest
+```
+
+Open the `RecipiesReport.pbit` file.
+
+Fill in the information for the sample database:
+
+- server: localhost
+- database: AcoRecipies
+
+Click `load`
+
+
 
 # Development
 
@@ -143,8 +255,33 @@ docker container start aco_recipies
 docker container rm aco_recipies
 
 # Quick Build. Kills the image after run
-docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipies aco-recipies:latest
+docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipies --name aco_recipies aco-recipies:latest
 ```
+
+# General
+
+## Creating a Data Transform PBI template
+
+| Parameter Name | Description |
+|----------------|-------------|
+| json_data_file_name | filename of the downloaded json data from the api |
+
+Dummy Data
+
+| Field | Value |
+|-------|-------|
+|subscriptionId | 00000000-0000-2222-0000-000000000000 |
+
+## Creating the Sample PBI template
+
+Template Overview: Sample Azure cost optimization reports built on top of a common dataset.
+
+| Parameter Name | Description | Default |
+|----------------|-------------|---------|
+| server         | server name (Host or ip. The port may be optionally specified with the server, separated by a colon or a comma.) | localhost |
+| database       | SQL Server database on server <server> | AcoRecipies |
+
+
 
 # References
 - Sql Server Express on Docker https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-linux-ver15&pivots=cs1-powershell
@@ -152,3 +289,4 @@ docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipies ac
 - Configure and Customize SQL Container https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-configure?view=sql-server-ver15&pivots=cs1-bash
 - Attach to a Container https://linuxize.com/post/how-to-connect-to-docker-container/
 - Azure Api list Locations https://docs.microsoft.com/en-us/rest/api/resources/subscriptions/list-locations#code-try-0
+- SQL System stored procedures https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-help-transact-sql?view=sql-server-ver15

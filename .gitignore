@@ -5,6 +5,7 @@ run.bat
 PartNumber.csv
 NonWindows.csv
 WindowsMachines.csv
+
 test_sample.csv-filtered.csv
 
 #Venv
@@ -83,3 +84,6 @@ SqlDWSetup.sql
 billing-container.yaml
 *.pbix
 recipies/import-data.sh
+
+# Sample data
+recipies/sampledata/Advisor.json

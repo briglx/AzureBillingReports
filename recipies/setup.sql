@@ -29,22 +29,22 @@ CREATE TABLE [aco].[Regions] (
 GO
 
 CREATE TABLE [aco].[Advisor] (
-    [assessmentKey] nvarchar(max)
-    , [Category] nvarchar(max)
-    , [id] nvarchar(max)
-    , [Impact] nvarchar(max)
-    , [Impacted Resource Name] nvarchar(max)
-    , [Impacted Resource Type] nvarchar(max)
-    , [Last Updated] nvarchar(max)
-    , [name] nvarchar(max)
-    , [recommendationTypeId] nvarchar(max)
-    , [resourceId] nvarchar(max)
-    , [score] nvarchar(max)
-    , [Short Description - Problem] nvarchar(max)
-    , [Short Description - Solution] nvarchar(max)
-    , [source] nvarchar(max)
-    , [subscriptionId] nvarchar(max)
-    , [type] nvarchar(max)
+    [assessmentKey] nvarchar(36) NULL
+    , [Category] nvarchar(20)
+    , [id] nvarchar(300)
+    , [Impact] nvarchar(6)
+    , [Impacted Resource Name] nvarchar(50)
+    , [Impacted Resource Type] nvarchar(50)
+    , [Last Updated] Date
+    , [name] nvarchar(50)
+    , [recommendationTypeId] nvarchar(50)
+    , [resourceId] nvarchar(2000)
+    , [score] Decimal(3,2) NULL
+    , [Short Description - Problem] nvarchar(200)
+    , [Short Description - Solution] nvarchar(200)
+    , [source] nvarchar(300) NULL
+    , [subscriptionId] nvarchar(300)
+    , [type] nvarchar(50)
 );
 GO
 

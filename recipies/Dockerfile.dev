@@ -19,6 +19,8 @@ COPY ./sampledata/*.csv /usr/src/app/
 # Grant permissions for the import-data script to be executable
 RUN chmod 666 /usr/src/app/*.csv
 RUN chmod +x /usr/src/app/import-data.sh
+RUN touch /usr/src/app/bcp_err.log
+RUN chown mssql:root /usr/src/app/bcp_err.log
 
 # Switch back to mssql user and run the entrypoint script
 USER mssql
