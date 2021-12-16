@@ -1,0 +1,5 @@
+14.0
+3
+1       SQLCHAR             0       100     ","    2     InstanceSizeFlexibilityGroup                                                                                         SQL_Latin1_General_CP1_CI_AS
+2       SQLCHAR             0       100     ","    1     ArmSkuName                                                                                                           SQL_Latin1_General_CP1_CI_AS
+3       SQLCHAR             0       41      "\n"   3     Ratio                                                                                                                ""

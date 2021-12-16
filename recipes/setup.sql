@@ -48,11 +48,10 @@ CREATE TABLE [aco].[Advisor] (
 );
 GO
 
-
 CREATE TABLE [aco].[ISFData] (
     [ArmSkuName] [nvarchar](50) NULL
-    , [InstanceSizeFlexibilityGroup] [nvarchar](200) NULL
-	, [Ratio] [nvarchar](50) NULL
+    , [InstanceSizeFlexibilityGroup] [nvarchar](50) NULL
+	, [Ratio] Decimal(11,9)
 );
 GO
 

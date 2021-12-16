@@ -1,0 +1,524 @@
+Azure Red Hat OpenShift Compute Optimized,Red_Hat_OpenShift_Compute_Optimized_v2_4_vCPU,1
+Azure Red Hat OpenShift Compute Optimized,Red_Hat_OpenShift_Compute_Optimized_v2_8_vCPU,2
+Azure Red Hat OpenShift Compute Optimized,Red_Hat_OpenShift_Compute_Optimized_v2_16_vCPU,4
+Azure Red Hat OpenShift Compute Optimized,Red_Hat_OpenShift_Compute_Optimized_v2_32_vCPU,8
+Azure Red Hat OpenShift General Purpose,Red_Hat_OpenShift_General_Purpose_v3_4_vCPU,1
+Azure Red Hat OpenShift General Purpose,Red_Hat_OpenShift_General_Purpose_v3_8_vCPU,2
+Azure Red Hat OpenShift General Purpose,Red_Hat_OpenShift_General_Purpose_v3_16_vCPU,4
+Azure Red Hat OpenShift General Purpose,Red_Hat_OpenShift_General_Purpose_v3_32_vCPU,8
+Azure Red Hat OpenShift Memory Optimized,Red_Hat_OpenShift_Memory_Optimized_v3_4_vCPU,1
+Azure Red Hat OpenShift Memory Optimized,Red_Hat_OpenShift_Memory_Optimized_v3_8_vCPU,2
+Azure Red Hat OpenShift Memory Optimized,Red_Hat_OpenShift_Memory_Optimized_v3_16_vCPU,4
+Azure Red Hat OpenShift Memory Optimized,Red_Hat_OpenShift_Memory_Optimized_v3_32_vCPU,8
+Azure Redis Cache Premium,Azure_Redis_Cache_Premium_P1_Cache,1
+Azure Redis Cache Premium,Azure_Redis_Cache_Premium_P2_Cache,2
+Azure Redis Cache Premium,Azure_Redis_Cache_Premium_P3_Cache,4
+Azure Redis Cache Premium,Azure_Redis_Cache_Premium_P4_Cache,8
+Azure Redis Cache Premium,Azure_Redis_Cache_Premium_P5_Cache,18
+BS Series,Standard_B1ls,1
+BS Series,Standard_B1s,2
+BS Series,Standard_B2s,8
+BS Series High Memory,Standard_B1ms,1
+BS Series High Memory,Standard_B2ms,4
+BS Series High Memory,Standard_B4ms,8
+BS Series High Memory,Standard_B8ms,16
+BS Series High Memory,Standard_B12ms,24
+BS Series High Memory,Standard_B16ms,32
+BS Series High Memory,Standard_B20ms,40
+D Series,Standard_D1,1
+D Series,Standard_D2,2
+D Series,Standard_D3,4
+D Series,Standard_D4,8
+D Series High Memory,Standard_D11,1
+D Series High Memory,Standard_D12,2
+D Series High Memory,Standard_D13,4
+D Series High Memory,Standard_D14,8
+DCSv2 Series,Standard_DC1s_v2,1
+DCSv2 Series,Standard_DC2s_v2,2
+DCSv2 Series,Standard_DC4s_v2,4
+DCSv2 Series,Standard_DC8_v2,8
+DS Series,Standard_DS1,1
+DS Series,Standard_DS2,2
+DS Series,Standard_DS3,4
+DS Series,Standard_DS4,8
+DS Series High Memory,Standard_DS11,1
+DS Series High Memory,Standard_DS12,2
+DS Series High Memory,Standard_DS13,4
+DS Series High Memory,Standard_DS14,8
+DSv2 Series,Standard_DS1_v2,1
+DSv2 Series,Standard_DS2_v2,2
+DSv2 Series,Standard_DS3_v2,4
+DSv2 Series,Standard_DS4_v2,8
+DSv2 Series,Standard_DS5_v2,16
+DSv2 Series High Memory,Standard_DS11-1_v2,1
+DSv2 Series High Memory,Standard_DS11_v2,1
+DSv2 Series High Memory,Standard_DS12-1_v2,2
+DSv2 Series High Memory,Standard_DS12-2_v2,2
+DSv2 Series High Memory,Standard_DS12_v2,2
+DSv2 Series High Memory,Standard_DS13-2_v2,4
+DSv2 Series High Memory,Standard_DS13-4_v2,4
+DSv2 Series High Memory,Standard_DS13_v2,4
+DSv2 Series High Memory,Standard_DS14-8_v2,8
+DSv2 Series High Memory,Standard_DS14-4_v2,8
+DSv2 Series High Memory,Standard_DS14_v2,8
+DSv2 Series High Memory,Standard_DS15_v2,10
+DSv2 Series High Memory Isolated,Standard_DS15i_v2,1
+DSv3 Series,Standard_D2s_v3,1
+DSv3 Series,Standard_D4s_v3,2
+DSv3 Series,Standard_D8s_v3,4
+DSv3 Series,Standard_D8hs_v3,4
+DSv3 Series,Standard_D16s_v3,8
+DSv3 Series,Standard_D32s_v3,16
+DSv3 Series,Standard_D32-16s_v3,16
+DSv3 Series,Standard_D32-8s_v3,16
+DSv3 Series,Standard_D48s_v3,24
+DSv3 Series,Standard_D64s_v3,32
+DSv3 Series,Standard_D64-32s_v3,32
+DSv3 Series,Standard_D64-16s_v3,32
+DSv3 Series Dedicated Host,Dsv3_Type1,1
+DSv3 Series Dedicated Host,Dsv3_Type2,1.1875
+DSv3 Series Dedicated Host,Dsv3_Type3,1.25
+DSv4 Series Dedicated Host,Dsv4_Type1,1
+Dadsv5 Internal Series Linux,Internal_D2ads_v5,1
+Dadsv5 Internal Series Linux,Internal_D4ads_v5,2
+Dadsv5 Internal Series Linux,Internal_D8ads_v5,4
+Dadsv5 Internal Series Linux,Internal_D16ads_v5,8
+Dadsv5 Internal Series Linux,Internal_D32ads_v5,16
+Dadsv5 Internal Series Linux,Internal_D48ads_v5,24
+Dadsv5 Internal Series Linux,Internal_D64ads_v5,32
+Dadsv5 Internal Series Linux,Internal_D96ads_v5,48
+Dalsv5 Internal Series Linux,Internal_D2als_v5,1
+Dalsv5 Internal Series Linux,Internal_D4als_v5,2
+Dalsv5 Internal Series Linux,Internal_D8als_v5,4
+Dalsv5 Internal Series Linux,Internal_D16als_v5,8
+Dalsv5 Internal Series Linux,Internal_D32als_v5,16
+Dalsv5 Internal Series Linux,Internal_D48als_v5,24
+Dalsv5 Internal Series Linux,Internal_D64als_v5,32
+Dalsv5 Internal Series Linux,Internal_D96als_v5,48
+Dasv4 Series,Standard_D2as_v4,1
+Dasv4 Series,Standard_D4ahs_v4,2
+Dasv4 Series,Standard_D4as_v4,2
+Dasv4 Series,Standard_D8as_v4,4
+Dasv4 Series,Standard_D16as_v4,8
+Dasv4 Series,Standard_D32as_v4,16
+Dasv4 Series,Standard_D48as_v4,24
+Dasv4 Series,Standard_D64as_v4,32
+Dasv4 Series,Standard_D96as_v4,48
+Dasv4 Series Dedicated Host,Dasv4_Type1,1
+Dasv5 Internal Series Linux,Internal_D2as_v5,1
+Dasv5 Internal Series Linux,Internal_D4as_v5,2
+Dasv5 Internal Series Linux,Internal_D8as_v5,4
+Dasv5 Internal Series Linux,Internal_D16as_v5,8
+Dasv5 Internal Series Linux,Internal_D32as_v5,16
+Dasv5 Internal Series Linux,Internal_D48as_v5,24
+Dasv5 Internal Series Linux,Internal_D64as_v5,32
+Dasv5 Internal Series Linux,Internal_D96as_v5,48
+Dasv5 Promo Series Linux,Standard_D2as_v5_Promo,1
+Dasv5 Promo Series Linux,Standard_D4as_v5_Promo,2
+Dasv5 Promo Series Linux,Standard_D8as_v5_Promo,4
+Dasv5 Promo Series Linux,Standard_D16as_v5_Promo,8
+Dasv5 Promo Series Linux,Standard_D32as_v5_Promo,16
+Dasv5 Promo Series Linux,Standard_D48as_v5_Promo,24
+Dasv5 Promo Series Linux,Standard_D64as_v5_Promo,32
+Dasv5 Promo Series Linux,Standard_D96as_v5_Promo,48
+Dav4 Series,Standard_D2a_v4,1
+Dav4 Series,Standard_D4a_v4,2
+Dav4 Series,Standard_D8a_v4,4
+Dav4 Series,Standard_D16a_v4,8
+Dav4 Series,Standard_D32a_v4,16
+Dav4 Series,Standard_D48a_v4,24
+Dav4 Series,Standard_D64a_v4,32
+Dav4 Series,Standard_D96a_v4,48
+Ddsv4 Series,Standard_D2ds_v4,1
+Ddsv4 Series,Standard_D4ds_v4,2
+Ddsv4 Series,Standard_D8ds_v4,4
+Ddsv4 Series,Standard_D16ds_v4,8
+Ddsv4 Series,Standard_D32ds_v4,16
+Ddsv4 Series,Standard_D48ds_v4,24
+Ddsv4 Series,Standard_D64ds_v4,32
+Ddsv4 Series Dedicated Host,Ddsv4_Type 1,1
+Ddv4 Series,Standard_D2d_v4,1
+Ddv4 Series,Standard_D4d_v4,2
+Ddv4 Series,Standard_D8d_v4,4
+Ddv4 Series,Standard_D16d_v4,8
+Ddv4 Series,Standard_D32d_v4,16
+Ddv4 Series,Standard_D48d_v4,24
+Ddv4 Series,Standard_D64d_v4,32
+Dsv4 Series,Standard_D2s_v4,1
+Dsv4 Series,Standard_D4s_v4,2
+Dsv4 Series,Standard_D8s_v4,4
+Dsv4 Series,Standard_D16s_v4,8
+Dsv4 Series,Standard_D32s_v4,16
+Dsv4 Series,Standard_D48s_v4,24
+Dsv4 Series,Standard_D64s_v4,32
+Dv2 Series,Standard_D1_v2,1
+Dv2 Series,Standard_D2_v2,2
+Dv2 Series,Standard_D3_v2,4
+Dv2 Series,Standard_D4_v2,8
+Dv2 Series,Standard_D5_v2,16
+Dv2 Series High Memory,Standard_D11_v2,1
+Dv2 Series High Memory,Standard_D12_v2,2
+Dv2 Series High Memory,Standard_D13_v2,4
+Dv2 Series High Memory,Standard_D14_v2,8
+Dv2 Series High Memory,Standard_D15_v2,10
+Dv2 Series High Memory Isolated,Standard_D15i_v2,1
+Dv3 Series,Standard_D2_v3,1
+Dv3 Series,Standard_D4_v3,2
+Dv3 Series,Standard_D8_v3,4
+Dv3 Series,Standard_D16_v3,8
+Dv3 Series,Standard_D32_v3,16
+Dv3 Series,Standard_D48_v3,24
+Dv3 Series,Standard_D64_v3,32
+Dv4 Series,Standard_D2_v4,1
+Dv4 Series,Standard_D4_v4,2
+Dv4 Series,Standard_D8_v4,4
+Dv4 Series,Standard_D16_v4,8
+Dv4 Series,Standard_D32_v4,16
+Dv4 Series,Standard_D48_v4,24
+Dv4 Series,Standard_D64_v4,32
+ESv3 Series,Standard_E2s_v3,1
+ESv3 Series,Standard_E4s_v3,2
+ESv3 Series,Standard_E4-2s_v3,2
+ESv3 Series,Standard_E8s_v3,4
+ESv3 Series,Standard_E8-4s_v3,4
+ESv3 Series,Standard_E8-2s_v3,4
+ESv3 Series,Standard_E16s_v3,8
+ESv3 Series,Standard_E16-4s_v3,8
+ESv3 Series,Standard_E16-8s_v3,8
+ESv3 Series,Standard_E20s_v3,10
+ESv3 Series,Standard_E32s_v3,16
+ESv3 Series,Standard_E32-8s_v3,16
+ESv3 Series,Standard_E32-16s_v3,16
+ESv3 Series,Standard_E48s_v3,24
+ESv3 Series,Standard_E64s_v3,28.8
+ESv3 Series,Standard_E64-32s_v3,28.8
+ESv3 Series,Standard_E64-16s_v3,28.8
+ESv3 Series Dedicated Host,Esv3_Type1,1
+ESv3 Series Dedicated Host,Esv3_Type2,1.107142857
+ESv3 Series Dedicated Host,Esv3_Type3,1.428571429
+ESv3 Series Isolated,Standard_E64is_v3,1
+ESv4 Series Dedicated Host,Esv4_Type1,1
+Eadsv5 Internal Series Linux,Internal_E2ads_v5,1
+Eadsv5 Internal Series Linux,Internal_E4ads_v5,2
+Eadsv5 Internal Series Linux,Internal_E8ads_v5,4
+Eadsv5 Internal Series Linux,Internal_E16ads_v5,8
+Eadsv5 Internal Series Linux,Internal_E20ads_v5,10
+Eadsv5 Internal Series Linux,Internal_E32ads_v5,16
+Eadsv5 Internal Series Linux,Internal_E48ads_v5,24
+Eadsv5 Internal Series Linux,Internal_E64ads_v5,32
+Eadsv5 Internal Series Linux,Internal_E96ads_v5,48
+Easv4 Series,Standard_E2as_v4,1
+Easv4 Series,Standard_E4-2as_v4,2
+Easv4 Series,Standard_E4as_v4,2
+Easv4 Series,Standard_E8-4as_v4,4
+Easv4 Series,Standard_E8-2as_v4,4
+Easv4 Series,Standard_E8as_v4,4
+Easv4 Series,Standard_E16-4as_v4,8
+Easv4 Series,Standard_E16-8as_v4,8
+Easv4 Series,Standard_E16as_v4,8
+Easv4 Series,Standard_E20as_v4,10
+Easv4 Series,Standard_E32-16as_v4,16
+Easv4 Series,Standard_E32as_v4,16
+Easv4 Series,Standard_E32-8as_v4,16
+Easv4 Series,Standard_E48as_v4,24
+Easv4 Series,Standard_E64as_v4,32
+Easv4 Series,Standard_E64-16as_v4,32
+Easv4 Series,Standard_E64-32as_v4,32
+Easv4 Series,Standard_E96as_v4,48
+Easv4 Series,Standard_E96-24as_v4,48
+Easv4 Series,Standard_E96-48as_v4,48
+Easv4 Series,Standard_E96ias_v4,48
+Easv4 Series Dedicated Host,Easv4_Type1,1
+Easv5 Internal Series Linux,Internal_E2as_v5,1
+Easv5 Internal Series Linux,Internal_E4as_v5,2
+Easv5 Internal Series Linux,Internal_E8as_v5,4
+Easv5 Internal Series Linux,Internal_E16as_v5,8
+Easv5 Internal Series Linux,Internal_E20as_v5,10
+Easv5 Internal Series Linux,Internal_E32as_v5,16
+Easv5 Internal Series Linux,Internal_E48as_v5,24
+Easv5 Internal Series Linux,Internal_E64as_v5,32
+Easv5 Internal Series Linux,Internal_E96as_v5,48
+Easv5 Promo Series Linux,Standard_E2as_v5_Promo,1
+Easv5 Promo Series Linux,Standard_E4as_v5_Promo,2
+Easv5 Promo Series Linux,Standard_E8as_v5_Promo,4
+Easv5 Promo Series Linux,Standard_E16as_v5_Promo,8
+Easv5 Promo Series Linux,Standard_E20as_v5_Promo,10
+Easv5 Promo Series Linux,Standard_E32as_v5_Promo,16
+Easv5 Promo Series Linux,Standard_E48as_v5_Promo,24
+Easv5 Promo Series Linux,Standard_E64as_v5_Promo,32
+Easv5 Promo Series Linux,Standard_E96as_v5_Promo,48
+Eav4 Series,Standard_E2a_v4,1
+Eav4 Series,Standard_E4a_v4,2
+Eav4 Series,Standard_E8a_v4,4
+Eav4 Series,Standard_E16a_v4,8
+Eav4 Series,Standard_E20a_v4,10
+Eav4 Series,Standard_E32a_v4,16
+Eav4 Series,Standard_E48a_v4,24
+Eav4 Series,Standard_E64a_v4,32
+Eav4 Series,Standard_E96a_v4,48
+Edsv4 Series,Standard_E2ds_v4,1
+Edsv4 Series,Standard_E4-2ds_v4,2
+Edsv4 Series,Standard_E4ds_v4,2
+Edsv4 Series,Standard_E4ds_v4_ADHType1,2
+Edsv4 Series,Standard_E8ds_v4_ADHType1,4
+Edsv4 Series,Standard_E8-2ds_v4,4
+Edsv4 Series,Standard_E8-4ds_v4,4
+Edsv4 Series,Standard_E8ds_v4,4
+Edsv4 Series,Standard_E16ds_v4_ADHType1,8
+Edsv4 Series,Standard_E16-8ds_v4,8
+Edsv4 Series,Standard_E16-4ds_v4,8
+Edsv4 Series,Standard_E16ds_v4,8
+Edsv4 Series,Standard_E20ds_v4,10
+Edsv4 Series,Standard_E32-8ds_v4,16
+Edsv4 Series,Standard_E32-16ds_v4,16
+Edsv4 Series,Standard_E32ds_v4,16
+Edsv4 Series,Standard_E32ds_v4_ADHType1,16
+Edsv4 Series,Standard_E48ds_v4,24
+Edsv4 Series,Standard_E64-32ds_v4,32
+Edsv4 Series,Standard_E64ds_v4,32
+Edsv4 Series,Standard_E64-16ds_v4,32
+Edsv4 Series Dedicated Host,Edsv4_Type 1,1
+Edsv4 Series Isolated,Standard_E64ids_v4_SPECIAL,1
+Edsv4 Series Isolated,Standard_E80ids_v4,1.25
+Edv4 Series,Standard_E2d_v4,1
+Edv4 Series,Standard_E4d_v4,2
+Edv4 Series,Standard_E8d_v4,4
+Edv4 Series,Standard_E16d_v4,8
+Edv4 Series,Standard_E20d_v4,10
+Edv4 Series,Standard_E32d_v4,16
+Edv4 Series,Standard_E48d_v4,24
+Edv4 Series,Standard_E64d_v4,32
+Edv4 Series Isolated,Standard_E64id_v4_SPECIAL,1
+Esv4 Series,Standard_E2s_v4,1
+Esv4 Series,Standard_E4s_v4,2
+Esv4 Series,Standard_E4-2s_v4,2
+Esv4 Series,Standard_E4s_v4_ADHType1,2
+Esv4 Series,Standard_E8s_v4,4
+Esv4 Series,Standard_E8-2s_v4,4
+Esv4 Series,Standard_E8-4s_v4,4
+Esv4 Series,Standard_E8s_v4_ADHType1,4
+Esv4 Series,Standard_E16s_v4_ADHType1,8
+Esv4 Series,Standard_E16-8s_v4,8
+Esv4 Series,Standard_E16-4s_v4,8
+Esv4 Series,Standard_E16s_v4,8
+Esv4 Series,Standard_E20s_v4,10
+Esv4 Series,Standard_E32-16s_v4,16
+Esv4 Series,Standard_E32-8s_v4,16
+Esv4 Series,Standard_E32s_v4,16
+Esv4 Series,Standard_E32s_v4_ADHType1,16
+Esv4 Series,Standard_E48s_v4,24
+Esv4 Series,Standard_E64-32s_v4,32
+Esv4 Series,Standard_E64-16s_v4,32
+Esv4 Series,Standard_E64s_v4,32
+Esv4 Series Isolated,Standard_E64is_v4_SPECIAL,1
+Esv4 Series Isolated,Standard_E80is_v4,1.25
+Ev3 Series,Standard_E2_v3,1
+Ev3 Series,Standard_E4_v3,2
+Ev3 Series,Standard_E8_v3,4
+Ev3 Series,Standard_E16_v3,8
+Ev3 Series,Standard_E20_v3,10
+Ev3 Series,Standard_E32_v3,16
+Ev3 Series,Standard_E48_v3,24
+Ev3 Series,Standard_E64_v3,28.8
+Ev3 Series Isolated,Standard_E64i_v3,1
+Ev4 Series,Standard_E2_v4,1
+Ev4 Series,Standard_E4_v4,2
+Ev4 Series,Standard_E8_v4,4
+Ev4 Series,Standard_E16_v4,8
+Ev4 Series,Standard_E20_v4,10
+Ev4 Series,Standard_E32_v4,16
+Ev4 Series,Standard_E48_v4,24
+Ev4 Series,Standard_E64_v4,32
+Ev4 Series Isolated,Standard_E64i_v4_SPECIAL,1
+F Series,Standard_F1,1
+F Series,Standard_F2,2
+F Series,Standard_F4,4
+F Series,Standard_F8,8
+F Series,Standard_F16,16
+FS Series,Standard_F1s,1
+FS Series,Standard_F2s,2
+FS Series,Standard_F4s,4
+FS Series,Standard_F8s,8
+FS Series,Standard_F16s,16
+FSv2 Series,Standard_F2s_v2,1
+FSv2 Series,Standard_F4s_v2,2
+FSv2 Series,Standard_F8s_v2,4
+FSv2 Series,Standard_F16s_v2,8
+FSv2 Series,Standard_F32s_v2,16
+FSv2 Series,Standard_F48s_v2,24
+FSv2 Series,Standard_F64s_v2,32
+FSv2 Series,Standard_F72s_v2,36
+FSv2 Series Dedicated Host,Fsv2_Type2,1
+FSv2 Series Dedicated Host,Fsv2 Type3,1.277777778
+H Series,Standard_H8,1
+H Series,Standard_H16,2
+H Series High Memory,Standard_H8m,1
+H Series High Memory,Standard_H16m,2
+H Series High Memory Low Latency,Standard_H16mr,1
+H Series Low Latency,Standard_H16r,1
+HBS Series,Standard_HB60-45rs,1
+HBS Series,Standard_HB60-30rs,1
+HBS Series,Standard_HB60-15rs,1
+HBS Series,Standard_HB60rs,1
+HBSv2 Series Low Latency,Standard_HB120rs_v2,1
+HBrsv3 Series Low Latency,Standard_HB120-96rs_v3,1
+HBrsv3 Series Low Latency,Standard_HB120-32rs_v3,1
+HBrsv3 Series Low Latency,Standard_HB120-16rs_v3,1
+HBrsv3 Series Low Latency,Standard_HB120-64rs_v3,1
+HBrsv3 Series Low Latency,Standard_HB120rs_v3,1
+HCS Series,Standard_HC44-16rs,1
+HCS Series,Standard_HC44-32rs,1
+HCS Series,Standard_HC44rs,1
+LS Series,Standard_L4s,1
+LS Series,Standard_L8s,2
+LS Series,Standard_L16s,4
+LS Series,Standard_L32s,8
+LSv2 Series,Standard_L8s_v2,1
+LSv2 Series,Standard_L16s_v2,2
+LSv2 Series,Standard_L32s_v2,4
+LSv2 Series,Standard_L48s_v2,6
+LSv2 Series,Standard_L64s_v2,8
+LSv2 Series,Standard_L80s_v2,10
+LSv2 Series,Standard_L96s_v2,12
+LSv2 Series Dedicated Host,Lsv2_Type1,1
+LSv2 Series Isolated,Standard_L88is_v2,1
+MS Series,Standard_M64s,1
+MS Series,Standard_M64,1
+MS Series,Standard_M128s,2
+MS Series,Standard_M128,2
+MS Series Dedicated Host,Ms_Type1,1
+MS Series Fractional,Standard_M16s,1
+MS Series Fractional,Standard_M32s,2
+MS Series Fractional High Memory,Standard_M8-4ms,1
+MS Series Fractional High Memory,Standard_M8-2ms,1
+MS Series Fractional High Memory,Standard_M8ms,1
+MS Series Fractional High Memory,Standard_M16-8ms,2
+MS Series Fractional High Memory,Standard_M16-4ms,2
+MS Series Fractional High Memory,Standard_M16ms,2
+MS Series Fractional High Memory,Standard_M32-16ms,4
+MS Series Fractional High Memory,Standard_M32ms,4
+MS Series Fractional High Memory,Standard_M32-8ms,4
+MS Series Fractional Large,Standard_M32ls,1
+MS Series Fractional Large,Standard_M64ls,1.8846875
+MS Series Fractional Tiny,Standard_M32ts,1
+MS Series HM Dedicated Host,Msm_Type1,1
+MS Series High Memory,Standard_M64ms,1
+MS Series High Memory,Standard_M64-16ms,1
+MS Series High Memory,Standard_M64m,1
+MS Series High Memory,Standard_M64-32ms,1
+MS Series High Memory,Standard_M128ms,2
+MS Series High Memory,Standard_M128-64ms,2
+MS Series High Memory,Standard_M128-32ms,2
+MS Series High Memory,Standard_M128m,2
+MSv2 Series,Standard_M208s_v2,1
+MSv2 Series,Standard_M208-52s_v2,1
+MSv2 Series,Standard_M208-104s_v2,1
+MSv2 Series,Standard_M416is_v2,2
+MSv2 Series,Standard_M416-208s_v2,2
+MSv2 Series,Standard_M416s_v2,2
+MSv2 Series,Standard_M416-104s_v2,2
+MSv2 Series 192ms,Standard_M192ims_v2,1
+MSv2 Series 32,Standard_M32ms_v2,1
+MSv2 Series 64,Standard_M64s_v2,1
+MSv2 Series Dedicated Host,Msv2_Type1,1
+MSv2 Series Disk 192s,Standard_M192is_v2,1
+MSv2 Series Fractional,Standard_M24s_v2,1
+MSv2 Series Fractional,Standard_M48s_v2,2
+MSv2 Series Fractional,Standard_M96s_v2,4
+MSv2 Series Fractional,Standard_M192s_v2,8
+MSv2 Series Fractional High Memory,Standard_M24ms_v2,1
+MSv2 Series Fractional High Memory,Standard_M48ms_v2,2
+MSv2 Series Fractional High Memory,Standard_M96ms_v2,4
+MSv2 Series Fractional High Memory,Standard_M192ms_v2,8
+MSv2 Series Fractional High Memory 128s,Standard_M128s_v2,1
+MSv2 Series HM Dedicated Host,Msmv2_Type1,1
+MSv2 Series High Memory,Standard_M208-52ms_v2,1
+MSv2 Series High Memory,Standard_M208-104ms_v2,1
+MSv2 Series High Memory,Standard_M208ms_v2,1
+MSv2 Series High Memory,Standard_M416-208ms_v2,2
+MSv2 Series High Memory,Standard_M416-104ms_v2,2
+MSv2 Series High Memory,Standard_M416ms_v2,2
+MSv2 Series High Memory 128ms,Standard_M128ms_v2,1
+MSv2 Series MedMem Dedicated Host,Msv2MedMem Type1,1
+MSv2 Series MedMem HM Dedicated Host,Msmv2MedMem Type1,1
+MSv2 Series Memory,Standard_M64ms_v2,1
+MSv2 XS Series,Standard_M420xs_v2,1
+MSv2 XS Series,Standard_M420ixs_v2,1
+MdSv2 Series 32 Disk,Standard_M32dms_v2,1
+MdSv2 Series 64 Disk,Standard_M64ds_v2,1
+MdSv2 Series Disk,Standard_M192idms_v2,1
+MdSv2 Series Disk 192s,Standard_M192ids_v2,1
+MdSv2 Series Fractional High Memory Disk,Standard_M128ds_v2,1
+MdSv2 Series High Memory Disk,Standard_M128dms_v2,1
+MdSv2 Series Memory Disk,Standard_M64dms_v2,1
+Mdsv2 Series Dedicated Host,Mdsv2MedMem_Type1,1
+Mdsv2 Series HM Dedicated Host,Mdsmv2MedMem _Type1,1
+NC Series,Standard_NC6,1
+NC Series,Standard_NC12,2
+NC Series,Standard_NC24,4
+NC Series Low Latency,Standard_NC24r,1
+NCSv2 Series,Standard_NC6s_v2,1
+NCSv2 Series,Standard_NC12s_v2,2
+NCSv2 Series,Standard_NC24s_v2,4
+NCSv2 Series Low Latency,Standard_NC24rs_v2,1
+NCSv3 Series,Standard_NC6s_v3,1
+NCSv3 Series,Standard_NC12s_v3,2
+NCSv3 Series,Standard_NC24s_v3,4
+NCSv3 Series Low Latency,Standard_NC24rs_v3,1
+NCas T4 v3 Series,Standard_NC4as_T4_v3,1
+NCas T4 v3 Series,Standard_NC8as_T4_v3,2
+NCas T4 v3 Series,Standard_NC16as_T4_v3,4
+NCas T4 v3 Series,Standard_NC64as_T4_v3,16
+NDS Series,Standard_ND6s,1
+NDS Series,Standard_ND12s,2
+NDS Series,Standard_ND24s,4
+NDS Series Low Latency,Standard_ND24rs,1
+NDasr A100 v4 Series,Standard_ND96asr_A100_v4,1
+NDasr A100 v4 Series,Standard_ND96asr_v4,1
+NDrSv2 Series Low Latency,Standard_ND40rs_v2,1
+NP Series,Standard_NP10s,1
+NP Series,Standard_NP20s,2
+NP Series,Standard_NP40s,4
+NV Series,Standard_NV6,1
+NV Series,Standard_NV12,2
+NV Series,Standard_NV24,4
+NVSv3 Series,Standard_NV12s_v3,1
+NVSv3 Series,Standard_NV24s_v3,2
+NVSv3 Series,Standard_NV48s_v3,4
+NVSv3 Series Dedicated Host,NVsv3_Type1,1
+NVSv3 Series High Memory,Standard_NV24ms_v3,1
+NVSv3 Series High Memory,Standard_NV32ms_v3,1.333333333
+NVasv4 Series,Standard_NV4as_v4,1
+NVasv4 Series,Standard_NV8as_v4,2
+NVasv4 Series,Standard_NV16as_v4,4
+NVasv4 Series,Standard_NV32as_v4,8
+NVasv4 Series Dedicated Host,NVasv4_Type1,1
+Red Hat Enterprise Linux,RHEL_1-4_vCPU,1
+Red Hat Enterprise Linux,RHEL_5plus_vCPU,2.166667
+Red Hat Enterprise Linux for SAP with HA,RHEL_SAP_HA_1-4_vCPU,1
+Red Hat Enterprise Linux for SAP with HA,RHEL_SAP_HA_5plus_vCPU,2.333333
+Red Hat Enterprise Linux with HA,RHEL_HA_1-4_vCPU,1
+Red Hat Enterprise Linux with HA,RHEL_HA_5plus_vCPU,2
+SQL AHUB,52 vCPU VM,1
+SQL AHUB,104 vCPU VM,2
+SQL on IaaS,Standard_SQLG7_AMD_IaaS,1
+SQLG7,SQLG7_NP104s,1
+SQLG7,SQLG7_IaaS,1.25
+SQLG7,Standard_SQLG7_NVME,1.625
+SQLG7,Standard_SQLG7_AMD_NVME,2
+SUSE Linux Enterprise Server Priority,SLES_Priority_1_vCPU_VM,1
+SUSE Linux Enterprise Server Priority,SLES_Priority_2-4_vCPU_VM,2
+SUSE Linux Enterprise Server Priority,SLES_Priority_6_vCPU_VM,3
+SUSE Linux Enterprise Server Priority,SLES_Priority_8plus_vCPU_VM,3.2
+SUSE Linux Enterprise Server Standard,SLES_Standard_1-2_vCPU_VM,1
+SUSE Linux Enterprise Server Standard,SLES_Standard_3-4_vCPU_VM,1.92308
+SUSE Linux Enterprise Server Standard,SLES_Standard_5plus_vCPU_VM,2.30769
+SUSE Linux Enterprise Server for HPC Priority,SLES_HPC_Priority_1-2_vCPU_VM,1
+SUSE Linux Enterprise Server for HPC Priority,SLES_HPC_Priority_3-4_vCPU_VM,2
+SUSE Linux Enterprise Server for HPC Priority,SLES_HPC_Priority_5plus_vCPU_VM,2.6
+SUSE Linux Enterprise Server for HPC Standard,SLES_HPC_Standard_1-2_vCPU_VM,1
+SUSE Linux Enterprise Server for HPC Standard,SLES_HPC_Standard_3-4_vCPU_VM,1.92308
+SUSE Linux Enterprise Server for HPC Standard,SLES_HPC_Standard_5plus_vCPU_VM,2.92308
+SUSE Linux Enterprise Server for SAP Standard,SLES_SAP_Priority_1-2_vCPU_VM,1
+SUSE Linux Enterprise Server for SAP Standard,SLES_SAP_Priority_3-4_vCPU_VM,2
+SUSE Linux Enterprise Server for SAP Standard,SLES_SAP_Priority_5plus_vCPU_VM,2.41176

@@ -32,7 +32,7 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | ActualCost | DB | Yes | No (OK) | Yes |
 | AmortizedCost | DB | Yes | No (OK) | Yes |
 | Reservation Details | DB |Yes | Yes | Yes |
-| Subscriptinos | Billing data | NA | NA | NA |
+| Subscriptions | Billing data | NA | NA | NA |
 | Reservation Recommendations | blob - download/resrecommendations/merged/reservation_merged.json| Yes | Yes | No |
 | Meters | Reservation Recommendations | NA | NA | NA |
 | PriceList | Blob - download/pricesheet/pricesheet.json | Yes | Yes | No |
@@ -53,6 +53,8 @@ The purpose of the Common Data Set is to standardize on the various data sets us
 | Reservation Recomendatins.subscriptionId | Subscriptions.SubscriptionId | Many to one | Single |
 
 ## Regions Table
+
+![Regions](../docs/RecipesReportsRegions.jpg)
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -81,7 +83,7 @@ Example Data. See full dataset [/sampledata/Regions.csv](sampledata/Regions.csv)
 | Central US (Stage) | US | /subscriptions/cd3b4810-bb97-4f99-9eaa-20c547ee30cb/locations/centralusstage |  |  | centralusstage |  |  | Other | (US) Central US (Stage) | Logical | cd3b4810-bb97-4f99-9eaa-20c547ee30cb |
 | Central US EUAP | US | /subscriptions/cd3b4810-bb97-4f99-9eaa-20c547ee30cb/locations/centraluseuap | 41.5908 | -93.6208 | centraluseuap | eastus2euap |  | Other | (US) Central US EUAP | Physical | cd3b4810-bb97-4f99-9eaa-20c547ee30cb |
 
-### Steps to Create Regions Sample data
+### Steps to Create Sample data
 
 - Download from Azure
 - Transform the data
@@ -116,6 +118,8 @@ Remove bad records by:
 
 ## Advisor Table
 
+![Advisor View](../docs/RecipesReportsAdvisor.jpg)
+
 | Field | Type | Notes |
 |-------|------|-------|
 | assessmentKey | nvarchar(36) NULL | 72 |
@@ -148,7 +152,7 @@ Example Data. See full dataset [/sampledata/Advisor.csv](sampledata/Advisor.csv)
 |                                      | HighAvailability | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-db/providers/Microsoft.Advisor/recommendations/354a06ea-7a93-3079-5c4d-9871044915c1 | Medium | vm-db | MICROSOFT.CLASSICCOMPUTE/VIRTUALMACHINES | 354a06ea-7a93-3079-5c4d-9871044915c1 | 651c7925-17a3-42e5-85cd-73bd095cf27f | /subscriptions/00000000-0000-2222-0000-000000000000/resourcegroups/rg-dev/providers/microsoft.compute/virtualmachines/vm-db |  | Enable Backups on your Virtual Machines | Enable Backups on your Virtual Machines |  | 00000000-0000-2222-0000-000000000000 | Microsoft.Advisor/recommendations |
 
 
-### Steps to Create Advisor Sample data
+### Steps to Create Sample data
 
 - Initiate the Recommendation Generation process
 - Download from Azure
@@ -189,6 +193,49 @@ Remove bad records by:
 - Replacing `vm name` with dummy vm name
 - Remove the `,` (comma) and `"` (quote)s from `"Virtual machines should encrypt temp disks, caches, and data flows between Compute and Storage resources"` to `Virtual machines should encrypt temp disks caches and data flows between Compute and Storage resources`
 
+## ISFRatio Table
+
+This is the Instance Size Flexibility Ratio lookup dataset.
+
+![Recipes Report ISFData](../docs/RecipesReportsISFData.jpg) 
+
+| Field | Type | Notes |
+|-------|------|-------|
+| ArmSkuName | nvarchar (50) NULL | |
+| InstanceSizeFlexibilityGroup | nvarchar (200) NULL | |
+| Ratio | Decimal(4,2) | |
+
+Example Data. See full dataset [/sampledata/ISFRatio.csv](sampledata/ISFRatio.csv)
+
+| InstanceSizeFlexibilityGroup | ArmSkuName | Ratio |
+|------------|------------------------------|-------|
+| BS Series High Memory | Standard_B20ms | 40 |
+| D Series | Standard_D1 | 1 |
+| D Series | Standard_D2 | 2 |
+| D Series | Standard_D3 | 4 |
+| D Series | Standard_D4 | 8 |
+| DSv2 Series High Memory | Standard_DS13-2_v2 | 4 |
+| Eav4 Series | Standard_E8a_v4 | 4 |
+
+### Steps to Create Sample data
+
+- Download from Azure
+- Remove Bad Records
+
+Download the [ISFRatio file](https://isfratio.blob.core.windows.net/isfratio/ISFRatio.csv) with  `wget`.
+
+```bash
+wget https://isfratio.blob.core.windows.net/isfratio/ISFRatio.csv 
+```
+
+Remove bad records by:
+
+- Remove the header row
+- Replacing `subscripionid` with dummy_subscription_id
+- Replacing `resource Group Name` with dummy resource group name
+- Replacing `vm name` with dummy vm name
+- Remove the `,` (comma) and `"` (quote)s from `"Virtual machines should encrypt temp disks, caches, and data flows between Compute and Storage resources"` to `Virtual machines should encrypt temp disks caches and data flows between Compute and Storage resources`
+
 ## Reservation Recommendations Table
 
 | Field | Type | Notes |
@@ -202,6 +249,7 @@ Remove bad records by:
 Get started looking at the sample recipe reports.
 
 * Clone this project
+* Create a local.env
 * Build the Common Data Docker Image
 * Open the Sample Recipes Report Template
 
@@ -212,7 +260,12 @@ git clone https://github.com/briglx/AzureBillingReports.git
 
 # Navigate to Recipes
 cd AzureBillingReports/recipes
+```
 
+Copy the `example_local.env` to `local.env`
+replace the `SA_PASSWORD=<your password>` with you own password
+
+```bash
 # Build the image
 docker build --pull --rm -f "Dockerfile.dev" -t aco-recipes:latest "."
 
@@ -227,8 +280,15 @@ Fill in the information for the sample database:
 - server: localhost
 - database: AcoRecipes
 
+![Recipes Pbix Report Parameters](../docs/RecipesPbixReportParameters.jpg)
+
 Click `load`
 
+Fill in the Username and password for the database connection
+- sa
+- `password used in setup`
+
+![Recipes Report Sql Connection](../docs/RecipesPbixReportSqlConnection.jpg) 
 
 
 # Development
@@ -258,6 +318,12 @@ docker container rm aco_recipes
 docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes aco-recipes:latest
 ```
 
+Before checking in project, run the following:
+
+```bash
+codespell --skip="*.pbit,*.pbix"
+```
+
 # General
 
 ## Creating a Data Transform PBI template
@@ -282,6 +348,18 @@ Template Overview: Sample Azure cost optimization reports built on top of a comm
 | database       | SQL Server database on server <server> | AcoRecipes |
 
 
+# Design Notes
+
+Default Sql Collation `SQL_Latin1_General_CP1_CI_AS`
+```sql
+SELECT SERVERPROPERTY('Collation')
+SELECT DATABASEPROPERTYEX('AcoRecipies', 'Collation')
+```
+
+Create Sql bcp format file
+```bash
+/opt/mssql-tools/bin/bcp AcoRecipes.aco.ISFData format nul -c -f ISFRatio.fmt -t, -S localhost -U sa -P $SA_PASSWORD
+```
 
 # References
 - Sql Server Express on Docker https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-linux-ver15&pivots=cs1-powershell
@@ -290,3 +368,4 @@ Template Overview: Sample Azure cost optimization reports built on top of a comm
 - Attach to a Container https://linuxize.com/post/how-to-connect-to-docker-container/
 - Azure Api list Locations https://docs.microsoft.com/en-us/rest/api/resources/subscriptions/list-locations#code-try-0
 - SQL System stored procedures https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-help-transact-sql?view=sql-server-ver15
+- SQL Collation and Unicode https://docs.microsoft.com/en-us/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-ver15#utf8
