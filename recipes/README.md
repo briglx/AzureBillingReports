@@ -236,6 +236,95 @@ Remove bad records by:
 - Replacing `vm name` with dummy vm name
 - Remove the `,` (comma) and `"` (quote)s from `"Virtual machines should encrypt temp disks, caches, and data flows between Compute and Storage resources"` to `Virtual machines should encrypt temp disks caches and data flows between Compute and Storage resources`
 
+
+## Reservation Transactions Table
+
+| Field | Type | Notes |
+|-------|------|-------|
+| accountName | nvarchar(100) | |
+| accountOwnerEmail | nvarchar(100) | |
+| amount | Decimal(11,9) | |
+| armSkuName | nvarchar(50) | |
+| billingFrequency | nvarchar(50) | |
+| costCenter | nvarchar(100) | |
+| currency | nvarchar(20) | |
+| currentEnrollment | nvarchar(50) | |
+| departmentName | nvarchar(50) | |
+| description | nvarchar(50) | |
+| eventDate | Date | |
+| eventType | nvarchar(10) | |
+| id | nvarchar(200) | |
+| name | nvarchar(50) | |
+| purchasingEnrollment | nvarchar(50) | |
+| purchasingSubscriptionGuid | nvarchar(50) | |
+| purchasingSubscriptionName | nvarchar(50) | |
+| quantity | int  | |
+| region | nvarchar(25) | |
+| reservationOrderId | nvarchar(50) | |
+| reservationOrderName | nvarchar(50) | |
+| tags | nvarchar(200) | |
+| term | nvarchar(5) | |
+| type | nvarchar(50) | |
+
+Example Data. See full dataset [/sampledata/ReservationTransactions.csv](sampledata/ReservationTransactions.csv)
+
+| accountName | accountOwnerEmail | amount | armSkuName | billingFrequency | costCenter | currency | currentEnrollment | departmentName | description | eventDate | eventType | id | name | purchasingEnrollment | purchasingSubscriptionGuid | purchasingSubscriptionName | quantity | region | reservationOrderId | reservationOrderName | tags | term | type |
+|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| Aco Infrastructure | admin@example.com | 21 | Standard_DS1_v2 | recurring | "" | USD | 123456 | Unassigned | Standard_DS1_v2 westus 1 Year | 2019-09-09 12:19:04 | Purchase | /billingAccounts/123456/providers/Microsoft.Consumption/reservationtransactions/201909091919 | 201909091919 | 123456 | 00000000-0000-2222-0000-000000000000 | Infrastructure Subscription | 1 | westus | 00000000-0000-0000-0000-000000000000 | 2019-Q3-Purchase | devmaster | P1Y | Microsoft.Consumption/reservationTransactions |
+| Aco Infrastructure | admin@example.com | -21 | Standard_DS1_v2 | recurring | "" | USD | 123456 | Unassigned | Standard_DS1_v2 westus 1 Year | 2019-09-09 12:19:04 | Refund | /billingAccounts/123456/providers/Microsoft.Consumption/reservationtransactions/201909091919 | 201909091919 | 123456 | 00000000-0000-2222-0000-000000000000 | Infrastructure Subscription | 1 | westus | 00000000-0000-0000-0000-000000000000 | 2019-Q3-Purchase | devmaster | P1Y | Microsoft.Consumption/reservationTransactions |
+| Aco Infrastructure | admin@example.com | 500 | Standard_D1 | recurring | "" | USD | 123456 | Unassigned | Standard_D1 westus 1 Year | 2021-12-17 12:19:04 | Purchase | /billingAccounts/123456/providers/Microsoft.Consumption/reservationtransactions/202112171919 | 202112171919 | 123456 | 00000000-0000-2222-0000-000000000000 | Infrastructure Subscription | 5 | westus | 00000000-0000-0000-0000-000000000001 | 2021-Q4-Purchase | "" | P1Y | Microsoft.Consumption/reservationTransactions |
+| Aco Infrastructure | admin@example.com | 600 | Standard_B1s | recurring | "" | USD | 123456 | Unassigned | Standard_B1s westus 1 Year | 2021-12-17 12:19:04 | Purchase | /billingAccounts/123456/providers/Microsoft.Consumption/reservationtransactions/202112171919 | 202112171919 | 123456 | 00000000-0000-2222-0000-000000000000 | Infrastructure Subscription | 15 | westus | 00000000-0000-0000-0000-000000000001 | 2021-Q4-Purchase | "" | P1Y | Microsoft.Consumption/reservationTransactions |
+
+### Steps to Create Sample data
+
+- Download from Azure
+- Transform the data
+- Remove Bad Records
+
+Download the data using the [/api/consumption/reservation-transactions/list](https://docs.microsoft.com/en-us/rest/api/consumption/reservation-transactions/list) api with either the `az cli` or `wget`.
+
+```bash
+# Replace with your subscription-id and bearer token
+billing_account_id=<billingAccountId>
+subscription_id=<subscription-id>
+period_start_date=<Filter start date 2021-06-01>
+period_end_date=<Filter end date 2021-11-30>
+bearer_token=<bearer token>
+data_file=ReservationTransactions.json
+consumption_api_version=2021-10-01
+
+# az cli example
+
+az consumption reservation detail list --end-date --reservation-order-id --start-date > $data_file
+# OR
+
+billing_account_id=$(az billing account list --query "[].name" -o tsv)
+invoice_name=$(az billing invoice list --account-name $billing_account_id --period-end-date $period_end_date --period-start-date $period_end_date)
+az billing transaction list --account-name $billing_account_id --invoice-name
+
+# wget example
+header='--header=Authorization: Bearer $bearer_token'
+
+# Get Billing Account Id
+header='--header=Authorization: Bearer $bearer_token'
+wget "$header" https://management.azure.com/providers/Microsoft.Billing/billingAccounts?api-version=$consumption_api_version -O billing_accounts.json
+
+# Get Reservation transactions
+wget "$header" https://management.azure.com/providers/Microsoft.Billing/billingAccounts/$billingAccountId/providers/Microsoft.Consumption/reservationTransactions?$filter=properties/EventDate+ge$event_start_date+AND+properties/EventDate+le+$event_end_dateapi-version=$consumption_api_version -O $data_file
+```
+
+Transform the data using the PowerBi Template.
+
+- Open the `sampledata/ReservationTransactionsFromAzureApiJson.pbit` and enter the path to the downloaded `sampledata/ReservationTransactions.json` file for the `json_data_file_name` parameter.
+- On the `Raw Data` tab, select the dataset click `Export Data` from the ellipse.
+- Save the file as `sampledata/ReservationTransactions.csv`
+
+Remove bad records by:
+
+- Remove the header row
+- Replacing `subscripionid` with dummy_subscription_id
+
+
 ## Reservation Recommendations Table
 
 | Field | Type | Notes |
@@ -297,7 +386,7 @@ Docker commands to manage the sql image.
 
 ```bash
 # Build the image
-docker build --pull --rm -f "Dockerfile.dev" -t aco-recipes:latest "."
+docker build --pull --rm -f Dockerfile.dev -t aco-recipes:latest .
 
 # Run a new recipes container. This loads default data.
 docker run --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes --detach aco-recipes:latest
@@ -327,6 +416,7 @@ codespell --skip="*.pbit,*.pbix"
 # General
 
 ## Creating a Data Transform PBI template
+Template Overview: Report used to transform raw data into csv file.
 
 | Parameter Name | Description |
 |----------------|-------------|
@@ -337,6 +427,8 @@ Dummy Data
 | Field | Value |
 |-------|-------|
 |subscriptionId | 00000000-0000-2222-0000-000000000000 |
+|subscriptionName | Infrastructure Subscription |
+|billingaccount | 123456 |
 
 ## Creating the Sample PBI template
 
