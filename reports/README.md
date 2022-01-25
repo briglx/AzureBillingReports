@@ -3,7 +3,7 @@
 ![Point in time Report](../docs/PointInTimeReport.png)
 <!-- s![Whiteboard Diagram](../docs/Whiteboard.png) -->
 
-This reposistory demonstrates how to compare cost to a specific point in time.
+This reposistory demonstrates how to compare cost to a specific point in time (Baseline Date).
 
 - First obtain your enrollment id and a valid api authentication key.
 - Configure your environment
@@ -49,7 +49,7 @@ python -m pip install -e .
 This section fetches and filters the billing usage data used in the report.
 
 - Run the `get_usage_data.py` script to get the latest billing usage data. This will download and save the billing data into a csv file.
-- Run the `filter_data.py` script to filter the usage data. This will filter out any data before the minimum date.
+- Run the `filter_data.py` script to filter the usage data. This will filter out any data before the baseline date.
 
 ```bash
 python script/get_usage_data.py --eid <enrollment_id> --auth_key <api_auth_key>
@@ -61,7 +61,8 @@ python script/filter_data.py --path <path/to/csv> --min_date <2021-05-30>
 
 ## Open the Report
 
-This is the report that uses the billing data to show a point in time comparison.
+This is the report that uses the billing data to show a comparison to a specific point in time (Baseline Date).
 
 - Open the `/reports/PointInTimeAggregateLimitedColumns.pbit` template file
 - Provide the full path to the filtered downloaded csv file.
+- Provide the Baseline Point in time path to the filtered downloaded csv file.
