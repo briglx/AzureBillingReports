@@ -59,7 +59,7 @@ GO
 CREATE TABLE [aco].[Reservation Transactions] (
     [accountName] nvarchar(100)
     , [accountOwnerEmail] nvarchar(100)
-    , [amount] Decimal(11,9)
+    , [amount] Decimal(12,3)
     , [armSkuName] nvarchar(50)
     , [billingFrequency] nvarchar(50)
     , [costCenter] nvarchar(100)

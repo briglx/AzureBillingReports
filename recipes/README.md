@@ -114,6 +114,7 @@ Transform the data using the PowerBi Template.
 Remove bad records by:
 
 - Remove the header row
+- Replacing `subscripionid` with `dummy_subscription_id`
 - Remove the `,` (comma) and `"` (quote)s from `"Tokyo, Saitama"` to `Tokyo Saitama`
 
 ## Advisor Table
@@ -243,7 +244,7 @@ Remove bad records by:
 |-------|------|-------|
 | accountName | nvarchar(100) | |
 | accountOwnerEmail | nvarchar(100) | |
-| amount | Decimal(11,9) | |
+| amount | Decimal(12,3) | |
 | armSkuName | nvarchar(50) | |
 | billingFrequency | nvarchar(50) | |
 | costCenter | nvarchar(100) | |
@@ -324,6 +325,169 @@ Remove bad records by:
 - Remove the header row
 - Replacing `subscripionid` with dummy_subscription_id
 
+## ActualCost Table
+
+| Field | Type | Notes |
+|-------|------|-------|
+| AccountName | [nvarchar](300) NULL | |
+| AccountOwnerId | [nvarchar](300) NULL | |
+| AdditionalInfo | [nvarchar](4000) NULL | |
+| AvailabilityZone | [nvarchar](300) NULL | |
+| BillingAccountId | [nvarchar](300) NULL | |
+| BillingAccountName | [nvarchar](300) NULL | |
+| BillingCurrencyCode | [nvarchar](20) NULL | |
+| BillingPeriodEndDate | date NULL | |
+| BillingPeriodStartDate | date NULL | |
+| BillingProfileId | [nvarchar](100) NULL | |
+| BillingProfileName | [nvarchar](300) NULL | |
+| ChargeType | [nvarchar](300) NULL | |
+| ConsumedService | [nvarchar](300) NULL | |
+| CostAllocationRuleName | [nvarchar](300) NULL | |
+| CostCenter | [nvarchar](300) NULL | |
+| CostInBillingCurrency | decimal (28,20) NULL | |
+| Date | Date NULL | |
+| EffectivePrice  | decimal (28,20) NULL | |
+| Frequency | [nvarchar](300) NULL | |
+| InvoiceSectionId | [nvarchar](300) NULL | |
+| InvoiceSectionName | [nvarchar](300) NULL | |
+| IsAzureCreditEligible | [nvarchar](10) NULL | |
+| MeterCategory | [nvarchar](300) NULL | |
+| MeterId | [nvarchar](300) NULL | |
+| MeterName | [nvarchar](300) NULL | |
+| MeterRegion | [nvarchar](300) NULL | |
+| MeterSubCategory | [nvarchar](300) NULL | |
+| OfferId | [nvarchar](300) NULL | |
+| PartNumber | [nvarchar](50) NULL | |
+| PayGPrice | [nvarchar](100) NULL | |
+| PlanName | [nvarchar](300) NULL | |
+| PricingModel | [nvarchar](300) NULL | |
+| ProductName | [nvarchar](300) NULL | |
+| ProductOrderId | [nvarchar](300) NULL | |
+| ProductOrderName | [nvarchar](300) NULL | |
+| PublisherName | [nvarchar](300) NULL | |
+| PublisherType | [nvarchar](300) NULL | |
+| Quantity | decimal (28,20) NULL | |
+| ReservationId | [nvarchar](300) NULL | |
+| ReservationName | [nvarchar](300) NULL | |
+| ResourceGroup | [nvarchar](300) NULL | |
+| ResourceId | [nvarchar](2000) NULL | |
+| ResourceLocation | [nvarchar](300) NULL | |
+| ResourceName | [nvarchar](300) NULL | |
+| ServiceFamily | [nvarchar](300) NULL | |
+| ServiceInfo1 | [nvarchar](300) NULL | |
+| ServiceInfo2 | [nvarchar](300) NULL | |
+| SubscriptionId | [nvarchar](300) NULL | |
+| SubscriptionName | [nvarchar](300) NULL | |
+| Tags | [nvarchar](4000) NULL | |
+| Term | [nvarchar](300) NULL | |
+| UnitOfMeasure | [nvarchar](300) NULL | |
+| UnitPrice | decimal (28,20) NULL | |
+
+Example Data. See full dataset [/sampledata/ActualCost.csv](sampledata/ActualCost.csv)
+
+| AccountName | AccountOwnerId | AdditionalInfo | AvailabilityZone | BillingAccountId | BillingAccountName | BillingCurrencyCode | BillingPeriodEndDate | BillingPeriodStartDate | BillingProfileId | BillingProfileName | ChargeType | ConsumedService | CostAllocationRuleName | CostCenter | CostInBillingCurrency | Date | EffectivePrice | Frequency | InvoiceSectionId | InvoiceSectionName | IsAzureCreditEligible | MeterCategory | MeterId | MeterName | MeterRegion | MeterSubCategory | OfferId | PartNumber | PayGPrice | PlanName | PricingModel | ProductName | ProductOrderId | ProductOrderName | PublisherName | PublisherType | Quantity | ReservationId | ReservationName | ResourceGroup | ResourceId | ResourceLocation | ResourceName | ServiceFamily | ServiceInfo1 | ServiceInfo2 | SubscriptionId | SubscriptionName | Tags | Term | UnitOfMeasure | UnitPrice |
+|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+
+### Steps to Create Sample data
+
+- Download Data
+    - Option 1 (Query Usage data)
+    - Option 2 (Create & Invoke Export Job)
+- Transform the data
+- Remove Bad Records
+
+**Download Option 1 - Query Usage Data**
+
+Download the data using the [/api/cost-management/query/usage](https://docs.microsoft.com/en-us/rest/api/cost-management/query/usage) api with either the `az cli` or `wget`.
+And the cli [usage](https://docs.microsoft.com/en-us/cli/azure/costmanagement?view=azure-cli-latest#az_costmanagement_query)
+
+**Download Option 2 - Export Job**
+
+Create and invoke an export using the `az cli` [export](https://docs.microsoft.com/en-us/cli/azure/costmanagement/export?view=azure-cli-latest) command or call the [/api/cost-management/exports/create-or-update](https://docs.microsoft.com/en-us/rest/api/cost-management/exports/create-or-update) api with `wget`.
+
+Set scope to 
+- `/providers/Microsoft.Billing/billingAccounts/{billingAccountId}`
+- `/subscriptions/{subscriptionId}/`
+
+
+```bash
+# Replace with your subscription-id and bearer token
+
+
+# billing_account_id=$(az billing account list --query "[].name" -o tsv)
+# invoice_name=$(az billing invoice list --account-name $billing_account_id --period-end-date $period_end_date --period-start-date $period_end_date)
+# az billing transaction list --account-name $billing_account_id --invoice-name
+
+billing_number=<Billing Number AKA Enrollment Number>
+subscription_id=<subscription-id>
+bearer_token=<bearer token>
+
+scope="providers/Microsoft.Billing/billingAccounts/$billing_number"
+
+# azcli
+cost_type="ActualCosts"
+cost_filename="ActualCostBilling.json"
+az costmanagement query --type $cost_type --timeframe "MonthToDate" --scope $scope > $cost_filename
+
+cost_type="AmortizedCosts"
+cost_filename="AmortizedCostBilling.json"
+az costmanagement query --type $cost_type --timeframe "MonthToDate" --scope $scope > $cost_filename
+
+# Query usage
+POST https://management.azure.com/$scope/providers/Microsoft.CostManagement/query?api-version=2021-10-01
+{
+	type: "ActualCosts",
+    timeframe: "MonthToDate",
+	dataset: {
+            "granularity": "Daily"
+        }
+	
+}
+
+POST https://management.azure.com/$scope/providers/Microsoft.CostManagement/query?api-version=2021-10-01
+{
+	type: "AmortizedCosts",
+    timeframe: "MonthToDate",
+	dataset: {
+            "granularity": "Daily"
+        }
+	
+}
+
+```
+
+Powershell example to create and invoke an export for both Actual and Amortized costs.
+```powershell
+$StorageAccountSubscriptionId=<Destination Subscription ID>
+$ResourceGroup=<Billing Storage Resource Group>
+$StorageAccountName=<Billing Costs Storage Account>
+
+$DatasetGranularity="Daily"
+$DefinitionTimeframe="MonthToDate" 
+$DestinationResourceId="/subscriptions/$StorageAccountSubscriptionId/resourceGroups/$ResourceGroup/providers/Microsoft.Storage/storageAccounts/$StorageAccountName"
+$DestinationContainer="Costs"
+$ScheduleStatus="Inactive" 
+$Format="Csv" 
+
+billing_account_id=$(az billing account list --query "[].name" -o tsv)
+$Scope=providers/Microsoft.Billing/billingAccounts/$billing_account_id
+
+$ExportName="OneTime-Actual-CostManagement-Export" 
+$DefinitionType="ActualCost"
+$DestinationRootFolderPath="/actual_costs/scheduled_exports"
+New-AzCostManagementExport 
+    -Name $ExportName -Scope $Scope -DatasetGranularity $DatasetGranularity -DefinitionTimeframe $DefinitionTimeframe -DefinitionType $DefinitionType -ScheduleStatus $ScheduleStatus -Format $Format -DestinationResourceId $DestinationResourceId -DestinationContainer $DestinationContainer -DestinationRootFolderPath $DestinationRootFolderPath
+Invoke-AzCostManagementExecuteExport -ExportName $ActualCostExportName -Scope $Scope
+
+$ExportName="OneTime-Amortized-CostManagement-Export" 
+$DefinitionType="AmortizedCost"
+$DestinationRootFolderPathAmortized="/amortized_costs/scheduled_exports"
+New-AzCostManagementExport
+    -Name AmortizedCostExportName -Scope $Scope -DatasetGranularity $DatasetGranularity -DefinitionTimeframe $DefinitionTimeframe -DefinitionType $DefinitionType -ScheduleStatus $ScheduleStatus -Format $Format -DestinationResourceId $DestinationResourceId -DestinationContainer $DestinationContainer -DestinationRootFolderPath $DestinationRootFolderPath
+Invoke-AzCostManagementExecuteExport -ExportName $ExportName -Scope $Scope
+
+```
 
 ## Reservation Recommendations Table
 
@@ -338,10 +502,12 @@ Remove bad records by:
 Get started looking at the sample recipe reports.
 
 * Clone this project
-* Create a local.env
-* Build the Common Data Docker Image
+* Create Local Database
+    * Docker Option
+    * SQL DACPAC Option
 * Open the Sample Recipes Report Template
 
+## Clone Project
 
 ```bash
 # clone project
@@ -350,6 +516,14 @@ git clone https://github.com/briglx/AzureBillingReports.git
 # Navigate to Recipes
 cd AzureBillingReports/recipes
 ```
+
+## Create Local Database
+
+### Docker Option
+
+* Create a local.env
+* Build the Common Data Docker Image
+* Run the Database image
 
 Copy the `example_local.env` to `local.env`
 replace the `SA_PASSWORD=<your password>` with you own password
@@ -362,6 +536,27 @@ docker build --pull --rm -f "Dockerfile.dev" -t aco-recipes:latest "."
 docker run --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes --detach aco-recipes:latest
 ```
 
+### SQL DACPAC/BACPAC Option
+
+Import the database using either the DACPAC or BACPAC file
+
+```bash
+server_name=localhost
+database_name=AcoRecipes
+database_user=sa
+database_password='password used in setup'
+
+# Publish the data-tier application (DAC). Schema, table data, user data, etc..
+sqlpackage /Action:Publish /SourceFile:"AcoRecipes.dacpac" /TargetConnectionString:"Server=tcp:$server_name,1433;Initial Catalog=$database_name;Persist Security Info=False;User ID=$database_user;Password=$database_password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+
+# Import schema and table data from BACPAC
+sqlpackage /Action:Import /SourceFile:"AcoRecipes.bacpac" /TargetConnectionString:"Server=tcp:$server_name,1433;Initial Catalog=$database_name;Persist Security Info=False;User ID=$database_user;Password=$database_password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+
+```
+
+## Open Sample Report
 Open the `RecipesReport.pbit` file.
 
 Fill in the information for the sample database:
@@ -405,7 +600,19 @@ docker container rm aco_recipes
 
 # Quick Build. Kills the image after run
 docker run --rm -it --env-file local.env -p 1433:1433 --hostname aco_recipes --name aco_recipes aco-recipes:latest
+
+# Create Dabase DACPACK
+docker container exec -it aco_recipes /usr/src/app/create_db_package.sh dacpac
+
+# Create Dabase BACPACK
+docker container exec -it aco_recipes /usr/src/app/create_db_package.sh bacpac
+
+# Copy dacpac or bacpac from docker image to local
+docker container cp aco_recipes:/usr/src/app/AcoRecipes.dacpac AcoRecipes.dacpac  
+docker container cp aco_recipes:/usr/src/app/AcoRecipes.bacpac AcoRecipes.bacpac 
 ```
+
+## Linting
 
 Before checking in project, run the following:
 

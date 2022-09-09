@@ -3,7 +3,12 @@ FROM mcr.microsoft.com/mssql/server:2019-latest
 # Switch to root user for access to set helpful aliases
 USER root
 
-RUN apt-get -y update && apt-get install -y vim 
+RUN apt-get -y update && apt-get install -y vim unzip
+
+RUN wget -q -O sqlpackage.zip https://aka.ms/sqlpackage-linux \
+    && unzip -qq sqlpackage.zip -d /opt/mssql-tools/sqlpackage \
+    && chmod +x /opt/mssql-tools/sqlpackage/sqlpackage \
+    && rm sqlpackage.zip
 
 # Helpful aliases
 RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> /etc/bash.bashrc 

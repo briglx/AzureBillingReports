@@ -1,0 +1,76 @@
+Region,Type,Performance Tier,Storage Account Type,Access Tier,Redundancy,Capacity TB,Reservation,Write Operation,List and Create Ops,Read Ops,Data Retrieval, Monthly Cost 
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,LRS,50,0,1000000,1000000,1000000,1000,1075
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,LRS,100,0,1000000,1000000,1000000,1000,2097
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,LRS,200,0,1000000,1000000,1000000,1000,4142
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,LRS,400,0,1000000,1000000,1000000,1000,8231
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,LRS,800,0,1000000,1000000,1000000,1000,16155
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,ZRS,50,0,1000000,1000000,1000000,1000,1344
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,ZRS,100,0,1000000,1000000,1000000,1000,2622
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,ZRS,200,0,1000000,1000000,1000000,1000,5177
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,ZRS,400,0,1000000,1000000,1000000,1000,10289
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,ZRS,800,0,1000000,1000000,1000000,1000,20193
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,GRS,50,0,1000000,1000000,1000000,1000,2385
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,GRS,100,0,1000000,1000000,1000000,1000,4636
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,GRS,200,0,1000000,1000000,1000000,1000,9139
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,GRS,400,0,1000000,1000000,1000000,1000,18143
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,GRS,800,0,1000000,1000000,1000000,1000,35590
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GRS,50,0,1000000,1000000,1000000,1000,3056
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GRS,100,0,1000000,1000000,1000000,1000,5951
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GRS,200,0,1000000,1000000,1000000,1000,11741
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GRS,400,0,1000000,1000000,1000000,1000,23321
+East US,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GRS,800,0,1000000,1000000,1000000,1000,45758
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,GZRS,50,0,1000000,1000000,1000000,1000,2162
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,GZRS,100,0,1000000,1000000,1000000,1000,4197
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,GZRS,200,0,1000000,1000000,1000000,1000,8267
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,GZRS,400,0,1000000,1000000,1000000,1000,16406
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,GZRS,800,0,1000000,1000000,1000000,1000,32177
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GZRS,50,0,1000000,1000000,1000000,1000,2692
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GZRS,100,0,1000000,1000000,1000000,1000,5236
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GZRS,200,0,1000000,1000000,1000000,1000,10323
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GZRS,400,0,1000000,1000000,1000000,1000,20497
+East US 2,Block Blob Storage,Standard,General Purpose V1,Hot,RA-GZRS,800,0,1000000,1000000,1000000,1000,40210
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,LRS,50,0,1000000,1000000,1000000,1000,538 
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,LRS,100,0,1000000,1000000,1000000,1000,1050
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,LRS,200,0,1000000,1000000,1000000,1000,2074
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,LRS,400,0,1000000,1000000,1000000,1000,4122
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,LRS,800,0,1000000,1000000,1000000,1000,8218
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,ZRS,50,0,1000000,1000000,1000000,1000,667 
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,ZRS,100,0,1000000,1000000,1000000,1000,1307
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,ZRS,200,0,1000000,1000000,1000000,1000,2587
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,ZRS,400,0,1000000,1000000,1000000,1000,5147
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,ZRS,800,0,1000000,1000000,1000000,1000,10267
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GRS,50,0,1000000,1000000,1000000,1000,1090
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GRS,100,0,1000000,1000000,1000000,1000,2114
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GRS,200,0,1000000,1000000,1000000,1000,4162
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GRS,400,0,1000000,1000000,1000000,1000,8258
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GRS,800,0,1000000,1000000,1000000,1000,16450
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GRS,50,0,1000000,1000000,1000000,1000,1241
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GRS,100,0,1000000,1000000,1000000,1000,2621
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GRS,200,0,1000000,1000000,1000000,1000,5181
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GRS,400,0,1000000,1000000,1000000,1000,10301
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GRS,800,0,1000000,1000000,1000000,1000,20541
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GZRS,50,0,1000000,1000000,1000000,1000,1194
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GZRS,100,0,1000000,1000000,1000000,1000,2346
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GZRS,200,0,1000000,1000000,1000000,1000,4650
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GZRS,400,0,1000000,1000000,1000000,1000,9258
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,GZRS,800,0,1000000,1000000,1000000,1000,18474
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GZRS,50,0,1000000,1000000,1000000,1000,1482
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GZRS,100,0,1000000,1000000,1000000,1000,2922
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GZRS,200,0,1000000,1000000,1000000,1000,5802
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GZRS,400,0,1000000,1000000,1000000,1000,11562
+East US 2,Block Blob Storage,Standard,General Purpose V1,Cool,RA-GZRS,800,0,1000000,1000000,1000000,1000,23082
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,LRS,50,0,1000000,1000000,1000000,1000,1237
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,LRS,100,0,1000000,1000000,1000000,1000,1339
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,LRS,200,0,1000000,1000000,1000000,1000,1544
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,LRS,400,0,1000000,1000000,1000000,1000,1954
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,LRS,800,0,1000000,1000000,1000000,1000,2773
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,GRS,50,0,1000000,1000000,1000000,1000,1374
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,GRS,100,0,1000000,1000000,1000000,1000,1579
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,GRS,200,0,1000000,1000000,1000000,1000,1989
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,GRS,400,0,1000000,1000000,1000000,1000,2808
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,GRS,800,0,1000000,1000000,1000000,1000,4446
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,RA-GRS,50,0,1000000,1000000,1000000,1000,1374
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,RA-GRS,100,0,1000000,1000000,1000000,1000,1579
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,RA-GRS,200,0,1000000,1000000,1000000,1000,1989
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,RA-GRS,400,0,1000000,1000000,1000000,1000,2808
+East US 2,Block Blob Storage,Standard,General Purpose V1,Archive,RA-GRS,800,0,1000000,1000000,1000000,1000,4446

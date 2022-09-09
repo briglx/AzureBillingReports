@@ -83,7 +83,7 @@ SqlDWSetup.sql
 # General
 billing-container.yaml
 *.pbix
-recipes/import-data.sh
 
 # Sample data
 recipes/sampledata/Advisor.json
+script/blob-inventory.csv
