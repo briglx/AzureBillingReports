@@ -55,7 +55,8 @@ if __name__ == "__main__":
     _LOGGER.info("Starting script")
 
     parser = argparse.ArgumentParser(
-        description="Merge Usage Summary Temp records.", add_help=True,
+        description="Merge Usage Summary Temp records.",
+        add_help=True,
     )
     parser.add_argument("--connection_string", "-c", help="Connection String")
     args = parser.parse_args()

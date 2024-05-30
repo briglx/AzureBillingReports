@@ -1,11 +1,12 @@
 """Helper methods for various modules."""
+
 import csv
+from datetime import datetime
 import logging
 import logging.config
 import os
 import random
 import string
-from datetime import datetime
 
 import requests
 import yaml

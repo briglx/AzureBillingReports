@@ -1,4 +1,5 @@
 """Test the main helper methods."""
+
 from datetime import datetime, timezone
 
 from tqdm import tqdm as progress

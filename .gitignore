@@ -8,7 +8,7 @@ WindowsMachines.csv
 test_sample.csv-filtered.csv
 
 #Venv
-.venv 
+.venv
 
 #Vscode
 .vscode/*

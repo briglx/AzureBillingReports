@@ -6,9 +6,10 @@ import sys
 
 def remove_first_lines(src_file_name, dest_file_name, count):
     """Remove first count of lines from file_name."""
-    with open(src_file_name, "r") as src_stream, open(
-        dest_file_name, "w"  # pylint: disable=C0330
-    ) as dest_stream:
+    with (
+        open(src_file_name, "r") as src_stream,
+        open(dest_file_name, "w") as dest_stream,  # pylint: disable=C0330
+    ):
 
         # Skip lines
         for _ in range(count):

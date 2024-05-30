@@ -52,7 +52,7 @@ Run docker image
 
     docker run --rm -it --env-file local.env azurebillingreports:latest
 
-    # If you want to see STDOUT use 
+    # If you want to see STDOUT use
     docker run --rm -a STDOUT --env-file local.env azurebillingreports:latest
 
 Deploy the image to repository. Repalce the name <registryname> with the name of your repository. After deploying, this will remove the image from your local Docker environment
@@ -110,9 +110,9 @@ Create Docker Image repository
 Configure Databricks
 ====================
 
-Azure Databricks is used during the prep phase of the data pipeline. 
+Azure Databricks is used during the prep phase of the data pipeline.
 
-Configure Secrets 
+Configure Secrets
 -----------------
 
 The notebook uses secrets to connect to the storage account. Use the databricsk cli to set a secrets
@@ -124,7 +124,7 @@ The notebook uses secrets to connect to the storage account. Use the databricsk 
 
     # Or Create secret scope for standard cluster
     databricks secrets create-scope --scope billing --initial-manage-principal users
-    
+
     # Add secrets to cluster
     databricks secrets put --scope billing --key storage_key
     databricks secrets put --scope billing --key db_connection
@@ -132,7 +132,7 @@ The notebook uses secrets to connect to the storage account. Use the databricsk 
     databricks secrets put --scope billing --key db_password
 
 
-    
+
 
 
 

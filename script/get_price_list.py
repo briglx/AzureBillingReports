@@ -1,10 +1,10 @@
 #!/usr/bin/python
 """Script to fetch pricing."""
 import csv
+from datetime import datetime, timezone
 import json
 import logging
 import sys
-from datetime import datetime, timezone
 
 import requests
 
@@ -30,7 +30,10 @@ def get_pricelist(uri, auth_key):
         "Content-Type": "application/json",
     }
 
-    resp = requests.get(uri, headers=headers,)
+    resp = requests.get(
+        uri,
+        headers=headers,
+    )
     _LOGGER.info(resp)
 
     if resp.status_code == 200:

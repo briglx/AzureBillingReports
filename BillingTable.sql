@@ -7,7 +7,7 @@ GO
 drop TABLE [dbo].[BillingAmortized];
 CREATE TABLE [dbo].[BillingAmortized]
 (
-    
+
     [InvoiceSectionName] nvarchar(max) NULL,
     [AccountName] nvarchar(max) NULL,
     [AccountOwnerId] nvarchar(max) NULL,

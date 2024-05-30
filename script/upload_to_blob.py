@@ -36,7 +36,8 @@ if __name__ == "__main__":
     _LOGGER.info("Starting script")
 
     parser = argparse.ArgumentParser(
-        description="Upload billing usage to blob.", add_help=True,
+        description="Upload billing usage to blob.",
+        add_help=True,
     )
     parser.add_argument("--file_name", "-f", help="File name to copy")
     parser.add_argument("--container_name", "-c", help="Name of Destination Container")

@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """Script to fetch latest billing usage data."""
 import argparse
+from datetime import datetime, timezone
 import logging
 import os
-from datetime import datetime, timezone
 
 from billing import usage_data, util
 
@@ -30,7 +30,8 @@ if __name__ == "__main__":
     _LOGGER.info("Starting script")
 
     parser = argparse.ArgumentParser(
-        description="Get billing data report.", add_help=True,
+        description="Get billing data report.",
+        add_help=True,
     )
     parser.add_argument("--eid", "-e", help="Enrollment ID number")
     parser.add_argument("--auth_key", "-a", help="Billing Auth Key")

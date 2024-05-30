@@ -1,7 +1,8 @@
 """Test the filter_data methods."""
+
+from datetime import datetime
 import os
 import pathlib
-from datetime import datetime
 
 from billing import util
 

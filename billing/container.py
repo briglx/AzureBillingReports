@@ -1,4 +1,5 @@
 """Module to manage billing container."""
+
 import logging
 
 from azure.common.client_factory import get_client_from_json_dict

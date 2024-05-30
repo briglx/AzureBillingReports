@@ -48,7 +48,10 @@ def get_recommendations(uri, auth_key, ri_type):
         "Content-Type": "application/json",
     }
 
-    resp = requests.get(uri, headers=headers,)
+    resp = requests.get(
+        uri,
+        headers=headers,
+    )
     _LOGGER.info(resp)
 
     recommendations = json.loads(resp.content)

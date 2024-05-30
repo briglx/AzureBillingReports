@@ -1,4 +1,5 @@
 """Test the get_usage_data methods."""
+
 from datetime import datetime
 from unittest.mock import Mock, patch
 

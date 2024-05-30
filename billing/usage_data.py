@@ -1,7 +1,8 @@
 """Script to fetch latest monthly billing data and price sheet."""
+
+from datetime import datetime, timedelta
 import logging
 import time
-from datetime import datetime, timedelta
 
 import requests
 from tqdm import tqdm as progress
@@ -141,9 +142,15 @@ def request_report(uri, auth_key, polling=False):
     }
 
     if polling:
-        resp = requests.get(uri, headers=headers,)
+        resp = requests.get(
+            uri,
+            headers=headers,
+        )
     else:
-        resp = requests.post(uri, headers=headers,)
+        resp = requests.post(
+            uri,
+            headers=headers,
+        )
 
     if resp.status_code == 200 or resp.status_code == 202:
         return resp

@@ -1,11 +1,12 @@
 """Function to start Billing Container."""
+
 import datetime
 import json
 import logging
 import os
 
-import azure.functions as func
 from azure.common.client_factory import get_client_from_json_dict
+import azure.functions as func
 from azure.mgmt.containerinstance import ContainerInstanceManagementClient
 
 

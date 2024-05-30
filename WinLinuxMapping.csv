@@ -1,4 +1,4 @@
-﻿PartNumber ServiceType,Windows PartNumber,Windows ProductServiceType,Linux PartNumber,Linux ProductServiceType
+PartNumber ServiceType,Windows PartNumber,Windows ProductServiceType,Linux PartNumber,Linux ProductServiceType
 997-03469 - US East - Standard_D3_v2,997-03469,Virtual Machines Dv2/DSv2 Series Windows - D3 v2/DS3 v2  - US East - Standard_D3_v2,997-03445,Virtual Machines Dv2/DSv2 Series - D3 v2/DS3 v2  - US East - Standard_D3_v2
 997-01468 - EU West - Standard_DS4,997-01468,Virtual Machines D/DS Series Windows - D4/DS4 - EU West - Standard_DS4,997-01432,Virtual Machines D/DS Series - D4/DS4 - EU West - Standard_DS4
 997-02622 - US East 2 - Standard_D3_v2,997-02622,Virtual Machines Dv2/DSv2 Series Windows - D3 v2/DS3 v2  - US East 2 - Standard_D3_v2,997-02614,Virtual Machines Dv2/DSv2 Series - D3 v2/DS3 v2  - US East 2 - Standard_D3_v2

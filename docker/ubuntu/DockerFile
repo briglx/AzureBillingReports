@@ -3,18 +3,18 @@ FROM ubuntu:18.04
 # Install Base dependencies and utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl gnupg vim
-RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc 
+RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc
 
-# Install Python 3.7 
+# Install Python 3.7
 RUN apt-get update &&  apt-get install -y \
     build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
     libnss3-dev libssl-dev libreadline-dev libffi-dev wget
 WORKDIR /tmp
 RUN wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz \
-    && tar -xf Python-3.7.2.tar.xz 
+    && tar -xf Python-3.7.2.tar.xz
 WORKDIR /tmp/Python-3.7.2
-RUN ./configure --enable-optimizations 
-RUN make -j 1 
+RUN ./configure --enable-optimizations
+RUN make -j 1
 # RUN make altinstall
 RUN make install
 RUN /usr/local/bin/python3.7 -m pip install --upgrade pip
@@ -34,7 +34,7 @@ RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17
 
 # install pyodbc
 # Instructions from https://github.com/mkleehammer/pyodbc/wiki/Install
-RUN apt-get install -y unixodbc-dev 
+RUN apt-get install -y unixodbc-dev
 
 # Copy local project
 # COPY requirements.txt /app/

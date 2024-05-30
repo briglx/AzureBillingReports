@@ -1,11 +1,11 @@
 """Module to manage billing data with blob storage."""
+
+from datetime import datetime, timedelta
 import logging
 import subprocess
 import time
-from datetime import datetime, timedelta
 from urllib.parse import urlparse, urlunparse
 
-import requests
 from azure.storage.blob import (
     AccountSasPermissions,
     BlobBlock,
@@ -13,6 +13,7 @@ from azure.storage.blob import (
     ResourceTypes,
     generate_account_sas,
 )
+import requests
 from tqdm import tqdm as progress
 
 _LOGGER = logging.getLogger(__name__)

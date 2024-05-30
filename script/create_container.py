@@ -4,8 +4,7 @@ import json
 import logging
 import os
 
-from billing import container as bc
-from billing import util
+from billing import container as bc, util
 
 
 def main():

@@ -30,18 +30,18 @@ root:
     handlers: [console,file_handler]
     propagate: yes
 
-loggers:  
+loggers:
 
     azure.core.pipeline.policies.http_logging_policy:
         level: WARNING
         handlers: [console,file_handler]
         propagate: yes
 
-    billing:   
+    billing:
         level: DEBUG
         handlers: [console, file_handler]
         propagate: no
-    
+
     __main__:
         level: DEBUG
         handlers: [console, file_handler]

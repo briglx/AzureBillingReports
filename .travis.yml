@@ -18,13 +18,13 @@ matrix:
     - python: "3.7"
       env: TOXENV=cov
       after_success: coveralls
-    
+
 
 branches:
   only:
     - master
 
-install: 
+install:
   - pip install -U tox
 language: python
 

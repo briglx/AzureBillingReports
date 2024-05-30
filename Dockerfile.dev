@@ -9,10 +9,10 @@ RUN rm -Rf /tmp/azcopy*
 RUN export PATH=/opt/azcopy/:$PATH
 ENV PATH="/opt/azcopy:${PATH}"
 
-RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc 
-# RUN echo 'export PATH=$PATH:/opt/azcopy/' >> ~/.bashrc 
+RUN echo 'alias ll='"'"'ls $LS_OPTIONS -al'"'"'' >> ~/.bashrc
+# RUN echo 'export PATH=$PATH:/opt/azcopy/' >> ~/.bashrc
 
-# Packages that we need 
+# Packages that we need
 COPY requirements.txt /app/
 
 WORKDIR /app
@@ -23,7 +23,7 @@ ARG VER=0.0.0
 
 ENV VER ${VER}
 
-# Docker container in /app directory 
+# Docker container in /app directory
 COPY setup.py .
 COPY billing/*.py ./billing/
 COPY script/*.py ./script/

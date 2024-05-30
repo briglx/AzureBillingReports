@@ -1,14 +1,13 @@
 #!/usr/bin/python
 """Filter out data from file."""
 import argparse
-import logging
-import sys
 from datetime import datetime
+import logging
 
 from billing import util
 
 
-def main(path,min_date):
+def main(path, min_date):
     """Filter records from command line."""
     # path = argv[0]
     # print(path)
@@ -43,4 +42,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     path = args.path
     min_date = args.min_date
-    main(path,min_date)
+    main(path, min_date)

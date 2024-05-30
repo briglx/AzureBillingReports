@@ -1,9 +1,9 @@
 #!/usr/bin/python
 """Script to copy last two weeks of billing data."""
 import argparse
+from datetime import datetime
 import logging
 import os
-from datetime import datetime
 
 from billing import blob_storage, usage_data, util
 
@@ -68,7 +68,8 @@ if __name__ == "__main__":
     _LOGGER.info("Starting script")
 
     parser = argparse.ArgumentParser(
-        description="Get latest billing usage to block blob.", add_help=True,
+        description="Get latest billing usage to block blob.",
+        add_help=True,
     )
     parser.add_argument("--eid", "-e", help="Enrollment ID number")
     parser.add_argument("--auth_key", "-a", help="Billing Auth Key")

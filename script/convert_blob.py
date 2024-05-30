@@ -15,7 +15,8 @@ if __name__ == "__main__":
     _LOGGER.info("Starting script")
 
     parser = argparse.ArgumentParser(
-        description="Convert azure blob type.", add_help=True,
+        description="Convert azure blob type.",
+        add_help=True,
     )
     parser.add_argument("--blob_url", "-f", help="Url of file to convert")
     parser.add_argument("--sas_key", "-s", help="Sas key")
