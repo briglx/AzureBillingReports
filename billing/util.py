@@ -92,3 +92,11 @@ def filter_data(src, predicate):
             for row in reader:
                 if predicate(row):
                     writer.writerow(row)
+
+
+def get_split_file_name(src):
+    """Get the split file name."""
+    file_directory = os.path.dirname(src)
+    base_name = os.path.splitext(os.path.basename(src))[0]
+    dest_path = os.path.join(file_directory, base_name)
+    return dest_path

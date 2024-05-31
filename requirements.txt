@@ -1,8 +1,8 @@
 # Requirements
-azure-common==1.1.23
-azure-mgmt-containerinstance==1.5.0
-azure-mgmt-resource==7.0.0
-azure-storage-blob==12.0.0
-PyYAML==5.2
-requests==2.22.0
-tqdm==4.38.0
+azure-common==1.1.28
+azure-mgmt-containerinstance==10.1.0
+azure-mgmt-resource==23.1.1
+azure-storage-blob==12.20.0
+python-dotenv==1.0.1
+requests==2.32.3
+tqdm==4.66.4

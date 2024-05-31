@@ -79,5 +79,10 @@ ServerSetup.SQL
 SqlDWParquet.sql
 SqlDWSetup.sql
 
+# databases
+Notebooks/*.db
 # General
 billing-container.yaml
+.env
+data
+temp

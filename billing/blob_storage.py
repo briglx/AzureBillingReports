@@ -1,7 +1,9 @@
 """Module to manage billing data with blob storage."""
 
+import csv
 from datetime import datetime, timedelta
 import logging
+import os
 import subprocess
 import time
 from urllib.parse import urlparse, urlunparse
@@ -17,6 +19,8 @@ import requests
 from tqdm import tqdm as progress
 
 _LOGGER = logging.getLogger(__name__)
+
+DEFAULT_CHUNK_SIZE = 500000
 
 
 def get_account_info(connection_string):
@@ -229,7 +233,7 @@ def copy_blob_as_github_suggested(blob_url, copied_blob):
 #     logging.info(properties)
 
 
-def copy_blob_as_azcopy(src_url, dest_url):
+def copy_blob_as_azcopy(src_url, dest_url, output_type=None, recursive=False):
     """Use azcopy to copy as block blob."""
     _LOGGER.info("Copying using azcopy")
     # Escape characters
@@ -245,16 +249,11 @@ def copy_blob_as_azcopy(src_url, dest_url):
         raise Exception("AZ copy not found on the system.")
 
     # copy as block
-    args = [
-        "azcopy",
-        "copy",
-        src_url,
-        dest_url,
-        "--blob-type",
-        "BlockBlob",
-        "--output-type",
-        "json",
-    ]
+    args = ["azcopy", "copy", src_url, dest_url, "--blob-type", "BlockBlob"]
+    if output_type == "json":
+        args.append("--output-type", "json")
+    if recursive:
+        args.append("--recursive")
 
     _LOGGER.info("Call process: %s", " ".join(args))
     proc = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)
@@ -300,3 +299,88 @@ def get_block_name(source):
     )
 
     return new_file_name
+
+
+def write_csv_chunk(dest_path, part, lines):
+    """Write a chunk of lines to a csv file."""
+    file_name = os.path.join(dest_path, f"part_{part:02d}.csv")
+    with open(file_name, "w", newline="") as chunk_file:
+        writer = csv.writer(chunk_file)
+        for line in lines:
+            writer.writerow(line)
+
+
+def split_csv_file(
+    input_file, dest_path=None, chunk_size=DEFAULT_CHUNK_SIZE, skip_header=False
+):
+    """Split the input file into smaller parts using I/O."""
+    lines = []
+    stats = []
+    total_rows = 0
+    total_cost = 0
+    chunk_row_count = 0
+    chunk_cost = 0
+
+    if not dest_path:
+        file_directory = os.path.dirname(input_file)
+        base_name = os.path.splitext(os.path.basename(input_file))[0]
+        dest_path = os.path.join(file_directory, base_name)
+
+    _LOGGER.info("Split file by io for %s to %s", input_file, dest_path)
+
+    if not os.path.exists(dest_path):
+        os.makedirs(dest_path)
+
+    with open(input_file, newline="") as csv_file:
+        reader = csv.reader(csv_file, delimiter=",")
+
+        if skip_header:
+            _LOGGER.info("Skipping header")
+            next(reader)
+
+        for row in reader:
+
+            cur_cost = float(row[17])
+
+            total_rows = total_rows + 1
+            total_cost = total_cost + cur_cost
+
+            chunk_cost = chunk_cost + cur_cost
+            chunk_row_count = chunk_row_count + 1
+
+            lines.append(row)
+
+            if len(lines) == chunk_size:
+                part_name = f"{input_file}.part_{total_rows // chunk_size:02}.csv"
+
+                _LOGGER.info(
+                    "Partial Stats for part_%02d, %d rows, cost: %.2f",
+                    total_rows // chunk_size,
+                    chunk_row_count,
+                    chunk_cost,
+                )
+                stats.append((part_name, chunk_row_count, chunk_cost))
+                write_csv_chunk(dest_path, total_rows // chunk_size, lines)
+
+                lines = []
+                chunk_row_count = 0
+                chunk_cost = 0
+
+        # Write the remainder (if any)
+        if lines:
+            part_name = f"{input_file}.part_{total_rows // chunk_size + 1:02}.csv"
+            _LOGGER.info(
+                "Partial Stats for part_%02d, %d rows, cost: %.2f",
+                total_rows // chunk_size + 1,
+                chunk_row_count,
+                chunk_cost,
+            )
+            stats.append((part_name, chunk_row_count, chunk_cost))
+            write_csv_chunk(dest_path, total_rows // chunk_size + 1, lines)
+
+        _LOGGER.info(
+            "Total Stats for %s, %d rows, %.2f", input_file, total_rows, total_cost
+        )
+        stats.append((f"{input_file}", total_rows, total_cost))
+
+        return stats
