@@ -11,7 +11,8 @@ from billing import util
 from billing.blob_storage import get_blob_service_client_from_url, split_file_and_upload
 
 load_dotenv()
-# DEFAULT_CHUNK_SIZE = 500000
+
+DEFAULT_CHUNK_SIZE = (1024**2) * 250  # 250MB
 
 
 def skip_file(file_name, skip_paths):
@@ -22,7 +23,12 @@ def skip_file(file_name, skip_paths):
     return False
 
 
-async def main(source: str, destination: str, skip_paths: list[str] = []):
+async def main(
+    source: str,
+    destination: str,
+    skip_paths: list[str] = [],
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+):
     """Split csv file."""
     _LOGGER.info("Splitting csv files for %s, to %s", source, destination)
 
@@ -84,6 +90,11 @@ if __name__ == "__main__":
         "-sp",
         help="Paths to skip",
     )
+    parser.add_argument(
+        "--chunk_size",
+        "-cs",
+        help="Size of each chunk",
+    )
     args = parser.parse_args()
 
     default_source = (
@@ -97,6 +108,7 @@ if __name__ == "__main__":
     SOURCE_CONTAINER = args.source or default_source
     DESTINATION_CONTAINER = args.destination or default_destination
     SKIP_PATHS = args.skip_paths or os.environ["SKIP_PATHS"]
+    CHUNK_SIZE = args.chunk_size or os.environ["CHUNK_SIZE"]
 
     if not SOURCE_CONTAINER:
         raise ValueError(
@@ -111,4 +123,4 @@ if __name__ == "__main__":
     if SKIP_PATHS and len(SKIP_PATHS) > 0:
         SKIP_PATHS = SKIP_PATHS.split(",")
 
-    asyncio.run(main(SOURCE_CONTAINER, DESTINATION_CONTAINER, SKIP_PATHS))
+    asyncio.run(main(SOURCE_CONTAINER, DESTINATION_CONTAINER, SKIP_PATHS, CHUNK_SIZE))

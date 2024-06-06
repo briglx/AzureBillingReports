@@ -551,25 +551,12 @@ async def get_chunk_stats(chunk_name: str, chunk: str, file_stats: list):
     row_count = 0
     total_cost = 0
 
-    async def process_chuck():
-        nonlocal row_count, total_cost
-        try:
-
-            with StringIO(chunk) as csv_file:
-                reader = csv.reader(csv_file, delimiter=",")
-
-                for row in reader:
-
-                    cur_cost = Decimal(row[17])
-
-                    row_count = row_count + 1
-                    total_cost = total_cost + cur_cost
-
-        except UnicodeDecodeError as e:
-            _LOGGER.error("Error decoding file %s", chunk_name)
-            _LOGGER.error(e)
-
-    await asyncio.to_thread(process_chuck)
+    with StringIO(chunk) as csv_file:
+        reader = csv.reader(csv_file, delimiter=",")
+        for row in reader:
+            cur_cost = Decimal(row[17])
+            row_count = row_count + 1
+            total_cost = total_cost + cur_cost
 
     _LOGGER.info(
         "Chunk stats for: '%s' rows: %s, Total cost: %s",
@@ -610,35 +597,38 @@ async def split_file_and_upload(
 
         try:
             chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
-
-            # Decode and join partial content
-            chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
-            has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
-
-            # Split out last partial line
-            lines = chunk_str.split("\n")
-            partial_line = lines[-1]
-            if has_header:
-                complete_lines = lines[1:-1]
+            if b"PAR1" == chunk_bytes[:4]:
+                file_extension = "parqeut"
+                _LOGGER.warning("PAR1 header found in chunk. Skipping file")
+                return
             else:
-                complete_lines = lines[:-1]
+                # Decode and join partial content
+                chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
+                has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
 
-            # Rejoin to strings
-            complete_chunk_str = "\n".join(complete_lines)
-            partial_line_str = "\n".join([partial_line])
+                # Split out last partial line
+                lines = chunk_str.split("\n")
+                partial_line = lines[-1]
+                if has_header:
+                    complete_lines = lines[1:-1]
+                else:
+                    complete_lines = lines[:-1]
 
-            # Get stats
-            _LOGGER.debug("Getting stats for %s", chunk_name)
-            await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
+                # Rejoin to strings
+                complete_chunk_str = "\n".join(complete_lines)
+                partial_line_str = "\n".join([partial_line])
+
+                # Get stats
+                _LOGGER.debug("Getting stats for %s", chunk_name)
+                await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
+                data = complete_chunk_str.encode("utf-8")
 
             # Copy to destination
-            # destination_blob_client = destination_container_client.get_blob_client(chunk_name)
-            # await destination_blob_client.upload_blob(chunk_data)
             _LOGGER.debug("Uploading %s", chunk_name)
             await destination_container_client.upload_blob(
-                name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
+                name=chunk_name, data=data, overwrite=True
             )
-            total_bytes = total_bytes + len(complete_chunk_str)
+            total_bytes = total_bytes + len(data)
 
         except UnicodeDecodeError as e:
             _LOGGER.error("Error decoding file %s", chunk_name)
