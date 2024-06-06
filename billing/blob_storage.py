@@ -604,6 +604,8 @@ async def split_file_and_upload(
             break
 
         try:
+            chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
+
             # Decode and join partial content
             chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
             has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
@@ -620,8 +622,6 @@ async def split_file_and_upload(
             complete_chunk_str = "\n".join(complete_lines)
             partial_line_str = "\n".join([partial_line])
 
-            chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
-
             # Get stats
             await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
 
@@ -632,6 +632,7 @@ async def split_file_and_upload(
                 name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
             )
             total_bytes = total_bytes + len(complete_chunk_str)
+
         except UnicodeDecodeError as e:
             _LOGGER.error("Error decoding file %s", chunk_name)
             _LOGGER.error(e)
