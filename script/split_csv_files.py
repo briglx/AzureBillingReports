@@ -31,19 +31,17 @@ async def main(source, destination):
     container_client = source_blob_service_client.get_container_client(source_container)
     blobs = container_client.list_blobs(name_starts_with=source_prefix)
 
-    tasks = []
+    # tasks = []
     blob_count = 0
     try:
         async for blob in blobs:
             blob_client = source_blob_service_client.get_blob_client(
                 source_container, blob
             )
-            tasks.append(
-                split_file_and_upload(blob_client, blob, destination_container_client)
-            )
+            await split_file_and_upload(blob_client, blob, destination_container_client)
 
-        _LOGGER.info("Spltting %s blobs", blob_count)
-        await asyncio.gather(*tasks)
+        _LOGGER.info("Split %s blobs", blob_count)
+        # await asyncio.gather(*tasks)
 
     except Exception as e:
         _LOGGER.error("Error splitting files: %s", e)
