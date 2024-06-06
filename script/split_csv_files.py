@@ -108,7 +108,7 @@ if __name__ == "__main__":
     SOURCE_CONTAINER = args.source or default_source
     DESTINATION_CONTAINER = args.destination or default_destination
     SKIP_PATHS = args.skip_paths or os.environ["SKIP_PATHS"]
-    CHUNK_SIZE = args.chunk_size or os.environ.get(["CHUNK_SIZE"], None)
+    CHUNK_SIZE = args.chunk_size or os.environ.get("CHUNK_SIZE", None)
 
     if not SOURCE_CONTAINER:
         raise ValueError(
