@@ -587,6 +587,10 @@ async def split_file_and_upload(
     chunk_idx = 1
     total_bytes = 0
 
+    if "/Actual/20220901-20220930/" in blob.name:
+        _LOGGER.info("Skipping %s", blob.name)
+        return
+
     # blob_properties = blob_client.get_blob_properties()
     blob_size = blob.size
     file_extension = blob.name.split(".")[-1]
@@ -599,34 +603,39 @@ async def split_file_and_upload(
         if not chunk_bytes:
             break
 
-        # Decode and join partial content
-        chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
-        has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
+        try:
+            # Decode and join partial content
+            chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
+            has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
 
-        # Split out last partial line
-        lines = chunk_str.split("\n")
-        partial_line = lines[-1]
-        if has_header:
-            complete_lines = lines[1:-1]
-        else:
-            complete_lines = lines[:-1]
+            # Split out last partial line
+            lines = chunk_str.split("\n")
+            partial_line = lines[-1]
+            if has_header:
+                complete_lines = lines[1:-1]
+            else:
+                complete_lines = lines[:-1]
 
-        # Rejoin to strings
-        complete_chunk_str = "\n".join(complete_lines)
-        partial_line_str = "\n".join([partial_line])
+            # Rejoin to strings
+            complete_chunk_str = "\n".join(complete_lines)
+            partial_line_str = "\n".join([partial_line])
 
-        chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
+            chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
 
-        # Get stats
-        await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
+            # Get stats
+            await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
 
-        # Copy to destination
-        # destination_blob_client = destination_container_client.get_blob_client(chunk_name)
-        # await destination_blob_client.upload_blob(chunk_data)
-        await destination_container_client.upload_blob(
-            name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
-        )
-        total_bytes = total_bytes + len(complete_chunk_str)
+            # Copy to destination
+            # destination_blob_client = destination_container_client.get_blob_client(chunk_name)
+            # await destination_blob_client.upload_blob(chunk_data)
+            await destination_container_client.upload_blob(
+                name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
+            )
+            total_bytes = total_bytes + len(complete_chunk_str)
+        except UnicodeDecodeError as e:
+            _LOGGER.error("Error decoding file %s", chunk_name)
+            _LOGGER.error(e)
+
         chunk_idx += 1
 
     total_row_count = 0
