@@ -1,5 +1,6 @@
 """Module to manage billing data with blob storage."""
 
+import asyncio
 import csv
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -550,21 +551,25 @@ async def get_chunk_stats(chunk_name: str, chunk: str, file_stats: list):
     row_count = 0
     total_cost = 0
 
-    try:
+    async def process_chuck():
+        nonlocal row_count, total_cost
+        try:
 
-        with StringIO(chunk) as csv_file:
-            reader = csv.reader(csv_file, delimiter=",")
+            with StringIO(chunk) as csv_file:
+                reader = csv.reader(csv_file, delimiter=",")
 
-            for row in reader:
+                for row in reader:
 
-                cur_cost = Decimal(row[17])
+                    cur_cost = Decimal(row[17])
 
-                row_count = row_count + 1
-                total_cost = total_cost + cur_cost
+                    row_count = row_count + 1
+                    total_cost = total_cost + cur_cost
 
-    except UnicodeDecodeError as e:
-        _LOGGER.error("Error decoding file %s", chunk_name)
-        _LOGGER.error(e)
+        except UnicodeDecodeError as e:
+            _LOGGER.error("Error decoding file %s", chunk_name)
+            _LOGGER.error(e)
+
+    await asyncio.to_thread(process_chuck)
 
     _LOGGER.info(
         "Chunk stats for: '%s' rows: %s, Total cost: %s",
