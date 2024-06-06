@@ -41,8 +41,6 @@ async def main(source, destination):
             tasks.append(
                 split_file_and_upload(blob_client, blob, destination_container_client)
             )
-            blob_count = blob_count + 1
-            break
 
         _LOGGER.info("Spltting %s blobs", blob_count)
         await asyncio.gather(*tasks)
