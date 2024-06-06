@@ -42,7 +42,7 @@ docker run --rm -it --env-file local.env azurebillingreports:latest
 # If you want to see STDOUT use
 docker run --rm -a STDOUT --env-file local.env azurebillingreports:latest
 
-# Deploy the image to repository. Repalce the name <registryname> with the name of your repository. After deploying, this will remove the image from your local Docker environment
+# Deploy the image to repository. Replace the name <registryname> with the name of your repository. After deploying, this will remove the image from your local Docker environment
 az acr login --name  <registryname>
 docker tag azurebillingreports <registryname>.azurecr.io/azurebillingreports:v1
 docker push <registryname>.azurecr.io/azurebillingreports:v1

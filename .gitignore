@@ -86,3 +86,6 @@ billing-container.yaml
 .env
 data
 temp
+billing.log
+billing.log*
+notebooks/small_sample.db

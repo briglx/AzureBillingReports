@@ -2,6 +2,8 @@
 
 import csv
 from datetime import datetime, timedelta
+from decimal import Decimal
+from io import StringIO
 import logging
 import os
 import subprocess
@@ -11,16 +13,166 @@ from urllib.parse import urlparse, urlunparse
 from azure.storage.blob import (
     AccountSasPermissions,
     BlobBlock,
-    BlobServiceClient,
     ResourceTypes,
     generate_account_sas,
 )
+from azure.storage.blob.aio import BlobClient, BlobServiceClient, ContainerClient
 import requests
 from tqdm import tqdm as progress
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_CHUNK_SIZE = 500000
+# DEFAULT_CHUNK_SIZE =  100000000
+DEFAULT_CHUNK_SIZE = (1024**2) * 250  # 250MB
+# DEFAULT_CHUNK_SIZE = 5000000
+# DEFAULT_CHUNK_SIZE = 50000000
+
+
+def get_blob_service_client_from_url(url_with_sas):
+    """Get a blob client from a URL with a SAS token."""
+    prefix = ""
+    url_parts = urlparse(url_with_sas)
+    sas_token = url_parts.query
+    account_url = f"https://{url_parts.hostname}"
+    parts = url_parts.path.split("/")
+    container_name = parts[1]
+    if len(parts) > 2:
+        prefix = "/".join(parts[2:])
+
+    # return (account_url, sas_token, container_name, prefix)
+    return (
+        BlobServiceClient(account_url=account_url, credential=sas_token),
+        container_name,
+        prefix,
+    )
+
+
+def get_most_recent_files(blob_service_client: BlobServiceClient, prefix):
+    """Get the most recent file for each subfolder for a given prefix pattern in a container."""
+    _LOGGER.info("Getting most recent files for %s", prefix)
+    subfolder_details = {}
+    file_details = []
+
+    # List all blobs in the container with the given prefix
+    blobs = blob_service_client.list_blobs(name_starts_with=prefix)
+
+    for blob in blobs:
+        blob_name = blob.name
+        subfolders = blob_name.split("/")
+
+        # Ignore the last element (the actual file name)
+        subfolder_path = "/".join(subfolders[:-1])
+
+        blob_client = blob_service_client.get_blob_client(blob=blob)
+        blob_properties = blob_client.get_blob_properties()
+        blob_size = blob_properties.size
+        last_modified = blob_properties.last_modified
+
+        if (
+            subfolder_path not in subfolder_details
+            or last_modified > subfolder_details[subfolder_path][-1]
+        ):
+            subfolder_details[subfolder_path] = (
+                blob_client.url,
+                blob_name,
+                blob_size,
+                last_modified,
+            )
+
+    for _, details in subfolder_details.items():
+        _LOGGER.info(
+            "url: %s, name: %s, size: %d, last_modified: %s",
+            details[0],
+            details[1],
+            details[2],
+            details[3],
+        )
+        file_details.append((details[0], details[1], details[2]))
+
+    return file_details
+
+
+def get_most_recent_files_by_connection_string(
+    connection_string, container_name, prefix
+):
+    """Get the most recent file for a given prefix."""
+    subfolder_details = {}
+    file_details = []
+
+    # Get blobs that match prefix
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    blobs = blob_service_client.get_container_client(container_name).list_blobs(
+        name_starts_with=prefix
+    )
+
+    for blob in blobs:
+        # Get the blob name (including subfolder structure)
+        blob_name = blob.name
+
+        if "csv" in blob_name:
+
+            # Split the blob name by slashes to get subfolder names
+            subfolders = blob_name.split("/")
+
+            # Ignore the last element (the actual file name)
+            subfolder_path = "/".join(subfolders[:-1])
+
+            # Get the blob size
+            blob_client = blob_service_client.get_blob_client(
+                container=container_name, blob=blob
+            )
+            properties = blob_client.get_blob_properties()
+            blob_size = properties.size
+            last_modified = properties.last_modified
+
+            if (
+                subfolder_path not in subfolder_details
+                or last_modified > subfolder_details[subfolder_path][0]
+            ):
+                subfolder_details[subfolder_path] = (
+                    last_modified,
+                    blob_name,
+                    blob_size,
+                    blob_client.url,
+                )
+
+    for _, details in subfolder_details.items():
+        file_details.append((details[1], details[2], details[3]))
+
+    return file_details
+
+
+def copy_most_recent_files(source, destination):
+    """Get the most recent files for a given source and copy to the destination."""
+    file_count = 0
+    source_blob_service_client, source_container, source_prefix = (
+        get_blob_service_client_from_url(source)
+    )
+    destination_blob_service_client, destination_container, destination_prefix = (
+        get_blob_service_client_from_url(destination)
+    )
+
+    latest_files = get_most_recent_files(
+        source_blob_service_client.get_container_client(source_container), source_prefix
+    )
+
+    for blob_url, blob_name, blob_size in latest_files:
+        destination_blob_client = destination_blob_service_client.get_blob_client(
+            container=destination_container, blob=blob_name
+        )
+        # Copy the blob to the destination
+        copy_status = destination_blob_client.start_copy_from_url(blob_url)
+        _LOGGER.info(
+            "Copying %s, %s, %d to %s, %s",
+            blob_name,
+            blob_url,
+            blob_size,
+            destination,
+            copy_status,
+        )
+        file_count = file_count + 1
+
+    return latest_files, file_count
 
 
 def get_account_info(connection_string):
@@ -310,7 +462,7 @@ def write_csv_chunk(dest_path, part, lines):
             writer.writerow(line)
 
 
-def split_csv_file(
+def split_local_csv_file(
     input_file, dest_path=None, chunk_size=DEFAULT_CHUNK_SIZE, skip_header=False
 ):
     """Split the input file into smaller parts using I/O."""
@@ -384,3 +536,116 @@ def split_csv_file(
         stats.append((f"{input_file}", total_rows, total_cost))
 
         return stats
+
+
+def format_bytes(size, units=(" bytes", "KB", "MB", "GB", "TB", "PB", "EB")):
+    """Return a human readable string representation of bytes."""
+    return (
+        "%3.1f %s" % (size, units[0])
+        if size < 1024
+        else format_bytes(size / 1024, units[1:])
+    )
+
+
+async def get_chunk_stats(chunk_name: str, chunk: str, file_stats: list):
+    """Get stats for the file."""
+    row_count = 0
+    total_cost = 0
+
+    try:
+
+        with StringIO(chunk) as csv_file:
+            reader = csv.reader(csv_file, delimiter=",")
+
+            for row in reader:
+
+                cur_cost = Decimal(row[17])
+
+                row_count = row_count + 1
+                total_cost = total_cost + cur_cost
+
+    except UnicodeDecodeError as e:
+        _LOGGER.error("Error decoding file %s", chunk_name)
+        _LOGGER.error(e)
+
+    _LOGGER.info(
+        "Chunk stats for: '%s' rows: %s, Total cost: %s",
+        chunk_name,
+        row_count,
+        total_cost,
+    )
+    file_stats.append((chunk_name, row_count, total_cost))
+    # return total_rows, total_cost, partial_chunk_content, complete_chunk_content
+
+
+async def split_file_and_upload(
+    blob_client: BlobClient, blob, destination_container_client: ContainerClient
+):
+    """Split file and upload to destination."""
+    file_stats = []
+    partial_line_str = ""
+    chunk_idx = 1
+    total_bytes = 0
+
+    # blob_properties = blob_client.get_blob_properties()
+    blob_size = blob.size
+    file_extension = blob.name.split(".")[-1]
+
+    _LOGGER.debug("Splitting %s file size %s", blob.name, format_bytes(blob_size))
+
+    download_stream = await blob_client.download_blob()
+    while True:
+        chunk_bytes = await download_stream.read(DEFAULT_CHUNK_SIZE)
+        if not chunk_bytes:
+            break
+
+        # Decode and join partial content
+        chunk_str = partial_line_str + chunk_bytes.decode("utf-8-sig")
+        has_header = chunk_str[:30] == "InvoiceSectionName,AccountName"
+
+        # Split out last partial line
+        lines = chunk_str.split("\n")
+        partial_line = lines[-1]
+        if has_header:
+            complete_lines = lines[1:-1]
+        else:
+            complete_lines = lines[:-1]
+
+        # Rejoin to strings
+        complete_chunk_str = "\n".join(complete_lines)
+        partial_line_str = "\n".join([partial_line])
+
+        chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
+
+        # Get stats
+        await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
+
+        # Copy to destination
+        # destination_blob_client = destination_container_client.get_blob_client(chunk_name)
+        # await destination_blob_client.upload_blob(chunk_data)
+        await destination_container_client.upload_blob(
+            name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
+        )
+        total_bytes = total_bytes + len(complete_chunk_str)
+        chunk_idx += 1
+
+    total_row_count = 0
+    total_file_cost = 0
+    for chunk_stat in file_stats:
+        _, cunk_row_count, chunk_cost = chunk_stat
+        total_row_count += cunk_row_count
+        total_file_cost += chunk_cost
+    _LOGGER.info(
+        "Total Stats for %s, %d bytes (blob size), %d bytes (copied), %d rows, %.2f cost",
+        blob.name,
+        blob_size,
+        total_bytes,
+        total_row_count,
+        total_file_cost,
+    )
+
+    if len(partial_line) > 0:
+        # upload partial line
+        raise NotImplementedError(
+            f"Partial line upload not implemented. partial data: '{partial_line}'"
+        )

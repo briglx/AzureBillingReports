@@ -14,8 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install azcopy
-RUN curl -sL https://aka.ms/downloadazcopy-v10-linux | tar -zxf - --strip-components=1 --wildcards '*/azcopy' -C /usr/local/bin/
-
+# RUN curl -sL https://aka.ms/downloadazcopy-v10-linux | tar -zxf - --strip-components=1 --wildcards '*/azcopy' | cp /usr/local/bin/
+RUN curl -L -o azcopy.tar.gz https://aka.ms/downloadazcopy-v10-linux \
+    && tar -zxf azcopy.tar.gz --strip-components=1 --wildcards '*/azcopy' \
+    && mv azcopy /usr/local/bin/ \
+    && chmod +x /usr/local/bin/azcopy
 
 # # Install Azure CLI latest (2.51.0)
 # RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && echo "az --version"
