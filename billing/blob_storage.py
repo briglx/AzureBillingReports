@@ -22,10 +22,8 @@ from tqdm import tqdm as progress
 
 _LOGGER = logging.getLogger(__name__)
 
-# DEFAULT_CHUNK_SIZE =  100000000
+
 DEFAULT_CHUNK_SIZE = (1024**2) * 250  # 250MB
-# DEFAULT_CHUNK_SIZE = 5000000
-# DEFAULT_CHUNK_SIZE = 50000000
 
 
 def get_blob_service_client_from_url(url_with_sas):
@@ -578,6 +576,17 @@ async def get_chunk_stats(chunk_name: str, chunk: str, file_stats: list):
     # return total_rows, total_cost, partial_chunk_content, complete_chunk_content
 
 
+async def download_file(blob_client: BlobClient):
+    """Download file from blob storage."""
+    download_stream = await blob_client.download_blob()
+    while True:
+        _LOGGER.debug("Downloading chunk")
+        chunk_bytes = await download_stream.read(DEFAULT_CHUNK_SIZE)
+        if not chunk_bytes:
+            break
+        yield chunk_bytes
+
+
 async def split_file_and_upload(
     blob_client: BlobClient, blob, destination_container_client: ContainerClient
 ):
@@ -587,21 +596,12 @@ async def split_file_and_upload(
     chunk_idx = 1
     total_bytes = 0
 
-    if "/Actual/20220901-20220930/" in blob.name:
-        _LOGGER.info("Skipping %s", blob.name)
-        return
-
-    # blob_properties = blob_client.get_blob_properties()
     blob_size = blob.size
     file_extension = blob.name.split(".")[-1]
 
     _LOGGER.debug("Splitting %s file size %s", blob.name, format_bytes(blob_size))
 
-    download_stream = await blob_client.download_blob()
-    while True:
-        chunk_bytes = await download_stream.read(DEFAULT_CHUNK_SIZE)
-        if not chunk_bytes:
-            break
+    async for chunk_bytes in download_file(blob_client):
 
         try:
             chunk_name = f"{blob.name}.part_{chunk_idx :02}.{file_extension}"
@@ -623,11 +623,13 @@ async def split_file_and_upload(
             partial_line_str = "\n".join([partial_line])
 
             # Get stats
+            _LOGGER.debug("Getting stats for %s", chunk_name)
             await get_chunk_stats(chunk_name, complete_chunk_str, file_stats)
 
             # Copy to destination
             # destination_blob_client = destination_container_client.get_blob_client(chunk_name)
             # await destination_blob_client.upload_blob(chunk_data)
+            _LOGGER.debug("Uploading %s", chunk_name)
             await destination_container_client.upload_blob(
                 name=chunk_name, data=complete_chunk_str.encode("utf-8"), overwrite=True
             )

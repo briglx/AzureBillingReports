@@ -14,7 +14,15 @@ load_dotenv()
 # DEFAULT_CHUNK_SIZE = 500000
 
 
-async def main(source, destination):
+def skip_file(file_name, skip_paths):
+    """Check if file should be skipped."""
+    for skip_path in skip_paths:
+        if skip_path in file_name:
+            return True
+    return False
+
+
+async def main(source: str, destination: str, skip_paths: list[str] = []):
     """Split csv file."""
     _LOGGER.info("Splitting csv files for %s, to %s", source, destination)
 
@@ -31,17 +39,24 @@ async def main(source, destination):
     container_client = source_blob_service_client.get_container_client(source_container)
     blobs = container_client.list_blobs(name_starts_with=source_prefix)
 
-    # tasks = []
+    tasks = []
     blob_count = 0
     try:
         async for blob in blobs:
             blob_client = source_blob_service_client.get_blob_client(
                 source_container, blob
             )
-            await split_file_and_upload(blob_client, blob, destination_container_client)
+            if skip_file(blob.name, skip_paths):
+                _LOGGER.info("Skipping %s", blob.name)
+                continue
+
+            tasks.append(
+                split_file_and_upload(blob_client, blob, destination_container_client)
+            )
+            blob_count += 1
 
         _LOGGER.info("Split %s blobs", blob_count)
-        # await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks)
 
     except Exception as e:
         _LOGGER.error("Error splitting files: %s", e)
@@ -66,6 +81,11 @@ if __name__ == "__main__":
         "-d",
         help="Path to destination folder",
     )
+    parser.add_argument(
+        "--skip_paths",
+        "-sp",
+        help="Paths to skip",
+    )
     args = parser.parse_args()
 
     default_source = (
@@ -78,6 +98,7 @@ if __name__ == "__main__":
     )
     SOURCE_CONTAINER = args.source or default_source
     DESTINATION_CONTAINER = args.destination or default_destination
+    SKIP_PATHS = args.skip_paths or os.environ["SKIP_PATHS"]
 
     if not SOURCE_CONTAINER:
         raise ValueError(
@@ -89,4 +110,7 @@ if __name__ == "__main__":
             "destination is required. Default values not found. Have you set the EXPORT_LATEST_PARTS_URL and EXPORT_LATEST_SAS env variable?"
         )
 
-    asyncio.run(main(SOURCE_CONTAINER, DESTINATION_CONTAINER))
+    if SKIP_PATHS and len(SKIP_PATHS) > 0:
+        SKIP_PATHS = SKIP_PATHS.split(",")
+
+    asyncio.run(main(SOURCE_CONTAINER, DESTINATION_CONTAINER, SKIP_PATHS))
