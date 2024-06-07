@@ -89,3 +89,4 @@ temp
 billing.log
 billing.log*
 notebooks/small_sample.db
+tools/*.exe
