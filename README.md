@@ -11,6 +11,10 @@ This repository has:
 
 # Overview
 
+Simple
+![Architecture Simple Function](docs/BillingArchitectureSimpleFunction.png)
+
+Complex
 ![Architecture Overview](docs/BillingArchitectureOverview.png)
 
 
