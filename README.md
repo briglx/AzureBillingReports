@@ -12,10 +12,19 @@ This repository has:
 # Overview
 
 Simple
-![Architecture Simple Function](docs/BillingArchitectureSimpleFunction.png)
+![Architecture Simple](docs/architecture_overview_simple.png)
 
-Complex
-![Architecture Overview](docs/BillingArchitectureOverview.png)
+Function App
+![Architecture Function App](docs/architecture_overview_func.png)
+
+Variation with Function App ingestion
+![Architecture Variation Func Ingestion](docs/architecture_overview_python.png)
+
+Function App and DataBricks
+![Architecture Func and DBX](docs/architecture_overview_func_dbx.png)
+
+Data Factory and SQL
+![Architecture DF and SQL](docs/architecture_overview_df_sql.png)
 
 
 ## Billing Scripts - Getting Started
