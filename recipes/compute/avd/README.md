@@ -7,6 +7,31 @@
 * In-region backup
 * Auto-scale
 
+## WAF AVD Assessment
+* Pillars (Reliability, Security, Cost, Monitoring, Horizonatal scaling)
+* Application Delivery
+    * Host Pool (Personal, Pooled)
+    * Load-balancing algorithm (Breadth-first, Depth-first, scale-down scenarios)
+    * Scaling Plans for session hosts
+    * Session Hosts Availability zones or availability sets
+    * Compute size target workloads (CPU, GPU, Secure)
+    * Storage Solutions
+    * HA/Disaster Recovery (Availability zones, Backup)
+* Networking and Connectivity
+    * Network latency
+    * VPN, RDP
+    * Hybrid Network performance
+    * Network security
+    * DNS
+    * RDB Short path charges
+* Monitoring
+    * Service and Resource Health
+    * Performance Metrics
+    * Security and Compliance
+    * Reporting tools
+    * Alerts
+* ...
+
 
 ## Cost Drivers
 * Region
@@ -43,4 +68,6 @@
 * FSLogix Shrink
 
 # References
+* Workload assessment https://learn.microsoft.com/en-us/assessments/1ef67c4e-b8d1-4193-b850-d192089ae33d//
+* https://learn.microsoft.com/en-us/azure/well-architected/azure-virtual-desktop/design-principles#cost-optimization
 * Nerdio https://nmmce.getnerdio.com/
