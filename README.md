@@ -1,4 +1,4 @@
-# Azure Billing Repots
+# Azure Billing Reports
 
 The `azure billing reports` are an unofficial collection of reports built on top of the Azure Billing API.
 
